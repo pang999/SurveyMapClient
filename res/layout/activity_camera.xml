@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="0dp"
+    android:layout_margin="0dp"
+    android:orientation="vertical" >
+ 
+    <com.surveymapclient.view.CameraBitMapView
+        android:id="@+id/CameraBitMapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"    
+         />
+     <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="#00FFFF"
+        android:text="清单" />
+
+    <RelativeLayout
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#00FFFF"
+        android:orientation="horizontal"
+         >               
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentLeft="true"
+              >
+	             <ImageButton 
+		             android:id="@+id/danlianxian"
+		             android:layout_width="wrap_content"
+		             android:layout_height="match_parent"
+		             android:src="@drawable/danlianxian"
+		             android:onClick="DanLianXian"
+		             />
+	             <ImageButton
+		             android:id="@+id/duolianxian"
+		             android:layout_width="wrap_content"
+		             android:layout_height="match_parent"
+		             android:onClick="DuoLianXian"
+		             android:src="@drawable/duolianxian" />
+         </LinearLayout>
+		 
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+              >
+             <ImageButton
+	             android:id="@+id/chehui"
+	             android:layout_width="wrap_content"
+	             android:layout_height="match_parent"
+	             android:onClick="CheHui"
+	             android:src="@drawable/chehui" />
+             <ImageButton
+	             android:id="@+id/zhusi"
+	             android:layout_width="wrap_content"
+	             android:layout_height="match_parent"
+	             android:onClick="ZhuSi"
+	             android:src="@drawable/zhusi" />
+         </LinearLayout>
+
+    </RelativeLayout>
+ 	<Button
+             android:id="@+id/data_move"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_centerHorizontal="true"
+             android:text="2.289m" />
+ 	<Button
+             android:id="@+id/center_move"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             android:textSize="18sp"
+             android:textColor="#000000"
+             android:background="#DCDCDCFA"
+             android:visibility="invisible"
+             android:paddingRight="10dp"
+             android:paddingLeft="10dp"
+             android:text="text" />
+    
+</RelativeLayout>
