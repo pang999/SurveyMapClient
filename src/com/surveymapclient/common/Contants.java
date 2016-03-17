@@ -20,30 +20,30 @@ public class Contants {
 	public static final int IS_TWO_LINES=9;
 	
 	public static final int LINEATTRIBUTEBACK=10;
-	
+	public static final int SSSLINEATTRIBUTEBACK=10;	
 	/**
-	 * ¸ùÄ¿Â¼
+	 * æ ¹ç›®å½•
 	 */
 	public static String fish_saying_root = "/com.androidleaf.audiorecord";
 	
 	/**
-	 * »ñÈ¡ÒôÆµ±£´æÄ¿Â¼
+	 * è·å–éŸ³é¢‘ä¿å­˜ç›®å½•
 	 */
 	public static String AUDIO_DIRECTORY = Environment.getExternalStorageDirectory() +
 			fish_saying_root + "/audio_record";
 	
 	/**
-	 * Â¼ÖÆÒôÆµ³õÊ¼ºó×º
+	 * å½•åˆ¶éŸ³é¢‘åˆå§‹åç¼€
 	 */
 	public static final String PCM_SUFFIX = ".pcm";
 	
 	/**
-	 * ×ª»»³ÉaacÒôÆµºó×º
+	 * è½¬æ¢æˆaacéŸ³é¢‘åç¼€
 	 */
 	public static final String AAC_SUFFIX = ".aac";
 	
 	/**
-	 * ×ª»»³Ém4aÒôÆµºó×º
+	 * è½¬æ¢æˆm4aéŸ³é¢‘åç¼€
 	 */
 	public static final String M4A_SUFFIX = ".m4a";
 	
