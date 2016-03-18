@@ -49,13 +49,12 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 
 	//¿Ø¼þ
 	private DefineView defineview;
-	private Button textView;
 	private EditText edittitle;
 	private ImageView btndefineback,btneditNote,btnhistoryItem,btnrectangle,
 			btncoordinate,btnangle,btnsingle,btncontinuous;
 	
 	private static LocationView locationview;
-	
+	private RelativeLayout topLinearlaout;
     Bitmap bitmap;
 	boolean isdrag=true;
 	private Context mContext = null;
@@ -68,7 +67,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
     
     CouplePointLineBean couple;
     int index;
-    RelativeLayout topLinearlaout;
+   
     public static int TopHeaght;
 	@Override	
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +93,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		//center
 		defineview= (DefineView) findViewById(R.id.defineview);
 		dataMove=(Button) findViewById(R.id.data_move);
-		textView=(Button) findViewById(R.id.center_move);	
 		dataMove.setOnTouchListener(mTouchListener);
-		textView.setOnTouchListener(mTouchListener);
 		//bottom
 		btnsingle=(ImageView) findViewById(R.id.type_single);
 		btncontinuous=(ImageView) findViewById(R.id.type_continuous);
@@ -196,12 +193,15 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	}
 
 	public void showEditeView(){
-		textView.setVisibility(View.VISIBLE);
+		TextView text=new TextView(this);
+		text.setText("Text");
+		text.setTextColor(Color.RED);
+		text.setBackgroundColor(Color.GRAY);
+		
 	}
 	public void EditLineName(String text){
 		if (!text.equals("")&&""!=text) {
-			defineview.SetwriteLineText(text,-25);
-			
+			defineview.SetwriteLineText(text,-25);		
 		}		
 	}
 	@Override
@@ -209,7 +209,6 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.type_single:
-			IToast.show(this, "SINGLE");
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.SINGLE;
 			break;
@@ -277,11 +276,9 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 					defineview.LineChangeToText();						
 				}else {
 					defineview.LineNoChangeToText();
-				}
-                         
+				}                        
                 lastX = (int) event.getRawX();  
                 lastY = (int) event.getRawY();  
-
                 break;  
             case MotionEvent.ACTION_UP:  
             	if (defineview.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
@@ -289,12 +286,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
             		if (v==dataMove) {
             			defineview.SetwriteLineText("2.985m",10);
             			dataMove.setVisibility(View.INVISIBLE);
-    				}else if (v==textView) {
-//    					defineview.SetwriteLineText("Text",-25);
-    					textView.setVisibility(View.INVISIBLE);   					
-    					EditLineNameDialogFragment dialog = EditLineNameDialogFragment.newIntance();  
-    				    dialog.show(getFragmentManager(), "editDialog");  
-					}      		
+    				}     		
             		defineview.LineNoChangeToText();          		
 				}
                 break;  

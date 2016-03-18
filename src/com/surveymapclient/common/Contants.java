@@ -20,7 +20,9 @@ public class Contants {
 	public static final int IS_TWO_LINES=9;
 	
 	public static final int LINEATTRIBUTEBACK=10;
+
 	public static final int SSSLINEATTRIBUTEBACK=10;	
+    // branch 'master' of https://github.com/luxiansheng/SurveyMap.git
 	/**
 	 * 根目录
 	 */

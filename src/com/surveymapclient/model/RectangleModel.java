@@ -46,6 +46,10 @@ public class RectangleModel {
 		start_x=end_x= ViewContans.AdsorbPoint((int)Math.floor(x));
 		start_y=end_y= ViewContans.AdsorbPoint((int)Math.floor(y));	
 	}
+	public void Rectangle_camera_touch_down(float x,float y){		
+		start_x=end_x=x;
+		start_y=end_y=y;	
+	}
 	public void Rectangle_touch_move(float x,float y){		
 		end_x=x;
 		end_y=y;		
@@ -53,6 +57,12 @@ public class RectangleModel {
 	public void Rectangle_touch_up(float x,float y,Canvas canvas){		
 		end_x= ViewContans.AdsorbPoint((int)Math.floor(x));
 		end_y= ViewContans.AdsorbPoint((int)Math.floor(y));	
+		AddRectangleParams(getRectlist, start_x, start_y, end_x, end_y);
+		DrawRectangle(canvas);
+	}
+	public void Rectangle_camera_touch_up(float x,float y,Canvas canvas){		
+		end_x= x;
+		end_y= y;	
 		AddRectangleParams(getRectlist, start_x, start_y, end_x, end_y);
 		DrawRectangle(canvas);
 	}
@@ -80,6 +90,10 @@ public class RectangleModel {
 		smy= ViewContans.AdsorbPoint((int)Math.floor(smy));
 		emx= ViewContans.AdsorbPoint((int)Math.floor(emx));
 		emy= ViewContans.AdsorbPoint((int)Math.floor(emy)); 
+		AddRectangleParams(getRectlist, smx, smy, emx, emy);
+		MoveDrawRectangleOnBitmap(canvas);
+	}
+	public void MoveRectangle_camera_up(Canvas canvas){
 		AddRectangleParams(getRectlist, smx, smy, emx, emy);
 		MoveDrawRectangleOnBitmap(canvas);
 	}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.surveymapclient.activity.CameraActivity;
+import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.Logger;
@@ -13,8 +14,11 @@ import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.CouplePointLineBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
+import com.surveymapclient.model.AngleModel;
+import com.surveymapclient.model.CoordinateModel;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
+import com.surveymapclient.model.RectangleModel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -66,12 +70,11 @@ public class CameraBitMapView extends View {
     private boolean mIsShortPressed=false;
     private boolean isMoveLinedrag=false;
 	
-	public boolean isDrag=true;
-	public boolean isDan=false;
-	public boolean isDuo=false;
-	
 	private LinesModel linesModel;
 	private PolygonModel polygonModel;
+	private RectangleModel rectangleModel;
+    private CoordinateModel coordinateModel;
+    private AngleModel angleModel;
 	
 	 private boolean isWriteText=false;
 	 private static int m=-1;
@@ -84,6 +87,9 @@ public class CameraBitMapView extends View {
 		// TODO Auto-generated constructor stub
 		linesModel=new LinesModel();
 		polygonModel=new PolygonModel();
+		rectangleModel=new RectangleModel();
+		coordinateModel=new CoordinateModel();
+		angleModel=new AngleModel();
 		this.mContext=context;
 //		initCanvas();
 	}
@@ -146,7 +152,8 @@ public class CameraBitMapView extends View {
 		canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);     //显示旧的画布
 		canvas.scale(scale, scale,getWidth()/2,getHeight()/2);
 		polygonModel.DrawPath(canvas);
-		if (isDan&&isMovingdraw) {
+		angleModel.DrawAngle(canvas);
+		if (CameraActivity.TYPE==Contants.SINGLE&&isMovingdraw) {
 			if (isMoveLinedrag) {
 				linesModel.MoveDrawLine(canvas);
 			}else {
@@ -158,10 +165,27 @@ public class CameraBitMapView extends View {
 			}
         	
 		}
+		if (CameraActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
+			if (isMoveLinedrag) {
+				rectangleModel.MoveDrawRectangle(canvas);
+			}else {
+				rectangleModel.DrawRectangle(canvas);
+			}
+		} else if (CameraActivity.TYPE==Contants.COORDINATE&&isMovingdraw) {
+			if (isMoveLinedrag) {
+				coordinateModel.MoveDrawCoordinate(canvas);
+			}else {
+				coordinateModel.DrawCoordinate(canvas);
+			}
+			
+		}else if(CameraActivity.TYPE==Contants.ANGLE&&isMovingdraw){
+			if (isMoveLinedrag) {
+				angleModel.MoveDrawAngle(canvas);
+			}
+		}
 		if (isWriteText) {
         	Logger.i("选中的值", "m="+m);
         	linesModel.LineChangeToText(totallist, canvas, m);
-//			linesModel.AddTextOnLine(totallist, canvas, m);
 		}
 	}
 	//长按事件参数值
@@ -179,28 +203,53 @@ public class CameraBitMapView extends View {
 		switch (event.getAction()& MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
 //			Logger.i("屏幕与视图", "ACTION_DOWN");
-			
+			isMovingdraw=true;
         	lastx=x;
         	lasty=y;
         	lastDownTime= event.getDownTime();    
-			if (isDan) {
-				isMovingdraw=true;
+			if (CameraActivity.TYPE==Contants.SINGLE) {				
 				int i=linesModel.PitchOnLine(totallist, x, y);
 				if (i>=0) {				
 					isMoveLinedrag=true;
 					linesModel.MoveLine_down(totallist, i, rx, ry);
-					initCanvas();  
-            		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
+					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_camera_touch_down(x, y);
 				}
-			}else if (isDuo) {
+			}else if (CameraActivity.TYPE==Contants.CONTINU) {
 				polygonModel.Continuous_touch_down(x, y);
-			}else if (isDrag) {
+			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
+				int i=rectangleModel.PitchOnRectangle(rectangleModel.getRectlist, x, y);
+				if (i>=0) {
+					isMoveLinedrag=true;
+					rectangleModel.MoveRectangle_down(rectangleModel.getRectlist, i, rx, ry);
+					DrawAllOnBitmap();
+				}else {
+					rectangleModel.Rectangle_camera_touch_down(x, y);
+				}
+			}else if (CameraActivity.TYPE==Contants.COORDINATE) {
+				int i=coordinateModel.PitchOnCoordinate(coordinateModel.getCoordlist, x, y);	
+				if (i>=0) {
+					isMoveLinedrag=true;
+					coordinateModel.MoveCoordinate_down(coordinateModel.getCoordlist, i, rx, ry);
+					DrawAllOnBitmap();
+				} else {
+//					coordinateModel.Coordinate_touch_down(x, y);
+				}
+			}else if (CameraActivity.TYPE==Contants.ANGLE) {
+				int i=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
+				if (i>=0) {
+					isMoveLinedrag=true;
+					angleModel.MoveAngle_down(angleModel.getAnglelist, i, rx, ry);
+					DrawAllOnBitmap();
+				}else {
+					angleModel.Angle_touch_down(x, y);	
+				}
+			}else {
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
 			}
-			
+			invalidate();
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN: //如果有一只手指按下屏幕，后续又有一个手指按下     // 两只手指按下
 			Logger.i("中心点距离", "ACTION_POINTER_DOWN");
@@ -208,42 +257,79 @@ public class CameraBitMapView extends View {
         	break;
 		case MotionEvent.ACTION_MOVE:
 //        	Logger.i("屏幕与视图", "屏幕:x="+getLeft()+",screem_x="+screen_x+",RowX="+(int)rx+"，视图:x="+(int)x+"; 屏幕:y="+getTop()+",screem_y="+screen_y+",RowY="+(int)ry+",视图:y="+(int)y);
-			if (isDan) {
+			if (CameraActivity.TYPE==Contants.SINGLE) {
 				if (isMoveLinedrag) {        		
 					linesModel.MoveLine_move(rx, ry);
 				}else {
-					if (!mIsLongPressed) {
-	                	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
-	                	Yes=true;
-	            	}
-	            	if (mIsLongPressed) {        		
-	            		if (Yes) {
-	            			Yes=false;        			
-	            			if (linesModel.ExtendLine(totallist, x, y)) {
-								vibratorCallBack.onVibratorCallBack();
-							}    		
-	                		initCanvas();  
-	                		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
-						}          		
-	            		linesModel.Line_touch_move(x, y);
-	    			}else {
-	    				linesModel.Line_touch_move(x, y);
-					}
+	    			linesModel.Line_touch_move(x, y);
 				}			
-			}else if (isDuo) {
+			}else if (CameraActivity.TYPE==Contants.CONTINU) {
 				polygonModel.Continuous_touch_move(x, y);
-			}else if (isDrag) {
+			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
+				if (isMoveLinedrag) {
+					rectangleModel.MoveRectangle_move(rx, ry);
+				}else {
+	    			rectangleModel.Rectangle_touch_move(x, y);
+				}			
+			}else if (CameraActivity.TYPE==Contants.COORDINATE) {
+				if (isMoveLinedrag) {
+					coordinateModel.MoveCoordinate_move(rx, ry);
+				}else {
+	    			coordinateModel.Coordinate_touch_move(x, y);						
+				}
+			}else if (CameraActivity.TYPE==Contants.ANGLE) {
+				if (isMoveLinedrag) {
+					angleModel.MoveAngle_move(rx, ry);
+				}else {
+	    			angleModel.Angle_touch_move(x, y);
+				}
+			}else if(CameraActivity.TYPE==Contants.DRAG) {
 				if (mode==DRAG) {
 	            	drag_touch_move(rx, ry);
 				}else if(mode==ZOOM){
 					setzoomcanvas(event);
 				}
 			}
+		    if (!mIsLongPressed) {
+            	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
+            	Yes=true;
+        	}
+            if (mIsLongPressed) {        		
+        		if (Yes) {
+        			Yes=false;        			
+        			if (angleModel.ExtandAngle(angleModel.getAnglelist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+        				DefineActivity.TYPE=Contants.ANGLE;
+					}
+        			if (coordinateModel.ExtandCoordinate(coordinateModel.getCoordlist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.COORDINATE;
+					}
+        			if (rectangleModel.ExtandRectangle(rectangleModel.getRectlist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.RECTANGLE;
+					} 
+        			if (linesModel.ExtendLine(totallist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.SINGLE;
+					} 
+        			DrawAllOnBitmap();
+				}          		
+        		if (DefineActivity.TYPE==Contants.SINGLE) {
+					linesModel.Line_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
+					rectangleModel.Rectangle_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.COORDINATE) {
+					coordinateModel.Coordinate_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.ANGLE) {
+					angleModel.Angle_touch_move(x, y);	
+				}
+			}
+			invalidate();
 			break;
-		case MotionEvent.ACTION_UP:
-			
-			if (isDan) {			
-				isMovingdraw=false;
+		case MotionEvent.ACTION_UP:		
+			isMovingdraw=false;
+			if (CameraActivity.TYPE==Contants.SINGLE) {			
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
 					linesModel.MoveLine_camera_up(mCanvas, rx, ry);
@@ -251,8 +337,32 @@ public class CameraBitMapView extends View {
 					mIsLongPressed=false;
 					linesModel.Line_camera_touch_up(x, y, mCanvas);
 				}
-			}else if (isDuo) {
+			}else if (CameraActivity.TYPE==Contants.CONTINU) {
 				polygonModel.Continuous_camera_touch_up(x, y, mCanvas);
+			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
+				if (isMoveLinedrag) {
+					isMoveLinedrag=false;
+					rectangleModel.MoveRectangle_camera_up(mCanvas);
+				} else {
+					mIsLongPressed=false;
+					rectangleModel.Rectangle_camera_touch_up(x, y,mCanvas);
+				}
+			}else if (CameraActivity.TYPE==Contants.COORDINATE) {
+				if (isMoveLinedrag) {
+					isMoveLinedrag=false;
+					coordinateModel.MoveCoordinate_up(mCanvas);
+				}else {
+					mIsLongPressed=false;
+					coordinateModel.Coordinate_touch_up(x,y,mCanvas);
+				}	
+			}else if (CameraActivity.TYPE==Contants.ANGLE) {
+				if (isMoveLinedrag) {
+					isMoveLinedrag=false;
+					angleModel.MoveAngle_camera_up(mCanvas);
+				}else {
+					mIsLongPressed=false;
+					angleModel.Angle_touch_up(x, y, mCanvas);
+				}
 			}else {
 				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200) 	;												      	
 	        	if (mIsShortPressed) {
@@ -278,10 +388,18 @@ public class CameraBitMapView extends View {
 			} 
 			polygonModel.continuouslist.clear();
 			Logger.i("添加个数", "在total中 ， lines="+totallist.size());
+			CameraActivity.TYPE=Contants.DRAG;
 			break;		
 		}
 		invalidate();
 		return true;
+	}
+	private void DrawAllOnBitmap(){
+		initCanvas(); 
+		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
+		rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
+		coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
+		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
 	}
 	private void drag_touch_start(float rx,float ry){
 		dragPoint.set(rx,ry);
@@ -302,13 +420,10 @@ public class CameraBitMapView extends View {
 		float gy=(float)(-screen_y+ry-50);
 		int i=linesModel.PitchOnLineToText(totallist, gx, gy);
 		if (i>=0) {
-			m=i;	
-			
+			m=i;				
 			return true;
-		}else {
-			
-			return false;
 		}		
+		return false;
 	}
 	public void SetwriteLineText(String text){
 //		invalidate();

@@ -296,8 +296,7 @@ public class DefineView extends View{
 				if (i>=0) {				
 					isMoveLinedrag=true;
 					linesModel.MoveLine_down(totallist, i, rx, ry);
-					initCanvas();  
-            		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
+					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_touch_down(x, y);
 				}				
@@ -308,8 +307,7 @@ public class DefineView extends View{
 				if (i>=0) {
 					isMoveLinedrag=true;
 					rectangleModel.MoveRectangle_down(rectangleModel.getRectlist, i, rx, ry);
-					initCanvas();
-					rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
+					DrawAllOnBitmap();
 				}else {
 					rectangleModel.Rectangle_touch_down(x, y);
 				}			
@@ -318,24 +316,20 @@ public class DefineView extends View{
 				if (i>=0) {
 					isMoveLinedrag=true;
 					coordinateModel.MoveCoordinate_down(coordinateModel.getCoordlist, i, rx, ry);
-					initCanvas();
-					coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
+					DrawAllOnBitmap();
 				} else {
-					coordinateModel.Coordinate_touch_down(x, y);
+//					coordinateModel.Coordinate_touch_down(x, y);
 				}
 			}else if (DefineActivity.TYPE==Contants.ANGLE) {
 				int i=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
 				if (i>=0) {
-					IToast.show(getContext(), "i="+i);
 					isMoveLinedrag=true;
 					angleModel.MoveAngle_down(angleModel.getAnglelist, i, rx, ry);
-					initCanvas();
-					angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
+					DrawAllOnBitmap();
 				}else {
-					IToast.show(getContext(), "angleModel.getAnglelist="+angleModel.getAnglelist.size());
 					angleModel.Angle_touch_down(x, y);	
 				}
-			}else {
+			}else if(DefineActivity.TYPE==Contants.DRAG){
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
 			}
@@ -352,103 +346,71 @@ public class DefineView extends View{
             if (DefineActivity.TYPE==Contants.SINGLE) {       	
             	if (isMoveLinedrag) {        		
 					linesModel.MoveLine_move(rx, ry);
-				}else {
-					if (!mIsLongPressed) {
-	                	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
-	                	Yes=true;
-	            	}
-	            	if (mIsLongPressed) {        		
-	            		if (Yes) {
-	            			Yes=false;        			
-	            			if (linesModel.ExtendLine(totallist, x, y)) {
-								vibratorCallBack.onVibratorCallBack();
-							}    		
-	                		initCanvas();  
-	                		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
-						}          		
-	            		linesModel.Line_touch_move(x, y);
-	    			}else {
-	    				linesModel.Line_touch_move(x, y);
-					}
+				}else {					
+	    			linesModel.Line_touch_move(x, y);
 				}
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {
 				polygonModel.Continuous_touch_move(x, y);
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					rectangleModel.MoveRectangle_move(rx, ry);
-				}else {
-					if (!mIsLongPressed) {
-	                	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
-	                	Yes=true;
-	            	}
-					if (mIsLongPressed) {        		
-	            		if (Yes) {
-	            			Yes=false;        			
-	            			if (rectangleModel.ExtandRectangle(rectangleModel.getRectlist, x, y)) {
-								vibratorCallBack.onVibratorCallBack();
-							}    		
-	                		initCanvas();  
-	                		rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
-						}          		
-	            		rectangleModel.Rectangle_touch_move(x, y);
-	    			}else {
-	    				rectangleModel.Rectangle_touch_move(x, y);
-					}
-					
-				}
-				
+				}else {				
+	    			rectangleModel.Rectangle_touch_move(x, y);
+				}			
 			}else if (DefineActivity.TYPE==Contants.COORDINATE) {
 				if (isMoveLinedrag) {
 					coordinateModel.MoveCoordinate_move(rx, ry);
-				}else {
-					if (!mIsLongPressed) {
-	                	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
-	                	Yes=true;
-	            	}
-					if (mIsLongPressed) {        		
-	            		if (Yes) {
-	            			Yes=false;        			
-	            			if (coordinateModel.ExtandCoordinate(coordinateModel.getCoordlist, x, y)) {
-								vibratorCallBack.onVibratorCallBack();
-							}    		
-	                		initCanvas();  
-	                		coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
-						}          		
-	            		coordinateModel.Coordinate_touch_move(x, y);
-	    			}else {
-	    				coordinateModel.Coordinate_touch_move(x, y);
-					}
-						
+				}else {				
+	    			coordinateModel.Coordinate_touch_move(x, y);						
 				}				
 			}else if (DefineActivity.TYPE==Contants.ANGLE) {
 				if (isMoveLinedrag) {
 					angleModel.MoveAngle_move(rx, ry);
-				}else {
-					if (!mIsLongPressed) {
-	                	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
-	                	Yes=true;
-	            	}
-					if (mIsLongPressed) {        		
-	            		if (Yes) {
-	            			Yes=false;        			
-	            			if (angleModel.ExtandAngle(angleModel.getAnglelist, x, y)) {
-								vibratorCallBack.onVibratorCallBack();
-							}    		
-	                		initCanvas();  
-	                		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
-						}          		
-	            		angleModel.Angle_touch_move(x, y);
-	    			}else {
-	    				angleModel.Angle_touch_move(x, y);
-					}					
+				}else {					
+	    			angleModel.Angle_touch_move(x, y);
 				}				
-			}else {				
+			}else if(DefineActivity.TYPE==Contants.DRAG) {				
 				if (mode==DRAG) {
 	            	drag_touch_move(rx, ry);
 				}else if(mode==ZOOM){
 					setzoomcanvas(event);
 				}
-			}		   	
+			}	
+            if (!mIsLongPressed) {
+            	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
+            	Yes=true;
+        	}
+            if (mIsLongPressed) {        		
+        		if (Yes) {
+        			Yes=false;        			
+        			if (angleModel.ExtandAngle(angleModel.getAnglelist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+        				DefineActivity.TYPE=Contants.ANGLE;
+					}
+        			if (coordinateModel.ExtandCoordinate(coordinateModel.getCoordlist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.COORDINATE;
+					}
+        			if (rectangleModel.ExtandRectangle(rectangleModel.getRectlist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.RECTANGLE;
+					} 
+        			if (linesModel.ExtendLine(totallist, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.SINGLE;
+					} 
+        			DrawAllOnBitmap();
+				}          		
+        		if (DefineActivity.TYPE==Contants.SINGLE) {
+					linesModel.Line_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
+					rectangleModel.Rectangle_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.COORDINATE) {
+					coordinateModel.Coordinate_touch_move(x, y);
+				}else if (DefineActivity.TYPE==Contants.ANGLE) {
+					angleModel.Angle_touch_move(x, y);	
+				}
+			}
     	    invalidate();
             break;
         case MotionEvent.ACTION_UP:
@@ -524,6 +486,13 @@ public class DefineView extends View{
 			break;
         }
 		return true;
+	}
+	private void DrawAllOnBitmap(){
+		initCanvas(); 
+		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
+		rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
+		coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
+		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
 	}
 	/**
 	 * »­²¼ÍÏ×§

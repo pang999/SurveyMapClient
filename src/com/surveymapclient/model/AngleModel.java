@@ -132,6 +132,11 @@ public class AngleModel {
 		AddAngleParams(getAnglelist, start_mx, start_my, angle_mx,
 				angle_my, end_mx, end_my);
 	}
+	public void MoveAngle_camera_up(Canvas canvas){	    
+		MoveDrawAngleOnBitmap(canvas);
+		AddAngleParams(getAnglelist, start_mx, start_my, angle_mx,
+				angle_my, end_mx, end_my);
+	}
 	public void AddAngleParams(List<AngleLineBean> lines,float sx,
 			float sy,float ax,float ay,float ex,float ey){
 		AngleLineBean angleLineBean=new AngleLineBean(new PointF(sx, sy),

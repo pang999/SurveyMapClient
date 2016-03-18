@@ -24,7 +24,8 @@ public class CoordinateModel {
 	float center_mx,center_my,xto_mx,xto_my,yto_mx,yto_my,zto_mx,zto_my;
 	
 	public List<CoordinateLineBean> getCoordlist=new ArrayList<CoordinateLineBean>();
-	
+	private static int index=-1;
+	private static String select="";
 	public void DrawCoordinate(Canvas canvas){
 		
 		canvas.drawLine(center_x, center_y, xto_x, xto_y, mPaint);
@@ -70,11 +71,41 @@ public class CoordinateModel {
 		zto_x=center_x;
 		zto_y=center_y-100;
 	}
+	public void ExtandCoordinateOneAxis_touch_move(List<CoordinateLineBean> lines,float x,float y){
+		center_x=lines.get(index).getCenterPoint().x;
+		center_y=lines.get(index).getCenterPoint().y;
+		if (select=="X") {
+			yto_x=lines.get(index).getyPoint().x;
+			yto_y=lines.get(index).getyPoint().y;
+			zto_x=lines.get(index).getzPoint().x;
+			zto_y=lines.get(index).getzPoint().y;
+			xto_x=x;
+			xto_y=y;
+		}else if (select=="Y") {
+			xto_x=lines.get(index).getxPoint().x;
+			xto_y=lines.get(index).getxPoint().y;
+			yto_x=x;
+			yto_y=lines.get(index).getyPoint().y;
+			zto_x=lines.get(index).getzPoint().x;
+			zto_y=lines.get(index).getzPoint().y;
+		}else if (select=="Z") {
+			xto_x=lines.get(index).getxPoint().x;
+			xto_y=lines.get(index).getxPoint().y;
+			yto_x=lines.get(index).getyPoint().x;
+			yto_y=lines.get(index).getyPoint().y;
+			zto_x=lines.get(index).getzPoint().x;
+			zto_y=y;
+		}
+	}
 	public void Coordinate_touch_up(float x,float y,Canvas canvas){
 //		center_x= ViewContans.AdsorbPoint((int)Math.floor(center_x));
 //		center_y= ViewContans.AdsorbPoint((int)Math.floor(center_y));
 		DrawCoordinate(canvas);
-		AddCoordinateParams(getCoordlist, center_x, center_y, xto_x, xto_y, yto_x, yto_y, zto_x, zto_y);
+		AddCoordinateParams(getCoordlist,
+				center_x, center_y,
+				xto_x, xto_y, 
+				yto_x, yto_y,
+				zto_x, zto_y);
 	}
 	
 	public void MoveCoordinate_down(List<CoordinateLineBean> lines,int i,float rx,float ry){
@@ -107,7 +138,10 @@ public class CoordinateModel {
 	public void MoveCoordinate_up(Canvas canvas){
 //		center_mx= ViewContans.AdsorbPoint((int)Math.floor(center_mx));
 //		center_my= ViewContans.AdsorbPoint((int)Math.floor(center_mx));
-		AddCoordinateParams(getCoordlist, center_mx, center_my, xto_mx, xto_my, yto_mx, yto_my, zto_mx, zto_my);
+		AddCoordinateParams(getCoordlist, center_mx, center_my,
+				xto_mx, xto_my, 
+				yto_mx, yto_my, 
+				zto_mx, zto_my);
 		MoveCoordinateOnBitmap(canvas);
 	}
 	public int PitchOnCoordinate(List<CoordinateLineBean> lines,float x,float y){
@@ -138,7 +172,7 @@ public class CoordinateModel {
 			boolean y_axis=((yx-30<dx)&&(yx+30>dx))&&((yy-30<dy)&&(yy+30>dy));
 			boolean z_axis=((zx-30<dx)&&(zx+30>dx))&&((zy-30<dy)&&(zy+30>dy));
 			if (x_axis) {
-				Logger.i("选中坐标轴", "X轴");
+				Logger.i("选中坐标轴", i+"=X轴");
 				center_x=lines.get(i).getCenterPoint().x;
 				center_y=lines.get(i).getCenterPoint().y;
 				zto_x=(float)zx;
@@ -147,10 +181,12 @@ public class CoordinateModel {
 				yto_y=(float)yy;
 				xto_x=x;
 				xto_y=y;
+				index=i;
+				select="X";
 				lines.remove(i);
 				return true;
 			}else if (y_axis) {
-				Logger.i("选中坐标轴", "Y轴");
+				Logger.i("选中坐标轴", i+"=Y轴");
 				center_x=lines.get(i).getCenterPoint().x;
 				center_y=lines.get(i).getCenterPoint().y;
 				xto_x=(float)xx;
@@ -159,10 +195,12 @@ public class CoordinateModel {
 				zto_y=(float)zy;
 				yto_x=x;
 				yto_y=(float)yy;
+				index=i;
+				select="Y";
 				lines.remove(i);
 				return true;
 			}else if (z_axis) {
-				Logger.i("选中坐标轴", "Z轴");
+				Logger.i("选中坐标轴", i+"=Z轴");
 				center_x=lines.get(i).getCenterPoint().x;
 				center_y=lines.get(i).getCenterPoint().y;
 				xto_x=(float)xx;
@@ -171,6 +209,8 @@ public class CoordinateModel {
 				yto_y=(float)yy;
 				zto_x=(float)zx;
 				zto_y=y;
+				index=i;
+				select="Z";
 				lines.remove(i);
 				return true;
 			}

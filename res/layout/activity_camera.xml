@@ -11,71 +11,129 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"    
          />
-     <Button
+     <RelativeLayout
+        android:id="@+id/camera_topLinearlayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="50dp"     
         android:layout_gravity="top"
         android:background="#00FFFF"
-        android:text="清单" />
+         >
+        <EditText 
+            android:id="@+id/camera_editTitle"
+            android:layout_width="200dp"
+        	android:layout_height="wrap_content"  
+        	android:layout_centerInParent="true"
+        	android:gravity="center"
+        	android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+        	android:text="Sketch1"
+            />
+	      <com.surveymapclient.view.LocationView 
+	     	android:id="@+id/camera_locationview"
+	        android:layout_width="wrap_content"
+	      	android:layout_height="wrap_content" 
+	      	android:onClick="LocationSketch"		
+	            />
 
-    <RelativeLayout
+	      <ImageView
+	          android:id="@+id/camera_defineBack"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentLeft="true"
+	          android:layout_centerVertical="true"
+	          android:src="@drawable/back" />
+
+	      <ImageView
+	          android:id="@+id/camera_tolistlines"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentRight="true"
+	          android:layout_centerVertical="true"
+	          android:onClick="onListLines"
+	          android:src="@drawable/btnlines" />
+
+	      <ImageView
+	          android:id="@+id/camera_tohistory"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignTop="@+id/tolistlines"
+	          android:layout_toRightOf="@+id/defineBack"
+	          android:onClick="onHistory"
+	          android:src="@drawable/histories" />
+
+    </RelativeLayout>
+
+     <LinearLayout
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="#00FFFF"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
          >               
-         <LinearLayout
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentLeft="true"
-              >
-	             <ImageButton 
-		             android:id="@+id/danlianxian"
-		             android:layout_width="wrap_content"
-		             android:layout_height="match_parent"
-		             android:src="@drawable/danlianxian"
-		             android:onClick="DanLianXian"
-		             />
-	             <ImageButton
-		             android:id="@+id/duolianxian"
-		             android:layout_width="wrap_content"
-		             android:layout_height="match_parent"
-		             android:onClick="DuoLianXian"
-		             android:src="@drawable/duolianxian" />
-         </LinearLayout>
-		 
-         <LinearLayout
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
-              >
-             <ImageButton
-	             android:id="@+id/chehui"
-	             android:layout_width="wrap_content"
-	             android:layout_height="match_parent"
-	             android:onClick="CheHui"
-	             android:src="@drawable/chehui" />
-             <ImageButton
-	             android:id="@+id/zhusi"
-	             android:layout_width="wrap_content"
-	             android:layout_height="match_parent"
-	             android:onClick="ZhuSi"
-	             android:src="@drawable/zhusi" />
-         </LinearLayout>
 
-    </RelativeLayout>
+            <ImageView 
+	             android:id="@+id/camera_type_single"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:src="@drawable/danlianxian"
+	             android:layout_weight="1"
+             />
+            <ImageView
+	             android:id="@+id/camera_type_continuous"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_weight="1"
+	             android:src="@drawable/duolianxian" />
+
+            <ImageView
+                android:id="@+id/camera_type_rectangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/rectangle" />
+
+            <ImageView
+                android:id="@+id/camera_type_coordinate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/coordinate" />
+
+            <ImageView
+                android:id="@+id/camera_type_angle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/angle" />
+
+            <ImageView
+	            android:id="@+id/camera_recall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onRecall"
+	            android:layout_weight="1"
+	            android:src="@drawable/chehui" />
+            <ImageView
+	             android:id="@+id/camera_annotation"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:onClick="onAnnotation"
+	             android:layout_weight="1"
+	             android:src="@drawable/zhusi" />
+
+    </LinearLayout>
  	<Button
-             android:id="@+id/data_move"
+             android:id="@+id/camera_data_move"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignParentBottom="true"
              android:layout_centerHorizontal="true"
              android:text="2.289m" />
  	<Button
-             android:id="@+id/center_move"
+             android:id="@+id/camera_center_move"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_centerInParent="true"

@@ -126,24 +126,10 @@
 
     </LinearLayout>
  	<Button
-          android:id="@+id/center_move"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:textSize="18sp"
-          android:textColor="#000000"
-          android:background="#DCDCDCFA"
-          android:visibility="invisible"
-          android:paddingRight="10dp"
-          android:paddingLeft="10dp"
-          android:text="text" />
-
- 	<Button
- 	    android:id="@+id/data_move"
- 	    android:layout_width="wrap_content"
- 	    android:layout_height="wrap_content"
- 	    android:layout_above="@+id/button1"
- 	    android:layout_centerHorizontal="true"
- 	    android:text="2.289m" />
-
+             android:id="@+id/data_move"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_centerHorizontal="true"
+             android:text="2.289m" />
 </RelativeLayout>

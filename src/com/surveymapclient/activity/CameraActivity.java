@@ -1,5 +1,6 @@
 package com.surveymapclient.activity;
 
+import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.ImageTools;
 import com.surveymapclient.common.Logger;
@@ -7,6 +8,10 @@ import com.surveymapclient.entity.CouplePointLineBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.view.CameraBitMapView;
+import com.surveymapclient.view.DefineView;
+import com.surveymapclient.view.HistPopupWindow;
+import com.surveymapclient.view.LocationView;
+import com.surveymapclient.view.NotePopupWindow;
 import com.surveymapclient.view.fragment.CameraEditeAndDelDialog;
 import com.surveymapclient.view.fragment.EditeAndDelDialog;
 
@@ -34,23 +39,33 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-public class CameraActivity extends Activity implements DialogCallBack,VibratorCallBack{
+public class CameraActivity extends Activity implements DialogCallBack,VibratorCallBack,OnClickListener{
+	
+	//控件
+	private Button textView;
+	private EditText edittitle;
+	private ImageView btndefineback,btneditNote,btnhistoryItem,btnrectangle,
+			btncoordinate,btnangle,btnsingle,btncontinuous;
+	private static LocationView locationview;
+	private RelativeLayout topLinearlaout;
 	
     Bitmap bitmap;
 	private CameraBitMapView cameraBitMapView;
 	public static Bitmap smallBitmap ;
 	CouplePointLineBean couple;
 	private Button dataMove;
-	private Button textView;
     int index;
     int screenWidth;
     int screenHeight;
     private Context mContext = null;
+    public static int TYPE=0;
 	/**
      * 手机振动器
      */
@@ -62,27 +77,14 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);   
-		cameraBitMapView = (CameraBitMapView) findViewById(R.id.CameraBitMapView);
-		dataMove=(Button) findViewById(R.id.data_move);
-		dataMove.setOnTouchListener(mTouchListener);
-		textView=(Button) findViewById(R.id.center_move);
-		textView.setOnTouchListener(mTouchListener);
-		DisplayMetrics dm = getResources().getDisplayMetrics();  
-		screenWidth = dm.widthPixels;  
-		screenHeight= dm.heightPixels - 50; 
-		mContext=this;
+		initView();	
+		// 震动效果的系统服务
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         Intent intent=getIntent();
         if(intent!=null)
         {
-//            bitmap=intent.getParcelableExtra("bitmap");
-//            
-//			smallBitmap = ImageTools.zoomBitmap(bitmap, bitmap.getWidth()*5, bitmap.getHeight()*5 );
 			Logger.i("执行顺序", "smallBitmap="+smallBitmap);
-//			String url=intent.getExtras().getString("bitmap");
-			Bundle bundle=getIntent().getExtras();
-//			String fileName = intent.getStringExtra(
-//					TestCameraActivity.KEY_FILENAME);
-			
+			Bundle bundle=getIntent().getExtras();			
 			int where=bundle.getInt("Where");
 			if (where==0) {
 				String fileName = bundle.getString(TestCameraActivity.KEY_FILENAME);
@@ -94,39 +96,56 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 				String fileName = bundle.getString(TestCameraActivity.KEY_FILENAME);
 				cameraBitMapView.setimagebitmap(fileName);
 			}
-        }
-        // 震动效果的系统服务
-        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        }      
 	}
-	public void DanLianXian(View v){
-		if (cameraBitMapView.isDan) {
-			cameraBitMapView.isDuo=false;
-			cameraBitMapView.isDrag=true;
-			cameraBitMapView.isDan=false;
-		}else {
-//			imageview.ZoomCanvas(1);
-			cameraBitMapView.isDuo=false;
-			cameraBitMapView.isDrag=false;
-			cameraBitMapView.isDan=true;
-		}
+	private void initView(){
+		mContext=this;
+		//top		
+		btndefineback=(ImageView) findViewById(R.id.camera_defineBack);
+		btnhistoryItem=(ImageView) findViewById(R.id.camera_tohistory);
+		edittitle=(EditText) findViewById(R.id.camera_editTitle);
+		topLinearlaout=(RelativeLayout) findViewById(R.id.camera_topLinearlayout);
+		locationview=(LocationView) findViewById(R.id.camera_locationview);
+		edittitle.setOnClickListener(this);		
+		btndefineback.setOnClickListener(this);			
+		//center
+		cameraBitMapView = (CameraBitMapView) findViewById(R.id.CameraBitMapView);
+		dataMove=(Button) findViewById(R.id.camera_data_move);
+		textView=(Button) findViewById(R.id.camera_center_move);	
+		dataMove.setOnTouchListener(mTouchListener);
+		textView.setOnTouchListener(mTouchListener);
+		//bottom
+		btnsingle=(ImageView) findViewById(R.id.camera_type_single);
+		btncontinuous=(ImageView) findViewById(R.id.camera_type_continuous);
+		btnrectangle=(ImageView) findViewById(R.id.camera_type_rectangle);
+		btncoordinate=(ImageView) findViewById(R.id.camera_type_coordinate);
+		btnangle=(ImageView) findViewById(R.id.camera_type_angle);
+		btneditNote=(ImageView) findViewById(R.id.camera_annotation);
+		btnsingle.setOnClickListener(this);
+		btncontinuous.setOnClickListener(this);
+		btnrectangle.setOnClickListener(this);
+		btncoordinate.setOnClickListener(this);
+		btnangle.setOnClickListener(this);
+		btneditNote.setOnClickListener(this);
 	}
-	public void DuoLianXian(View v){
-		if (cameraBitMapView.isDuo) {
-			cameraBitMapView.isDuo=false; 
-			cameraBitMapView.isDrag=true;
-			cameraBitMapView.isDan=false;
-		}else {
-//			imageview.ZoomCanvas(1);
-			cameraBitMapView.isDuo=true;
-			cameraBitMapView.isDrag=false;
-			cameraBitMapView.isDan=false;
-		}
-	}
-	public void CheHui(View v){
+	public void onRecall(View v){
 		cameraBitMapView.UnDo();
 	}
-	public void ZhuSi(View v){
-		showEditePopupWindow(v);
+	public void onAnnotation(View v){
+		NotePopupWindow notePopupWindow=new NotePopupWindow(CameraActivity.this);
+		notePopupWindow.showPopupWindow(btneditNote);
+	}
+	public void onListLines(View v){
+		Intent intent=new Intent();
+		intent.setClass(this, ListLinesActivity.class);
+		startActivity(intent);
+	}
+	public void onHistory(View v){
+		HistPopupWindow histPopupWindow=new HistPopupWindow(CameraActivity.this);
+		histPopupWindow.showPopupWindow(btnhistoryItem);
+	}
+	public static void LocationXY(int x,int y){
+		locationview.LocationSketch(x, y);
 	}
 	@Override
 	public void onVibratorCallBack() {
@@ -171,58 +190,6 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		cameraBitMapView.RemoveIndexLine(index);
 	}
 	
-	public void showEditePopupWindow(View view){
-		// 一个自定义的布局，作为显示的内容
-		View contentView=LayoutInflater.from(mContext).inflate(R.layout.popupeditewindow, null);
-		Button edittext=(Button) contentView.findViewById(R.id.editetext);
-		Button tape=(Button) contentView.findViewById(R.id.tape);
-		edittext.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				IToast.show(mContext, "文字编辑");
-				textView.setVisibility(View.VISIBLE);
-				
-//				textView.layout(Contants.sreenWidth/2, 400, 400, 500);
-
-//				textView.setOnTouchListener(mTouchListener);
-			}
-		});
-		tape.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				IToast.show(mContext, "录音");
-			}
-		});
-		final PopupWindow popupWindow=new PopupWindow(contentView, 
-				200, 200, true);
-//		popupWindow.setTouchable(true);
-//		popupWindow.setTouchInterceptor(new OnTouchListener() {
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                Log.i("mengdd", "onTouch : ");
-//
-//                return false;
-//                // 这里如果返回true的话，touch事件将被拦截
-//                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-//            }
-//
-//        });
-
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.meimu));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
-	}
-	
 	private OnTouchListener mTouchListener=new OnTouchListener() {
 		
 		int lastX, lastY;  
@@ -265,7 +232,6 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 
                 v.layout(left, top, right, bottom);  
                 if (cameraBitMapView.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
-					Logger.i("设置线段", "设置成功了！");
 					cameraBitMapView.LineChangeToText();						
 				}else {
 					cameraBitMapView.LineNoChangeToText();
@@ -277,13 +243,10 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
                 break;  
             case MotionEvent.ACTION_UP:  
             	if (cameraBitMapView.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
-//					Logger.i("设置线段", "设置成功了！");
             		dataMove.setVisibility(View.INVISIBLE);
             		textView.setVisibility(View.INVISIBLE);
             		cameraBitMapView.SetwriteLineText("Text");
-            		cameraBitMapView.LineNoChangeToText();
-//					v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-            		
+            		cameraBitMapView.LineNoChangeToText();            		
 				}
                 break;  
             }  
@@ -293,5 +256,29 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 	@Override
 	public void onDestroy() {
 		super.onDestroy();	
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.camera_type_single:
+			TYPE=Contants.SINGLE;
+			break;
+		case R.id.camera_type_continuous:
+			TYPE=Contants.CONTINU;
+			break;
+		case R.id.camera_type_rectangle:
+			TYPE=Contants.RECTANGLE;
+			break;
+		case R.id.camera_type_coordinate:
+			TYPE=Contants.COORDINATE;
+			break;
+		case R.id.camera_type_angle:
+			TYPE=Contants.ANGLE;
+			break;
+		case R.id.camera_defineBack:
+			IToast.show(this, "保存图片成功");
+			break;
+		}
 	}
 }
