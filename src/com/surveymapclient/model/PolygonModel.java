@@ -246,69 +246,11 @@ public class PolygonModel {
 							shadowpoints.add(new PointF(lines.get(getInt.get(k).intValue()).getStopPoint().x, lines.get(getInt.get(k).intValue()).getStopPoint().y));
 						}								
 						ShadowArea(canvas);		
-						
-//						for (int k = 0; k < getInt.size(); k++) {
-//							lines.remove(getInt.get(k).intValue());
-							lines.removeAll(getInt);
-//							Logger.i("第getInt个数", "--getInt-->"+getInt.get(k).intValue());
-//						}
+						lines.removeAll(getInt);
 						Logger.i("相接总数", "lines总数="+lines.size());	
-//						if (lines.size()>=3) {
-//							jisuang(lines, 0, canvas);
-//						}
 						break;
 					}
-				}
-//				else if (goFoot) {
-//					if (i!=0) {
-//						if ((exi==sxj)&&(eyi==syj)) {
-//							isFoot=true;
-//							goHead=false;
-//							goFoot=true;
-//						}else if ((exi==exj)&&(eyi==eyj)) {
-//							isFoot=true;
-//							goHead=true;
-//							goFoot=false;
-//						}
-//					}
-//				}		 
-//				if (isHead) {
-//					isHead=false;
-//					getInt.add(i);
-//					n=j;
-//					isFromFor=true;
-//					Logger.i("第几个数", "--isHead-->"+n);
-//					break;
-//				}else if (isFoot) {
-//					isFoot=false;
-//					getInt.add(i);
-//					n=j;
-//					isFromFor=true;
-//					Logger.i("第几个数", "--isFoot-->"+n);
-//					break;
-//				}
-//				else if (isBack) { 		
-//					Logger.i("第几个数", "--isFromBack-->"+n);
-//					getInt.add(i);
-//					shadowpoints=new ArrayList<PointF>();
-//					for (int k = 0; k < getInt.size(); k++) {
-//						Logger.i("第几个数", "--->"+getInt.get(k).intValue());
-//						shadowpoints.add(new PointF(jiLines.get(getInt.get(k).intValue()).getStartPoint().x, jiLines.get(getInt.get(k).intValue()).getStartPoint().y));
-//						shadowpoints.add(new PointF(jiLines.get(getInt.get(k).intValue()).getStopPoint().x, jiLines.get(getInt.get(k).intValue()).getStopPoint().y));
-//					}					
-//					for (int k = 0; k < getInt.size(); k++) {
-//						jiLines.remove(getInt.get(k).intValue());
-//					}				
-//					ShadowArea(canvas);
-//					getInt.clear();
-//					isFromBack=true;
-//					break;
-//				}
-//					else {
-//					jiLines.remove(i);
-//					isFromCrack=true;
-//					break;
-//				}	
+				}	
 			}		
 		}
 		if (isFromFor) {

@@ -390,8 +390,7 @@ public class LinesModel {
 			sy= sy+dy;
 			ex= ex+dx;
 			ey= ey+dy; 			
-	    }
-		
+	    }		
 	}
 	public void MoveLine_up(Canvas canvas,float rx,float ry){	    
 		sx= ViewContans.AdsorbPoint((int)Math.floor(sx));
@@ -458,7 +457,7 @@ public class LinesModel {
 	            }              
 	        }  
 	        return iRet;  
-	    } 
+	 } 
 	
 	public void DeleteLine(List<CouplePointLineBean> lines,Canvas canvas){
 	          

@@ -118,10 +118,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	public void onReCall(View v){
 		defineview.UnDo();
 	}
-	public void onAnnotation(View v){
-		NotePopupWindow notePopupWindow=new NotePopupWindow(DefineActivity.this);
-		notePopupWindow.showPopupWindow(btneditNote);
-	}	
+
 	public void onListLines(View v){
 		Intent intent=new Intent();
 		intent.setClass(this, ListLinesActivity.class);
@@ -193,11 +190,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	}
 
 	public void showEditeView(){
-		TextView text=new TextView(this);
-		text.setText("Text");
-		text.setTextColor(Color.RED);
-		text.setBackgroundColor(Color.GRAY);
-		
+		defineview.setManyTextOnView();	
 	}
 	public void EditLineName(String text){
 		if (!text.equals("")&&""!=text) {
@@ -230,6 +223,12 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 			break;
 		case R.id.defineBack:
 			IToast.show(this, "±£´æÍ¼Æ¬³É¹¦");
+			break;
+		case R.id.annotation:
+			IToast.show(this, "hvoifdh");
+			TYPE=Contants.TEXT;
+			NotePopupWindow notePopupWindow=new NotePopupWindow(DefineActivity.this);
+			notePopupWindow.showPopupWindow(btneditNote);
 			break;
 		}		
 	}
