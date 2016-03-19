@@ -2,6 +2,7 @@ package com.surveymapclient.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -239,14 +240,21 @@ public class PolygonModel {
 						Logger.i("第几个数", "--isFromBack-->"+n);
 						getInt.add(i);
 						isFromBack=true;
-						shadowpoints=new ArrayList<PointF>();
-						for (int k = 0; k < getInt.size(); k++) {
-//							Logger.i("第几个数", "--->"+getInt.get(k).intValue());
+						shadowpoints=new ArrayList<PointF>();						
+						for (int k = getInt.size()-1; k >=0 ; k--) {						
 							shadowpoints.add(new PointF(lines.get(getInt.get(k).intValue()).getStartPoint().x, lines.get(getInt.get(k).intValue()).getStartPoint().y));
 							shadowpoints.add(new PointF(lines.get(getInt.get(k).intValue()).getStopPoint().x, lines.get(getInt.get(k).intValue()).getStopPoint().y));
-						}								
+						}	
+						Collections.sort(getInt);
 						ShadowArea(canvas);		
-						lines.removeAll(getInt);
+						for (int k = getInt.size()-1; k >=0 ; k--) {
+							Logger.i("第几个数", "--sort-->"+getInt.get(k).intValue());
+							lines.remove(getInt.get(k).intValue());
+						}
+						getInt.clear();
+						if (lines.size()>=3) {
+							jisuang(lines, 0, canvas);
+						}
 						Logger.i("相接总数", "lines总数="+lines.size());	
 						break;
 					}
