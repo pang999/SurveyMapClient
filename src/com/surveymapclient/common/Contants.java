@@ -13,15 +13,15 @@ public class Contants {
 	public static final int RECTANGLE=4;
 	public static final int COORDINATE=5;
 	public static final int ANGLE=6;
+	public static final int TEXT=7;
 	
+	public static final int IS_CONTINUES=8;
+	public static final int IS_ONE_LINE=9;
+	public static final int IS_TWO_LINES=10;
 	
-	public static final int IS_CONTINUES=7;
-	public static final int IS_ONE_LINE=8;
-	public static final int IS_TWO_LINES=9;
-	
-	public static final int LINEATTRIBUTEBACK=10;
+	public static final int LINEATTRIBUTEBACK=11;
 
-	public static final int SSSLINEATTRIBUTEBACK=10;	
+	public static final int SSSLINEATTRIBUTEBACK=12;	
     // branch 'master' of https://github.com/luxiansheng/SurveyMap.git
 	/**
 	 * 根目录

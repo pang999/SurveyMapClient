@@ -27,6 +27,7 @@ import com.surveymapclient.model.CoordinateModel;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
 import com.surveymapclient.model.RectangleModel;
+import com.surveymapclient.model.TextModel;
 import com.surveymapclient.view.StardyView.DrawPath;
 
 import android.R.bool;
@@ -125,6 +126,7 @@ public class DefineView extends View{
     private RectangleModel rectangleModel;
     private CoordinateModel coordinateModel;
     private AngleModel angleModel;
+    private TextModel textModel;
     
 //    float left, top, right, bottom;
     private  Path sPath = new Path();  
@@ -147,6 +149,7 @@ public class DefineView extends View{
 		rectangleModel=new RectangleModel();
 		coordinateModel=new CoordinateModel();
 		angleModel=new AngleModel();
+		textModel=new TextModel();
 		huabu=ViewContans.generatePaint(Color.GRAY, (float)0.5);
 		point=ViewContans.generatePaint(Color.RED, 20);
 		initCanvas();
@@ -242,6 +245,9 @@ public class DefineView extends View{
 			if (isMoveLinedrag) {
 				angleModel.MoveDrawAngle(canvas);
 			}
+		}else if (DefineActivity.TYPE==Contants.TEXT) {
+			textModel.DrawText(canvas);
+//			DefineActivity.TYPE=Contants.DRAG;
 		}if (isWriteText) {
         	Logger.i("选中的值", "m="+m);
         	linesModel.LineChangeToText(totallist, canvas, m);
@@ -333,6 +339,14 @@ public class DefineView extends View{
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
 			}
+			int ti=textModel.PitchOnText(textModel.getTextlist, x, y);
+			if (ti>=0) {
+				DefineActivity.TYPE=Contants.TEXT;
+				Logger.i("获取文字", "i="+ti);
+//				isMoveLinedrag=true;
+				textModel.MoveText_down(textModel.getTextlist, ti, rx, ry);
+				DrawAllOnBitmap();
+			}
     	    invalidate();
             break;
         case MotionEvent.ACTION_POINTER_DOWN: //如果有一只手指按下屏幕，后续又有一个手指按下     // 两只手指按下
@@ -369,6 +383,10 @@ public class DefineView extends View{
 				}else {					
 	    			angleModel.Angle_touch_move(x, y);
 				}				
+			}else if (DefineActivity.TYPE==Contants.TEXT) {
+//				if (isMoveLinedrag) {
+					textModel.MoveText_move(rx, ry);
+//				}
 			}else if(DefineActivity.TYPE==Contants.DRAG) {				
 				if (mode==DRAG) {
 	            	drag_touch_move(rx, ry);
@@ -399,6 +417,7 @@ public class DefineView extends View{
 						vibratorCallBack.onVibratorCallBack();
 						DefineActivity.TYPE=Contants.SINGLE;
 					} 
+        			
         			DrawAllOnBitmap();
 				}          		
         		if (DefineActivity.TYPE==Contants.SINGLE) {
@@ -449,6 +468,11 @@ public class DefineView extends View{
 					mIsLongPressed=false;
 					angleModel.Angle_touch_up(x, y, mCanvas);
 				}				
+			}else if (DefineActivity.TYPE==Contants.TEXT) {
+//				if (isMoveLinedrag) {
+//					isMoveLinedrag=false;
+					textModel.MoveText_up(mCanvas);
+//				}
 			}else {
 				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
 				if (mIsShortPressed) {
@@ -493,6 +517,7 @@ public class DefineView extends View{
 		rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
 		coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
 		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
+		textModel.DrawTextList(textModel.getTextlist, mCanvas);
 	}
 	/**
 	 * 画布拖拽
@@ -525,6 +550,11 @@ public class DefineView extends View{
 		}else {		
 			return false;
 		}		
+	}
+	public void setManyTextOnView(){
+		Logger.i("文字位置", "x="+(Contants.sreenWidth/2-screen_x)+"y="+(Contants.screenHeight/2-screen_y));
+		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
+		invalidate();
 	}
 	public void SetwriteLineText(String text,int place){
 		linesModel.AddTextOnLine(totallist, mCanvas, m,text,place);

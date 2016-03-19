@@ -40,6 +40,17 @@ public class ViewContans {
 		paint.setStyle(Style.FILL_AND_STROKE);
 	    return paint;
 	}
+	public static Paint generateTextPaint(){
+		paint=new Paint();
+		paint.setColor(Color.BLACK);
+		paint.setStrokeJoin(Paint.Join.ROUND);      
+		paint.setStrokeCap(Paint.Cap.ROUND); 
+		paint.setStrokeWidth(3); 
+		paint.setAntiAlias(true);
+		paint.setStyle(Style.STROKE);
+		paint.setTextSize(30);
+	    return paint;
+	}
 	//ÏÔÊ¾Ð§¹û
 	public static Paint generatePaint(int color,float width,boolean isFull){
 		paint=new Paint();
