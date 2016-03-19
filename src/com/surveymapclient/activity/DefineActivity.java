@@ -1,6 +1,5 @@
 package com.surveymapclient.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.surveymapclient.common.Contants;
