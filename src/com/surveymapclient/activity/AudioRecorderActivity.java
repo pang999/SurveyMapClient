@@ -19,6 +19,14 @@ import android.widget.TextView;
 
 public class AudioRecorderActivity extends Activity implements OnClickListener {
 
+	
+	/**
+	 * ²âÊÔBypang
+	 */
+	
+	
+	
+	
 	/**
 	 * Status£ºÂ¼Òô³õÊ¼×´Ì¬
 	 */
