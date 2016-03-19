@@ -1,6 +1,6 @@
 package com.surveymapclient.activity;
 
-import java.util.List;
+
 
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;

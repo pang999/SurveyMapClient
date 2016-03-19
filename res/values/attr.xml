@@ -5,5 +5,7 @@
         <attr name="ovalTop" format="dimension" />  
         <attr name="ovalRight" format="dimension" />  
         <attr name="ovalBottom" format="dimension" />  
+        <attr name="showAsAction" format="string"/>
+        
     </declare-styleable>
 </resources>
