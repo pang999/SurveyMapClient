@@ -8,7 +8,7 @@ import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.LineBean;
 
 import android.R.integer;
 import android.graphics.Canvas;
@@ -22,87 +22,79 @@ import android.graphics.PointF;
 public class LinesModel {
 	
 	//直线两头端点画点
-	private Paint point=ViewContans.generatePaint(Color.RED, 18);
+	private Paint point=ViewContans.generatePaint(Color.RED, 18,true);
 	//画在Bitmap的线笔
 	private Paint mPaint=ViewContans.generatePaint(Color.BLACK, 6, false);
 	//画图过程画笔
-	private Paint painting=ViewContans.generatePaint(Color.RED, 4);
+	private Paint painting=ViewContans.generatePaint(Color.RED, 4,true);
 	//选中画笔
-	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10);
+	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10,true);
 	//画布笔
 //	private Paint sketchpaint=ViewContans.generatePaint(Color.GRAY, (float)0.5);
 	
 	private float start_x,start_y,end_x,end_y;
-	
+	private float start_mx,start_my,end_mx,end_my;
 	private float sx1,sy1,sx2,sy2,ex12,ey12;
 	
 	private PointF movePoint=new PointF();
-	private float sx,sy,ex,ey;
-	
-	private int rx,ry;
 	//斜率
-	private static int xl_k=10;
+	public static int xl_k=10;
 	public int LineType=0;
 	
-	public List<CouplePointLineBean> list = new ArrayList<CouplePointLineBean>();
-		
+	public List<LineBean> Getlines = new ArrayList<LineBean>();
+	LineBean getremoveline=new LineBean();	
 	public void SketchXLines(Canvas canvas){
 		
 	}
 	public void SketchYLines(Canvas canvas){
 		
 	}
-	
+	//画直线
 	public void DrawLine(Canvas canvas){
-		canvas.drawLine(start_x, start_y, end_x, end_y, painting);
-		canvas.drawPoint(start_x, start_y, point);
-		canvas.drawPoint(end_x, end_y, point);
+		ViewContans.DrawLine(canvas, start_x, start_y, end_x,end_y, painting, point);
 	}
-	
+	//直线移动
 	public void MoveDrawLine(Canvas canvas){
-		canvas.drawLine(sx, sy, ex, ey, checkpaint);
-		canvas.drawPoint(sx, sy, point);
-		canvas.drawPoint(ex, ey, point);
+		ViewContans.DrawLine(canvas,start_mx, start_my, end_mx,end_my, checkpaint, point);
 	}
-	private void drawLineOnBitmap(float sx,float sy,float ex,float ey,Canvas canvas){
-		canvas.drawLine(sx, sy, ex, ey, mPaint);
-		canvas.drawPoint(sx, sy, point);
-		canvas.drawPoint(ex, ey, point);
+	//首次画在bitmap
+	private void drawLineFirstOnBitmap(float sx,float sy,float ex,float ey,Canvas canvas){
+		ViewContans.DrawLine(canvas, sx, sy, ex, ey, mPaint, point);
 	}
-	public void DrawLinesOnBitmap(List<CouplePointLineBean> lines,Canvas canvas){
+	//重绘所以直线
+	public void DrawLinesOnBitmap(List<LineBean> lines,Canvas canvas){
 		for (int i = 0; i < lines.size(); i++) {
-			float sx=lines.get(i).getStartPoint().x;
-			float sy=lines.get(i).getStartPoint().y;
-			float ex=lines.get(i).getStopPoint().x;
-			float ey=lines.get(i).getStopPoint().y;
-			canvas.drawLine(sx, sy, ex, ey, mPaint);
-			canvas.drawPoint(sx, sy, point);
-			canvas.drawPoint(ex, ey, point);
+			ViewContans.DrawLine(canvas,
+					lines.get(i).getStartX(), 
+					lines.get(i).getStartY(), 
+					lines.get(i).getEndX(), 
+					lines.get(i).getEndY(), 
+					ViewContans.generatePaint(lines.get(i).getPaintColor(),lines.get(i).getPaintWidth(), lines.get(i).isPaintIsFull()), 
+					point);
+			if (lines.get(i).getName().length()<8&&lines.get(i).getName().length()>0) {
+        		ViewContans.AddTextOnLine(lines.get(i), canvas,lines.get(i).getName(),-25);
+			}            	
+        	if (lines.get(i).getLength()>0||lines.get(i).getAngle()>0) {
+        		ViewContans.AddTextOnLine(lines.get(i), canvas,lines.get(i).getLength()+"m "+lines.get(i).getAngle()+"°",10);
+			}
 		}
 	}
-	private void drawLinesOnBitmap(float sx1,float sy1,float sx2,float sy2,float ex12,float ey12, Canvas canvas){
-		float[] pts={sx1,sy1,ex12,ey12,sx2,sy2,ex12,ey12};
-		canvas.drawLines(pts, mPaint);
-		canvas.drawPoint(sx1, sy1, point);
-		canvas.drawPoint(sx2, sy2, point);
-		canvas.drawPoint(ex12, ey12, point);
-	}
-	
+	//两个线交叉
 	public void DrawLines(Canvas canvas){
 		float[] pts={sx1,sy1,ex12,ey12,sx2,sy2,ex12,ey12};
-		canvas.drawLines(pts, painting);
-		canvas.drawPoint(sx1, sy1, point);
-		canvas.drawPoint(sx2, sy2, point);
-		canvas.drawPoint(ex12, ey12, point);
+		ViewContans.DrawLines(canvas, pts, painting, point);
 	}
-	
+	//两个线交叉重绘
+	private void drawLinesOnBitmap(float sx1,float sy1,float sx2,float sy2,float ex12,float ey12, Canvas canvas){
+		float[] pts={sx1,sy1,ex12,ey12,sx2,sy2,ex12,ey12};
+		ViewContans.DrawLines(canvas, pts, mPaint, point);
+	}
+
 	public void Line_touch_down(float x,float y){
-		list.clear();
 		start_x=end_x=ViewContans.AdsorbPoint((int)Math.floor(x));
 		start_y=end_y=ViewContans.AdsorbPoint((int)Math.floor(y));
 	}
 	public void Line_camera_touch_down(float x,float y){
-		list.clear();
 		start_x=end_x=x;
 		start_y=end_y=y;
 	}
@@ -116,33 +108,29 @@ public class LinesModel {
 		}
 		
 	}
-
 	public void Line_touch_up(float x,float y,Canvas canvas){
 		if (LineType==Contants.IS_TWO_LINES) {
 			ex12=ViewContans.AdsorbPoint((int)Math.floor(x));
 			ey12=ViewContans.AdsorbPoint((int)Math.floor(y));
 			boolean isOverlap1=(ex12==sx1)&&(ey12==sy1);
-			boolean isOverlap2=(ex12==sx2)&&(ey12==sy2);
-			
+			boolean isOverlap2=(ex12==sx2)&&(ey12==sy2);			
 			if (isOverlap1) {
-				AddLineParams(list, sx2, sy2, ex12, ey12);	
-				drawLineOnBitmap(sx2, sy2, ex12, ey12, canvas);
+				AddLinesParams(Getlines, sx2, sy2, ex12, ey12);	
+				drawLineFirstOnBitmap(sx2, sy2, ex12, ey12, canvas);
 			}else if (isOverlap2) {
-				AddLineParams(list, sx1, sy1, ex12, ey12);
-				drawLineOnBitmap(sx1, sy1, ex12, ey12, canvas);
+				AddLinesParams(Getlines, sx1, sy1, ex12, ey12);
+				drawLineFirstOnBitmap(sx1, sy1, ex12, ey12, canvas);
 			}else {
-				CouplePointLineBean cpl=new CouplePointLineBean(new PointF(sx1, sy1), new PointF(ex12, ey12));
-				list.add(cpl);
-				CouplePointLineBean cp2=new CouplePointLineBean(new PointF(sx2, sy2), new PointF(ex12, ey12));
-				list.add(cp2);
+				AddLinesParams(Getlines, sx1, sy1, ex12, ey12);	
+				AddLinesParams(Getlines, sx2, sy2, ex12, ey12);	
 				drawLinesOnBitmap(sx1, sy1, sx2, sy2, ex12, ey12, canvas);
 			}
 			LineType=Contants.IS_ONE_LINE;
 		}else {
 			end_x=ViewContans.AdsorbPoint((int)Math.floor(x));
 			end_y=ViewContans.AdsorbPoint((int)Math.floor(y));	
-			AddLineParams(list,start_x, start_y, end_x, end_y);
-			drawLineOnBitmap(start_x, start_y, end_x, end_y, canvas);
+			AddLinesParams(Getlines,start_x, start_y, end_x, end_y);
+			drawLineFirstOnBitmap(start_x, start_y, end_x, end_y, canvas);
 		}			
 	}
 	public void Line_camera_touch_up(float x,float y,Canvas canvas){
@@ -150,77 +138,90 @@ public class LinesModel {
 			ex12=x;
 			ey12=y;
 			boolean isOverlap1=(ex12==sx1)&&(ey12==sy1);
-			boolean isOverlap2=(ex12==sx2)&&(ey12==sy2);
-			
+			boolean isOverlap2=(ex12==sx2)&&(ey12==sy2);			
 			if (isOverlap1) {
-				AddLineParams(list, sx2, sy2, ex12, ey12);	
-				drawLineOnBitmap(sx2, sy2, ex12, ey12, canvas);
+				AddLinesParams(Getlines, sx2, sy2, ex12, ey12);	
+				drawLineFirstOnBitmap(sx2, sy2, ex12, ey12, canvas);
 			}else if (isOverlap2) {
-				AddLineParams(list, sx1, sy1, ex12, ey12);
-				drawLineOnBitmap(sx1, sy1, ex12, ey12, canvas);
+				AddLinesParams(Getlines, sx1, sy1, ex12, ey12);
+				drawLineFirstOnBitmap(sx1, sy1, ex12, ey12, canvas);
 			}else {
-				CouplePointLineBean cpl=new CouplePointLineBean(new PointF(sx1, sy1), new PointF(ex12, ey12));
-				list.add(cpl);
-				CouplePointLineBean cp2=new CouplePointLineBean(new PointF(sx2, sy2), new PointF(ex12, ey12));
-				list.add(cp2);
+				AddLinesParams(Getlines, sx1, sy1, ex12, ey12);	
+				AddLinesParams(Getlines, sx2, sy2, ex12, ey12);	
 				drawLinesOnBitmap(sx1, sy1, sx2, sy2, ex12, ey12, canvas);
 			}
 			LineType=Contants.IS_ONE_LINE;
 		}else {
 			end_x=x;
 			end_y=y;	
-			AddLineParams(list,start_x, start_y, end_x, end_y);
-			drawLineOnBitmap(start_x, start_y, end_x, end_y, canvas);
+			AddLinesParams(Getlines,start_x, start_y, end_x, end_y);
+			drawLineFirstOnBitmap(start_x, start_y, end_x, end_y, canvas);
 		}			
 	}
-	
-	public void AddLineParams(List<CouplePointLineBean> lists,float sx,float sy,float ex,float ey){
-		CouplePointLineBean cpl=new CouplePointLineBean(new PointF(sx, sy), new PointF(ex, ey));
-		lists.add(cpl);
+
+	public void AddChangeLineParams(List<LineBean> lists,float sx,float sy,float ex,float ey,
+			double angle,String name,String desc,double lengh, int color,float width,boolean isfull){
+		LineBean line=new LineBean();
+		line.setStartX(sx);
+		line.setStartY(sy);
+		line.setEndX(ex);
+		line.setEndY(ey);
+		line.setAngle(angle);
+		line.setPaintColor(color);
+		line.setLength(lengh);
+		line.setName(name);
+		line.setPaintIsFull(false);
+		line.setPaintWidth(width);
+		line.setDescripte(desc);
+		line.setPaintIsFull(isfull);
+		lists.add(line);
+	}
+	public void AddLinesParams(List<LineBean> lists, float sx,float sy,float ex,float ey){
+		LineBean line=new LineBean();
+		line.setStartX(sx);
+		line.setStartY(sy);
+		line.setEndX(ex);
+		line.setEndY(ey);
+		line.setAngle(0.00);
+		line.setPaintColor(Color.BLACK);
+		line.setLength(0);
+		line.setName("lineName-"+lists.size());
+		line.setPaintIsFull(false);
+		line.setPaintWidth(6);
+		line.setDescripte("描述"+lists.size());
+		lists.add(line);
 	}
 	
-	public void AddLinesParams(List<CouplePointLineBean> lists, PointF start,PointF stop){
-		CouplePointLineBean cpl=new CouplePointLineBean(start, stop);
-		cpl.setAngle(0.00);
-		cpl.setColor(Color.BLACK);
-		cpl.setLength(0);
-		cpl.setName("lineName-"+lists.size());
-		cpl.setFull(false);
-		cpl.setWidth(6);
-		cpl.setDescripte("描述"+lists.size());
-		lists.add(cpl);
-	}
-	
-	public boolean ExtendLine(List<CouplePointLineBean> lines,float x,float y){
+	public boolean ExtendLine(List<LineBean> lines,float x,float y){
 		int dx=(int) x;
 		int dy=(int) y;
 		for (int i = 0; i < lines.size(); i++) {
-        	float sx=lines.get(i).getStartPoint().x;
-        	float sy=lines.get(i).getStartPoint().y;
-        	float ex=lines.get(i).getStopPoint().x;
-        	float ey=lines.get(i).getStopPoint().y;
+        	float sx=lines.get(i).getStartX();
+        	float sy=lines.get(i).getStartY();
+        	float ex=lines.get(i).getEndX();
+        	float ey=lines.get(i).getEndY();
         	Logger.i("起点终点", "重绘前-->L"+i+": ("+(int)sx+","+(int)sy+")  ,  ("+(int)ex+","+(int)ey+")");
 		}
 		for (int i = 0; i < lines.size()-1; i++) {
 			for (int j = i+1; j < lines.size(); j++) {
-				int sxi=(int) lines.get(i).getStartPoint().x;
-				int syi=(int) lines.get(i).getStartPoint().y;
-				int exi=(int) lines.get(i).getStopPoint().x;
-				int eyi=(int) lines.get(i).getStopPoint().y;  
-				int sxj=(int) lines.get(j).getStartPoint().x;
-				int syj=(int) lines.get(j).getStartPoint().y;
-				int exj=(int) lines.get(j).getStopPoint().x;
-				int eyj=(int) lines.get(j).getStopPoint().y;
+				int sxi=(int) lines.get(i).getStartX();
+				int syi=(int) lines.get(i).getStartY();
+				int exi=(int) lines.get(i).getEndX();
+				int eyi=(int) lines.get(i).getEndY();  
+				int sxj=(int) lines.get(j).getStartX();
+				int syj=(int) lines.get(j).getStartY();
+				int exj=(int) lines.get(j).getEndX();
+				int eyj=(int) lines.get(j).getEndY();
 				if ((sxi==sxj)&&(syi==syj)) {  
 					int csx=Math.abs(dx-sxi);
 					int csy=Math.abs(dy-syi);		
 					Logger.i("共用端点", "第 i="+i+" 的头 , 第 j="+j+" 的头  :("+sxi+","+syi+")");				
 					if (csx<40&&csy<40) {	
 						LineType=Contants.IS_TWO_LINES;
-						sx1=lines.get(i).getStopPoint().x;
-						sy1=lines.get(i).getStopPoint().y;
-						sx2=lines.get(j).getStopPoint().x;
-						sy2=lines.get(j).getStopPoint().y;
+						sx1=lines.get(i).getEndX();
+						sy1=lines.get(i).getEndY();
+						sx2=lines.get(j).getEndX();
+						sy2=lines.get(j).getEndY();
 						ex12=x;
 						ey12=y;
 //						Logger.i("线段总数", "重叠 Lines="+couplePointLines.size());
@@ -236,10 +237,10 @@ public class LinesModel {
 //					Logger.i("共用端点", "第 i="+i+" 的头 , 第 j="+j+" 的尾  :("+sxi+","+syi+")");
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
-						sx1=lines.get(i).getStopPoint().x;
-						sy1=lines.get(i).getStopPoint().y;
-						sx2=lines.get(j).getStartPoint().x;
-						sy2=lines.get(j).getStartPoint().y;
+						sx1=lines.get(i).getEndX();
+						sy1=lines.get(i).getEndY();
+						sx2=lines.get(j).getStartX();
+						sy2=lines.get(j).getStartY();
 						ex12=x;
 						ey12=y;
 						lines.remove(j);
@@ -252,10 +253,10 @@ public class LinesModel {
 					Logger.i("共用端点", "第 i="+i+" 的尾 , 第 j="+j+" 的头  :("+exi+","+eyi+")");
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
-						sx1=lines.get(i).getStartPoint().x;
-						sy1=lines.get(i).getStartPoint().y;
-						sx2=lines.get(j).getStopPoint().x;
-						sy2=lines.get(j).getStopPoint().y;
+						sx1=lines.get(i).getStartX();
+						sy1=lines.get(i).getStartY();
+						sx2=lines.get(j).getEndX();
+						sy2=lines.get(j).getEndY();
 						ex12=x;
 						ey12=y;
 						lines.remove(j);
@@ -268,10 +269,10 @@ public class LinesModel {
 //					Logger.i("共用端点", "第 i="+i+" 的尾 , 第 j="+j+" 的尾  :("+exi+","+eyi+")");
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
-						sx1=lines.get(i).getStartPoint().x;
-						sy1=lines.get(i).getStartPoint().y;
-						sx2=lines.get(j).getStartPoint().x;
-						sy2=lines.get(j).getStartPoint().y;
+						sx1=lines.get(i).getStartX();
+						sy1=lines.get(i).getStartY();
+						sx2=lines.get(j).getStartX();
+						sy2=lines.get(j).getStartY();
 						ex12=x;
 						ey12=y;
 						lines.remove(j);
@@ -283,24 +284,24 @@ public class LinesModel {
 			
 		}
 		for (int i = 0; i < lines.size(); i++) {
-			int gspx=(int) lines.get(i).getStartPoint().x;
-			int gspy=(int) lines.get(i).getStartPoint().y;
-			int gepx=(int) lines.get(i).getStopPoint().x;
-			int gepy=(int) lines.get(i).getStopPoint().y;
+			int gspx=(int) lines.get(i).getStartX();
+			int gspy=(int) lines.get(i).getStartY();
+			int gepx=(int) lines.get(i).getEndX();
+			int gepy=(int) lines.get(i).getEndY();
 			int csx=Math.abs(dx-gspx);
 			int csy=Math.abs(dy-gspy);
 			int cex=Math.abs(dx-gepx);
 			int cey=Math.abs(dy-gepy);
 			if (csy<40&&csx<40) {
 				LineType=Contants.IS_ONE_LINE;
-				start_x=lines.get(i).getStopPoint().x;
-				start_y=lines.get(i).getStopPoint().y;
+				start_x=lines.get(i).getEndX();
+				start_y=lines.get(i).getEndY();
 				lines.remove(i);	
 				return true;
 			}else if (cex<40&&cey<40) {
 				LineType=Contants.IS_ONE_LINE;
-				start_x=lines.get(i).getStartPoint().x;
-				start_y=lines.get(i).getStartPoint().y;
+				start_x=lines.get(i).getStartX();
+				start_y=lines.get(i).getStartY();
 				lines.remove(i);
 				return true;
 			}
@@ -308,15 +309,15 @@ public class LinesModel {
 		return false;
 	}
 	
-	public int PitchOnLine(List<CouplePointLineBean> lines,float x,float y){
+	public int PitchOnLine(List<LineBean> lines,float x,float y){
 		Logger.i("线段总数", "Lines="+lines.size());
 	    int dx=(int) x;
 	    int dy=(int) y;			
 		for (int i = 0; i < lines.size(); i++) {
-			int gspx=(int) lines.get(i).getStartPoint().x;
-			int gspy=(int) lines.get(i).getStartPoint().y;
-			int gepx=(int) lines.get(i).getStopPoint().x;
-			int gepy=(int) lines.get(i).getStopPoint().y;
+			int gspx=(int) lines.get(i).getStartX();
+			int gspy=(int) lines.get(i).getStartY();
+			int gepx=(int) lines.get(i).getEndX();
+			int gepy=(int) lines.get(i).getEndY();
         	Logger.i("起点终点", "---->L"+i+": ("+gspx+","+gspy+")  ,  ("+gepx+","+gepy+")");
 			boolean xCan=(gspx<dx&&dx<gepx)||(gspx>dx&&dx>gepx);
 			boolean xx=(gspx==gepx);
@@ -342,8 +343,7 @@ public class LinesModel {
 					double val=((double)k_fz)/k_fm;
 		    		BigDecimal bd =new BigDecimal(val);
 		    		//保留2位小数
-		    		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 
-		    		
+		    		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 		    		
 		    		int b_fz1=gspy*gepx;
 		    		int b_fz2=gepy*gspx;
 		    		int b_fz=b_fz1-b_fz2;
@@ -371,166 +371,117 @@ public class LinesModel {
 		return -1;
 	}	
 	
-	public void MoveLine_down(List<CouplePointLineBean> lines,int i,float rx,float ry){
-		sx=lines.get(i).getStartPoint().x;
-		sy=lines.get(i).getStartPoint().y;
-		ex=lines.get(i).getStopPoint().x;
-		ey=lines.get(i).getStopPoint().y;
+	public void MoveLine_down(List<LineBean> lines,int i,float rx,float ry){
+		start_mx=lines.get(i).getStartX();
+		start_my=lines.get(i).getStartY();
+		end_mx=lines.get(i).getEndX();
+		end_my=lines.get(i).getEndY();
+		getremoveline.setAngle(lines.get(i).getAngle());
+		getremoveline.setLength(lines.get(i).getLength());
+		getremoveline.setName(lines.get(i).getName());
+		getremoveline.setDescripte(lines.get(i).getDescripte());
+		getremoveline.setPaintColor(lines.get(i).getPaintColor());
+		getremoveline.setPaintIsFull(lines.get(i).isPaintIsFull());
+		getremoveline.setPaintWidth(lines.get(i).getPaintWidth());
 		movePoint.set(rx, ry);
 		lines.remove(i);
 	}
 	
 	public void MoveLine_move(float rx,float ry){
 		float dx=rx-movePoint.x;
-	    float dy=ry-movePoint.y;
-	    	
+	    float dy=ry-movePoint.y;	    	
 	    if (Math.sqrt(dx*dx+dy*dy)>5f) {
 	    	movePoint.set(rx, ry);
-	    	sx=sx+dx;
-			sy= sy+dy;
-			ex= ex+dx;
-			ey= ey+dy; 			
+	    	start_mx=start_mx+dx;
+	    	start_my=start_my+dy;
+	    	end_mx=end_mx+dx;
+	    	end_my=end_my+dy; 			
 	    }		
 	}
 	public void MoveLine_up(Canvas canvas,float rx,float ry){	    
-		sx= ViewContans.AdsorbPoint((int)Math.floor(sx));
-		sy= ViewContans.AdsorbPoint((int)Math.floor(sy));
-		ex= ViewContans.AdsorbPoint((int)Math.floor(ex));
-		ey= ViewContans.AdsorbPoint((int)Math.floor(ey)); 
-		AddLineParams(list, sx, sy, ex, ey);
-		drawLineOnBitmap(sx, sy, ex, ey, canvas);
+		start_mx= ViewContans.AdsorbPoint((int)Math.floor(start_mx));
+		start_my= ViewContans.AdsorbPoint((int)Math.floor(start_my));
+		end_mx= ViewContans.AdsorbPoint((int)Math.floor(end_mx));
+		end_my= ViewContans.AdsorbPoint((int)Math.floor(end_my)); 
+		AddChangeLineParams(Getlines, start_mx, start_my, end_mx, end_my,
+				getremoveline.getAngle(), getremoveline.getName(), 
+				getremoveline.getDescripte(), getremoveline.getLength(),
+				getremoveline.getPaintColor(), getremoveline.getPaintWidth(), getremoveline.isPaintIsFull());
+		ViewContans.DrawLine(canvas, start_mx, start_my, end_mx, end_my, 
+    			ViewContans.generatePaint(getremoveline.getPaintColor(), getremoveline.getPaintWidth(), getremoveline.isPaintIsFull()), point);
+		getremoveline.setStartX(start_mx);
+		getremoveline.setStartY(start_my);
+		getremoveline.setEndX(end_mx);
+		getremoveline.setEndY(end_my);
+		if (getremoveline.getName().length()<8&&getremoveline.getName().length()>0) {
+    		ViewContans.AddTextOnLine(getremoveline, canvas,getremoveline.getName(),-25);
+		}            	
+    	if (getremoveline.getLength()>0||getremoveline.getAngle()>0) {
+    		ViewContans.AddTextOnLine(getremoveline, canvas,getremoveline.getLength()+"m "+getremoveline.getAngle()+"°",10);
+		}
 	}
 	public void MoveLine_camera_up(Canvas canvas,float x,float y){    
-		AddLineParams(list, sx, sy, ex, ey);
-		drawLineOnBitmap(sx, sy, ex, ey, canvas);
+		AddLinesParams(Getlines, start_mx,start_my,end_mx,end_my);
+		drawLineFirstOnBitmap( start_mx,start_my,end_mx,end_my, canvas);
 	}
 
-	public int PitchOnLineToText(List<CouplePointLineBean> lines,float x,float y){
+	public int PitchOnLineToText(List<LineBean> lines,float x,float y){
 		int i=PitchOnLine(lines, x, y);
 		return i;
 	}
-	public void LineChangeToText(List<CouplePointLineBean> lines,Canvas canvas,int i){
-		Paint paint=ViewContans.generatePaint(Color.BLUE, 10);
-		float sxi= lines.get(i).getStartPoint().x;
-		float syi= lines.get(i).getStartPoint().y;
-		float exi= lines.get(i).getStopPoint().x;
-		float eyi= lines.get(i).getStopPoint().y; 
+	public void LineChangeToText(List<LineBean> lines,Canvas canvas,int i){
+		Paint paint=ViewContans.generatePaint(Color.BLUE, 10,true);
+		float sxi= lines.get(i).getStartX();
+		float syi= lines.get(i).getStartY();
+		float exi= lines.get(i).getEndX();
+		float eyi= lines.get(i).getEndY(); 
 		canvas.drawLine(sxi, syi, exi, eyi, paint);
 	}
 	
-	public void AddTextOnLine(List<CouplePointLineBean> lines,Canvas canvas,int i,String text,int place){
-		Paint textpaint = new Paint();                
-    	textpaint.setColor(Color.BLUE);
-    	textpaint.setTextSize(30); 
-    	List<PointF> list=new ArrayList<PointF>();
-		
-        list.add(new PointF(lines.get(i).getStopPoint().x, lines.get(i).getStartPoint().y));
-        list.add(new PointF(lines.get(i).getStartPoint().x, lines.get(i).getStartPoint().y));
-        list.add(new PointF(lines.get(i).getStopPoint().x, lines.get(i).getStopPoint().y));
-		float A=(float) PolygonModel.Angle(list);
-		float len=(float)getTextWidth(textpaint, text);
-		float tx=lines.get(i).getStartPoint().x/2+lines.get(i).getStopPoint().x/2;
-		float ty=lines.get(i).getStartPoint().y/2+lines.get(i).getStopPoint().y/2;	
-		Logger.i("文字的角度", ""+A);
-		if (xl_k==0) {
-			ViewContans.drawText(canvas, text, tx-place , ty-place, textpaint, -A,len);
-		}else if (xl_k==2) {
-			ViewContans.drawText(canvas, text, tx+place , ty-place, textpaint, 90,len);
-		}else if (xl_k==1) {
-			ViewContans.drawText(canvas, text, tx+place , ty-place, textpaint, A,len);
-		}else if (xl_k==-1) {
-			ViewContans.drawText(canvas, text, tx-place , ty-place, textpaint, -A,len);
-		}
-       	list.clear();	
+	public void AddTextOnLine(List<LineBean> list,Canvas canvas,int i,String text,int place){
+		ViewContans.AddTextOnLine(list.get(i), canvas,text, place);
+		list.get(i).setLength(Double.parseDouble(text));
 	}
-	public void AddLineNameAtIndex(List<CouplePointLineBean> lines ,String text,int index){
-		lines.get(index).setName(text);
-	}
-	 public static int getTextWidth(Paint paint, String str) {  
-	        int iRet = 0;  
-	        if (str != null && str.length() > 0) {  
-	            int len = str.length();  
-	            float[] widths = new float[len];  
-	            paint.getTextWidths(str, widths);  
-	            for (int j = 0; j < len; j++) {  
-	                iRet += (int) Math.ceil(widths[j]);  
-	            }              
-	        }  
-	        return iRet;  
-	 } 
-	
-	public void DeleteLine(List<CouplePointLineBean> lines,Canvas canvas){
+	public void DeleteLine(List<LineBean> lines,Canvas canvas){
 	          
         Logger.i("线段总数", "before-->Lines="+lines.size());
         lines.remove(lines.size()-1);
         for (int i = 0; i < lines.size(); i++) {
-		   	float sx=lines.get(i).getStartPoint().x;
-		   	float sy=lines.get(i).getStartPoint().y;
-		   	float ex=lines.get(i).getStopPoint().x;
-		   	float ey=lines.get(i).getStopPoint().y;
+		   	float sx=lines.get(i).getStartX();
+		   	float sy=lines.get(i).getStartY();
+		   	float ex=lines.get(i).getEndX();
+		   	float ey=lines.get(i).getEndY();
 		   
 		   	Logger.i("起点终点", "undo-->L"+i+": ("+(int)sx+","+(int)sy+")  ,  ("+(int)ex+","+(int)ey+")");
 		   	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
-        			ViewContans.generatePaint(lines.get(i).getColor(), lines.get(i).getWidth(), lines.get(i).isFull()), point);
+        			ViewContans.generatePaint(lines.get(i).getPaintColor(), lines.get(i).getPaintWidth(), lines.get(i).isPaintIsFull()), point);
 		}
         Logger.i("线段总数", "after-->Lines="+lines.size());
         
 	}
-	public void RemoveIndexLine(List<CouplePointLineBean> lines,Canvas canvas,int index){
-        
-		Logger.i("线段总数", "before-->Lines="+lines.size());
-		lines.remove(index);
-        for (int i = 0; i < lines.size(); i++) {
-        	float sx=lines.get(i).getStartPoint().x;
-        	float sy=lines.get(i).getStartPoint().y;
-        	float ex=lines.get(i).getStopPoint().x;
-        	float ey=lines.get(i).getStopPoint().y;
-        	Logger.i("起点终点", "undo-->L"+i+": ("+(int)sx+","+(int)sy+")  ,  ("+(int)ex+","+(int)ey+")");
-//			ViewContans.DrawLine(canvas, sx, sy, ex, ey, mPaint, point);
-        	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
-        			ViewContans.generatePaint(lines.get(i).getColor(), lines.get(i).getWidth(), lines.get(i).isFull()), point);
+	public void ChangeLineAttributeAtIndex(List<LineBean> list
+			,Canvas canvas,int index,LineBean line){
+		float sx=list.get(index).getStartX();
+    	float sy=list.get(index).getStartY();
+    	float ex=list.get(index).getEndX();
+    	float ey=list.get(index).getEndY();  
+    	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
+    			ViewContans.generatePaint(line.getPaintColor(), line.getPaintWidth(), line.isPaintIsFull()), point);           	
+    	if (line.getName().length()<8&&line.getName().length()>0) {
+    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getName(),-25);
+		}            	
+    	if (line.getLength()>0||line.getAngle()>0) {
+    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getLength()+"m "+line.getAngle()+"°",10);
 		}
-        Logger.i("线段总数", "after-->Lines="+lines.size());
-        
+    	list.remove(index);
+    	AddChangeLineParams(list,
+    			sx, sy, ex, ey, 
+    			line.getAngle(), 
+    			line.getName(),
+    			line.getDescripte(), 
+    			line.getLength(), 
+    			line.getPaintColor(),
+    			line.getPaintWidth(), 
+    			line.isPaintIsFull());
 	}
-	public void ChangeLineAttributeAtIndex(List<CouplePointLineBean> lines
-			,Canvas canvas,int index,String name,double angle,int color
-			,double lenght,boolean isfull,float w,String desc){	
-		for (int i = 0; i < lines.size(); i++) {
-        	if (i==index) {
-        		float sx=lines.get(index).getStartPoint().x;
-            	float sy=lines.get(index).getStartPoint().y;
-            	float ex=lines.get(index).getStopPoint().x;
-            	float ey=lines.get(index).getStopPoint().y;
-            	lines.get(index).setAngle(angle);
-            	lines.get(index).setColor(color);
-            	lines.get(index).setLength(lenght);
-            	lines.get(index).setName(name);
-            	lines.get(index).setFull(isfull);
-            	lines.get(index).setWidth(w);
-            	lines.get(index).setDescripte(desc);
-            	Logger.i("画笔宽度", "w="+w);   
-            	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
-            			ViewContans.generatePaint(color, w, isfull), point);
-			}else {
-				float sx=lines.get(i).getStartPoint().x;
-            	float sy=lines.get(i).getStartPoint().y;
-            	float ex=lines.get(i).getStopPoint().x;
-            	float ey=lines.get(i).getStopPoint().y;
-    			ViewContans.DrawLine(canvas, sx, sy, ex, ey, mPaint, point);
-			}
-		}
-		
-	}
-	public void ReStartDrawLine(List<CouplePointLineBean> lines,Canvas canvas){    
-        for (int i = 0; i < lines.size(); i++) {
-        	float sx=lines.get(i).getStartPoint().x;
-        	float sy=lines.get(i).getStartPoint().y;
-        	float ex=lines.get(i).getStopPoint().x;
-        	float ey=lines.get(i).getStopPoint().y;
-			ViewContans.DrawLine(canvas, sx, sy, ex, ey, mPaint, point);
-		}
-        
-	}
-	
 }

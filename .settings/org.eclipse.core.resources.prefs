@@ -1,3 +1,9 @@
 eclipse.preferences.version=1
+encoding//src/com/surveymapclient/activity/adapter/CoordinateAdapter.java=UTF-8
+encoding//src/com/surveymapclient/activity/adapter/PolygonAdapter.java=UTF-8
+encoding//src/com/surveymapclient/activity/adapter/RectangleAdapter.java=UTF-8
 encoding//src/com/surveymapclient/common/Contants.java=UTF-8
 encoding//src/com/surveymapclient/common/FileUtils.java=UTF-8
+encoding//src/com/surveymapclient/common/ViewContans.java=UTF-8
+encoding//src/com/surveymapclient/model/CoordinateModel.java=UTF-8
+encoding//src/com/surveymapclient/model/RectangleModel.java=UTF-8

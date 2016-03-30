@@ -2,15 +2,25 @@ package com.surveymapclient.activity;
 
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.CoordinateBean;
+import com.surveymapclient.entity.LineBean;
+import com.surveymapclient.entity.PolygonBean;
+import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
+import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.HistPopupWindow;
 import com.surveymapclient.view.LocationView;
+import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
 import com.surveymapclient.view.fragment.EditLineNameDialogFragment;
 import com.surveymapclient.view.fragment.EditeAndDelDialog;
@@ -21,10 +31,13 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -47,6 +60,7 @@ import android.widget.Toast;
 public class DefineActivity extends Activity implements DialogCallBack,VibratorCallBack,OnClickListener{
 
 	//控件
+	private static MagnifyView magnifyview;
 	private DefineView defineview;
 	private EditText edittitle;
 	private ImageView btndefineback,btneditNote,btnhistoryItem,btnrectangle,
@@ -64,7 +78,11 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
      */
     private Vibrator vibrator;
     
-    CouplePointLineBean couple;
+    LineBean line;
+    PolygonBean polygon;
+    RectangleBean rectangle;
+    CoordinateBean coordinate;
+    AngleBean angle;
     int index;
    
     public static int TopHeaght;
@@ -72,12 +90,13 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_define);		
+		setContentView(R.layout.activity_define);	
 		initView();
 		// 震动效果的系统服务
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         mContext=this;
         TopHeaght=100;
+//        initData();
 		
 	}
 	private void initView(){
@@ -90,6 +109,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		edittitle.setOnClickListener(this);		
 		btndefineback.setOnClickListener(this);			
 		//center
+		magnifyview=(MagnifyView) findViewById(R.id.magnifyview);
 		defineview= (DefineView) findViewById(R.id.defineview);
 		dataMove=(Button) findViewById(R.id.data_move);
 		dataMove.setOnTouchListener(mTouchListener);
@@ -120,7 +140,12 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 
 	public void onListLines(View v){
 		Intent intent=new Intent();
-		intent.setClass(this, ListLinesActivity.class);
+		intent.putExtra("LineList",(Serializable)defineview.BackLinelist());
+		intent.putExtra("RectList",(Serializable) defineview.BackRectlist());
+		intent.putExtra("PolyList",(Serializable) defineview.BackPolylist());
+		intent.putExtra("CoorList", (Serializable)defineview.BackCoorlist());
+		intent.putExtra("AngleList",(Serializable) defineview.BackAnglelist());
+		intent.setClass(this, DataListActivity.class);
 		startActivity(intent);
 	}
 	public void onHistory(View v){
@@ -131,16 +156,10 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	public static void LocationXY(int x,int y){
 		locationview.LocationSketch(x, y);
 	}
-	@SuppressLint("NewApi")
-	@Override
-	public void onDialogCallBack(CouplePointLineBean couplePoint,int i) {
-		// TODO Auto-generated method stub
-		this.couple=couplePoint;
-		this.index=i;
-		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance();
-		FragmentTransaction ft=getFragmentManager().beginTransaction();
-		eadd.show(ft, "");
+	public static void MagnifyBitmap(Bitmap canvas){
+		magnifyview.setDrawableCanvas(canvas);
 	}
+	
 	@Override
 	public void onVibratorCallBack() {
 		// TODO Auto-generated method stub
@@ -152,50 +171,70 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
         long[] pattern = {10,50};
         vibrator.vibrate(pattern, -1);
 	}
-	//直线属性显示及编辑
-	public void SendData(){
-		Intent intent=new Intent();
-		Bundle bundle=new Bundle();
-		bundle.putString("name", couple.getName());
-		bundle.putString("descripte", couple.getDescripte());
-		bundle.putDouble("length", couple.getLength());
-		bundle.putDouble("angle", couple.getAngle());
-		bundle.putFloat("width", couple.getWidth());
-		bundle.putInt("color", couple.getColor());
-		bundle.putBoolean("style", couple.isFull());
-		bundle.putInt("i", index);
-		intent.putExtras(bundle);
-		intent.setClass(DefineActivity.this, LineAttributeActivity.class);
-		startActivityForResult(intent, Contants.LINEATTRIBUTEBACK);
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initData();
 	}
-	
+	private void initData(){
+		if (AttributeLineActivity.BACKLINE==Contants.LINEATTRIBUTEBACK) {	
+			Bundle bundle=this.getIntent().getExtras();			
+			LineBean lineBeans=(LineBean) bundle.getSerializable("BackLine");
+			Logger.i("Activity返回", "position="+bundle.getInt("Index"));
+			Logger.i("Activity返回", "getLength="+lineBeans.getLength());
+			defineview.ChangeLineAttribute(bundle.getInt("Index"), lineBeans);			
+		}	
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode==Contants.LINEATTRIBUTEBACK) {
-			if (resultCode==RESULT_OK) {
-				Bundle bundle = data.getExtras();	
-				defineview.ChangeLineAttribute(bundle.getInt("backIndex"), bundle.getString("backName"),
-						bundle.getDouble("backAngle"), bundle.getInt("backColor"),
-						bundle.getDouble("backLenght"), bundle.getBoolean("backStyle"),
-						bundle.getFloat("backWidth"), bundle.getString("backDesc"));			
+		if (resultCode==RESULT_OK) {
+			if (requestCode==Contants.LINEATTRIBUTEBACK) {	
+				Bundle bundle = data.getExtras();				
+				LineBean lineBeans=(LineBean) bundle.getSerializable("BackLine");
+				defineview.ChangeLineAttribute(index, lineBeans);			
 			}
-			
+			if (requestCode==Contants.RECTATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				RectangleBean rectangleBean=(RectangleBean) bundle.getSerializable("BackRectangle");
+				defineview.ChangeRectangleAttribute(index,rectangleBean);
+				Logger.i("BackRectangle", rectangleBean.getRectName());
+			}
+			if (requestCode==Contants.COORDATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				CoordinateBean coordinateBean= (CoordinateBean) bundle.getSerializable("BackCoordinate");
+				defineview.ChangeCoordinateAttribute(index, coordinateBean);
+			}
+			if (requestCode==Contants.ANGLEATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				AngleBean angleBean=(AngleBean) bundle.getSerializable("BackAngle");
+				defineview.ChangeAngleAttribute(index, angleBean);
+			}
 		}
 	}
-	public void Remove(){
+	public void RemoveLineIndex(){
 		defineview.RemoveIndexLine(index);
 	}
-
+	public void RemoveRectangleIndex(){
+		defineview.RemoveIndexRectangle(index);
+	}
+	public void RemoveCoordinateIndex(){
+		defineview.RemoveIndexCoordinate(index);
+	}
 	public void showEditeView(){
 		defineview.setManyTextOnView();	
 	}
-	public void EditLineName(String text){
-		if (!text.equals("")&&""!=text) {
-			defineview.SetwriteLineText(text,-25);		
-		}		
+	public void showTapeDialog(){
+		Intent intent=new Intent(this, AudioRecorderActivity.class);
+		startActivity(intent);
 	}
+//	public void EditLineName(String text){
+//		if (!text.equals("")&&""!=text) {
+//			defineview.SetwriteLineText(text,-25);		
+//		}		
+//	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -282,7 +321,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
             	if (defineview.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
 //					Logger.i("设置线段", "设置成功了！");            		           		
             		if (v==dataMove) {
-            			defineview.SetwriteLineText("2.985m",10);
+            			defineview.SetwriteLineText("2.985");
             			dataMove.setVisibility(View.INVISIBLE);
     				}     		
             		defineview.LineNoChangeToText();          		
@@ -292,4 +331,94 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
             return false;  
         }  
 	};
+	//直线属性显示及编辑
+	public void SendLineData(){
+		Intent intent=new Intent();
+		Bundle bundle=new Bundle();
+		bundle.putSerializable("Line", line);
+		bundle.putInt("TYPE", 1);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributeLineActivity.class);
+		startActivityForResult(intent, Contants.LINEATTRIBUTEBACK);
+	}
+	public void SendPolygonData(){
+		Intent intent=new Intent();
+		Bundle bundle=new Bundle();
+		bundle.putSerializable("Polygon", (Serializable)polygon);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributePolygonActivity.class);
+		startActivityForResult(intent, Contants.POLYGONATTRIBUTEBACK);
+	}
+	public void SendRectangleData(){
+		Intent intent=new Intent();
+		Bundle bundle=new Bundle();
+		bundle.putSerializable("Rectangle", rectangle);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributeRectangleActivity.class);
+		startActivityForResult(intent, Contants.RECTATTRIBUTEBACK);
+	}
+	public void SendCoordinateData(){
+		Intent intent=new Intent();
+		Bundle bundle=new Bundle();
+		bundle.putSerializable("Coordinate", coordinate);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributeCoordinateActivity.class);
+		startActivityForResult(intent, Contants.COORDATTRIBUTEBACK);
+	}
+	public void SendAngleData(){
+		Intent intent=new Intent();
+		Bundle bundle=new Bundle();
+		bundle.putSerializable("Angle", angle);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributeAngleActivity.class);
+		startActivityForResult(intent, Contants.ANGLEATTRIBUTEBACK);
+	}
+	@SuppressLint("NewApi")
+	@Override
+	public void onDialogCallBack(LineBean couplePoint,int i) {
+		// TODO Auto-generated method stub
+		this.line=couplePoint;
+		this.index=i;
+		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(0);
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		eadd.show(ft, "");
+	}
+//	List<LineBean> list=new ArrayList<LineBean>();
+	@Override
+	public void onDialogCallBack(PolygonBean polygon, int i) {
+		// TODO Auto-generated method stub
+		this.polygon=polygon;
+		this.index=i;
+		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(1);
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		eadd.show(ft, "");
+	}
+	@Override
+	public void onDialogCallBack(RectangleBean rectangle, int i) {
+		// TODO Auto-generated method stub
+		this.rectangle=rectangle;
+		this.index=i;
+		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(2);
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		eadd.show(ft, "");
+	}
+	
+	@Override
+	public void onDialogCallBack(CoordinateBean coordinate, int i) {
+		// TODO Auto-generated method stub
+		this.coordinate=coordinate;
+		this.index=i;
+		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(3);
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		eadd.show(ft, "");
+	}
+	@Override
+	public void onDialogCallBack(AngleBean angleLine, int i) {
+		// TODO Auto-generated method stub
+		this.angle=angleLine;
+		this.index=i;
+		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(4);
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		eadd.show(ft, "");
+	}
 }

@@ -1,10 +1,10 @@
 package com.surveymapclient.view.fragment;
 
 import com.surveymapclient.activity.DefineActivity;
-import com.surveymapclient.activity.LineAttributeActivity;
+import com.surveymapclient.activity.AttributeLineActivity;
 import com.surveymapclient.activity.R;
 import com.surveymapclient.common.IToast;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.LineBean;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -24,14 +24,13 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class EditeAndDelDialog extends DialogFragment implements OnClickListener{
 
-	CouplePointLineBean couplePointLine;
-	int index;
+	static int type;
 	ImageView edit;
 	ImageView delete;
-	public static EditeAndDelDialog newIntance(){
+	public static EditeAndDelDialog newIntance(int t){
 		EditeAndDelDialog editeAndDelDialog=new EditeAndDelDialog();
 		Bundle bundle=new Bundle();
-
+		type=t;
 		editeAndDelDialog.setArguments(bundle);
 		return editeAndDelDialog;
 		
@@ -73,10 +72,32 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 		DefineActivity daActivity=(DefineActivity) getActivity();
 		int id = v.getId();
 		if (id == R.id.dialogedit) {
-			daActivity.SendData();
+			if (type==0) {
+				daActivity.SendLineData();
+			}	
+			if (type==1) {
+				daActivity.SendPolygonData();
+			}
+			if (type==2) {
+				daActivity.SendRectangleData();
+			}
+			if (type==3) {
+				daActivity.SendCoordinateData();
+			}
+			if (type==4) {
+				daActivity.SendAngleData();
+			}
 			dismiss();
 		} else if (id == R.id.dialogdelete) {
-			daActivity.Remove();
+			if (type==0) {
+				daActivity.RemoveLineIndex();
+			}
+			if (type==2) {
+				daActivity.RemoveRectangleIndex();
+			}
+			if (type==3) {
+				daActivity.RemoveCoordinateIndex();
+			}
 			dismiss();
 		} else {
 		}

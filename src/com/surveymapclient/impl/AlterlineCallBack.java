@@ -1,8 +1,8 @@
 package com.surveymapclient.impl;
 
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.LineBean;
 
 public interface AlterlineCallBack {
 
-	void onAlterlineCallBack(CouplePointLineBean line);
+	void onAlterlineCallBack(LineBean line);
 }

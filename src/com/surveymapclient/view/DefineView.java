@@ -1,85 +1,50 @@
 package com.surveymapclient.view;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.surveymapclient.activity.DefineActivity;
-import com.surveymapclient.activity.HomeActivity;
 import com.surveymapclient.common.Contants;
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.entity.CouplePointLineBean;
-import com.surveymapclient.entity.RectangleLineBean;
+import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.CoordinateBean;
+import com.surveymapclient.entity.LineBean;
+import com.surveymapclient.entity.PolygonBean;
+import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.impl.ClipCallBack;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.AngleModel;
 import com.surveymapclient.model.CoordinateModel;
+import com.surveymapclient.model.LineAndPolygonModel;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
 import com.surveymapclient.model.RectangleModel;
 import com.surveymapclient.model.TextModel;
-import com.surveymapclient.view.StardyView.DrawPath;
 
-import android.R.bool;
-import android.app.Activity;
+import android.R.integer;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
-import android.graphics.PathEffect;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Shader.TileMode;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Environment;
-import android.os.Vibrator;
-import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.Toast;
 
 public class DefineView extends View{
 	
 	DialogCallBack dialogCallBack;
 	VibratorCallBack vibratorCallBack;
 	ClipCallBack clipCallBack;
-	//画点
-	private Paint point;
-	private Paint huabu;
 	
-//    private Paint   circlePaint;
-//    private Path    circlePath;
-    
     private Canvas  mCanvas;
-    private Path    mPath;
-    private Paint   mBitmapPaint;// 画布的画笔
-    private Bitmap  mBitmap;
-    private Paint   mPaint;// 真实的画笔
-    
+    private Bitmap  mBitmap;    
     	
-	final int width = Contants.sreenWidth*3;
+    final int width = Contants.sreenWidth*3;
 	final int height = Contants.screenHeight*3;
 	public int screen_x=-Contants.sreenWidth;
 	public int screen_y=-Contants.screenHeight;
@@ -95,12 +60,6 @@ public class DefineView extends View{
 	// 第一个按下的手指的点   
     private PointF dragPoint = new PointF();
 	private float scale=1;
-	
-//	public boolean isDrag=true;
-//	public boolean isDan=false;
-//	public boolean isDuo=false;
-
-
 
     //画直线
     private boolean isMovingdraw=false;
@@ -109,20 +68,15 @@ public class DefineView extends View{
     private boolean isMoveLinedrag=false;
 
     //连续线段获得条数
-    public List<CouplePointLineBean> totallist=new ArrayList<CouplePointLineBean>();
-    
+//    public List<LineBean> totallist=new ArrayList<LineBean>();
+//    public List<PolygonBean> totalPolys=new ArrayList<PolygonBean>();
     private boolean isWriteText=false;
-//    private boolean isLineChange=false;
     //选中直线
 	private static int m=-1;
-    //路径对象 
-    class DrawPath{
-        Path shadowpath;
-        Paint shadowpaint;
-    }
     
     private LinesModel linesModel;
     private PolygonModel polygonModel;
+    private LineAndPolygonModel linepoly;
     private RectangleModel rectangleModel;
     private CoordinateModel coordinateModel;
     private AngleModel angleModel;
@@ -138,75 +92,35 @@ public class DefineView extends View{
     private static final int FACTOR = 2;  
     private int mCurrentX, mCurrentY,sCurrentX, sCurrentY;
     private int rmCurrentX,rmCurrentY;
-    private Canvas clipCanvas;
+    private Canvas clipCanvas; 
     
 	public DefineView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
-//		mPath = new Path();
 		linesModel=new LinesModel();
 		polygonModel=new PolygonModel();
 		rectangleModel=new RectangleModel();
 		coordinateModel=new CoordinateModel();
+		linepoly=new LineAndPolygonModel();
 		angleModel=new AngleModel();
 		textModel=new TextModel();
-		huabu=ViewContans.generatePaint(Color.GRAY, (float)0.5);
-		point=ViewContans.generatePaint(Color.RED, 20);
 		initCanvas();
 		isFirst=true;	
 		dialogCallBack=(DialogCallBack) context;
-		vibratorCallBack=(VibratorCallBack) context;	
-//		clipCallBack=(ClipCallBack)context ;
-		
+		vibratorCallBack=(VibratorCallBack) context;			
 		sPath.addCircle(RADIUS, RADIUS, RADIUS, Direction.CW); 
-//		sPath.addRect(RADIUS, RADIUS, RADIUS, RADIUS, Direction.CW);
         matrix.setScale(FACTOR, FACTOR);  
         clipCanvas=new Canvas();
+        DefineActivity.TYPE=Contants.DRAG;
 	}
 	//初始化画布
-    public void initCanvas(){
-         
-        mPaint = ViewContans.generatePaint(Color.RED, 5);  
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);    
+    public void initCanvas(){      
         //画布大小 
         mBitmap = Bitmap.createBitmap(Contants.sreenWidth*3, Contants.screenHeight*3, 
-            Bitmap.Config.RGB_565);
-       
+            Bitmap.Config.RGB_565);      
         mCanvas = new Canvas(mBitmap);  //所有mCanvas画的东西都被保存在了mBitmap中      
-        mCanvas.drawColor(Color.WHITE);
-        initCanvasHuabu(mCanvas);
-//      mPath = new Path();
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-         
+        ViewContans.initCanvasHuabu(mCanvas,mBitmap,scale);         
     }
-	
-	private void initCanvasHuabu(Canvas canvas){
-		canvas.drawColor(Color.WHITE);
-		final int space = 20;   //长宽间隔  
-	    int vertz = 0;  
-	    int hortz = 0;  
-	    int xcount=height/10;
-	    int ycount=width/10;
-		canvas.scale(scale, scale,width/2,height/2);
-		// 将前面已经画过得显示出来
-	    canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);     //显示旧的画布       
-	    polygonModel.DrawPath(canvas);
-		angleModel.DrawPath(canvas);
-	    for(int i=0;i<xcount/2+1;i++){  
-	       canvas.drawLine(0,  vertz,  width, vertz, huabu);  
-	       vertz+=space;  
-	    }   
-	    for (int i = 0; i < ycount/2+1; i++) {
-	       canvas.drawLine(hortz, 0, hortz, height, huabu);  
-	       hortz+=space;  
-		}
-        canvas.drawPoint(0, 0, point);
-	    canvas.drawPoint( width, 0, point);
-	    canvas.drawPoint(0,  height, point);
-	    canvas.drawPoint( width,  height, point) ;
-	    canvas.drawPoint(width/2, height/2, point);
-	}
-
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
@@ -215,7 +129,9 @@ public class DefineView extends View{
 			isFirst=false;
 			layout(screen_x, screen_y, 3*Contants.sreenWidth+screen_x, 3*Contants.screenHeight+screen_y);
 		}		
-		initCanvasHuabu(canvas);      
+	    ViewContans.initCanvasHuabu(canvas,mBitmap,scale);
+		polygonModel.DrawPath(canvas);
+		angleModel.DrawPath(canvas);
         if (DefineActivity.TYPE==Contants.SINGLE&&isMovingdraw) {       	
         	if (isMoveLinedrag) {
 				linesModel.MoveDrawLine(canvas);
@@ -224,9 +140,15 @@ public class DefineView extends View{
 	        		linesModel.DrawLines(canvas);
 	        	}else{
 	        		linesModel.DrawLine(canvas);
-	    		}
-//				ClipCavas(canvas);
-			}       	           
+	    		}	
+				ClipCavas(canvas);
+			}          	
+		}
+        if (DefineActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
+        	if (isMoveLinedrag) {
+        		polygonModel.MoveDrawPolygon(canvas);
+			}
+			
 		}
         if (DefineActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
         	if (isMoveLinedrag) {
@@ -245,34 +167,41 @@ public class DefineView extends View{
 			if (isMoveLinedrag) {
 				angleModel.MoveDrawAngle(canvas);
 			}
+		}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS&&isMovingdraw) {
+			angleModel.DrawAngle(canvas);
 		}else if (DefineActivity.TYPE==Contants.TEXT) {
 			textModel.DrawText(canvas);
 //			DefineActivity.TYPE=Contants.DRAG;
+		}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS&&isMovingdraw) {
+			coordinateModel.DrawCoordinate(canvas);
 		}if (isWriteText) {
         	Logger.i("选中的值", "m="+m);
-        	linesModel.LineChangeToText(totallist, canvas, m);
-		}
-        
-     
+        	linesModel.LineChangeToText(linesModel.Getlines, canvas, m);
+		} 
+		
 	}
 	
 	private void ClipCavas(Canvas canvas){
 		// TODO Auto-generated method stub
 		// 剪切  
         Logger.i("清屏高度",""+ DefineActivity.TopHeaght);
-//		canvas.translate(mCurrentX-RADIUS, mCurrentY-RADIUS ); 
+		canvas.translate(mCurrentX-RADIUS, mCurrentY-RADIUS ); 
 //		sPath.moveTo(sCurrentY, sCurrentY);
 //		sPath.quadTo(sCurrentY,sCurrentY,mCurrentX ,mCurrentY);
-//		canvas.clipPath(sPath);
+		canvas.clipPath(sPath);
 		
         int c=80;
-//        canvas.drawRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c, ViewContans.generatePaint(Color.RED, 2));
-        canvas.clipRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
+        canvas.drawRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c, ViewContans.generatePaint(Color.RED, 2,true));
+//        canvas.clipRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
         // 画放大后的图         
-//        canvas.translate(RADIUS - mCurrentX * FACTOR, RADIUS - mCurrentY * FACTOR); 
+        canvas.translate(RADIUS - mCurrentX * FACTOR, RADIUS - mCurrentY * FACTOR); 
 //		 initCanvas();
 //        canvas.drawLine((float)sCurrentX, (float)sCurrentY,(float) mCurrentX,(float)  mCurrentY, ViewContans.generatePaint(Color.RED,3));
-         canvas.drawBitmap(mBitmap, matrix, null); 
+//        canvas.translate(Contants.sreenWidth/2-screen_x, Contants.screenHeight/2-screen_y ); 
+        canvas.drawLine(sCurrentX, sCurrentY, mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 4,true));
+        canvas.drawPoint(mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 20,true));
+        canvas.drawBitmap(mBitmap, matrix, null); 
+        Logger.i("mBitmap大小", mBitmap.toString());
 //         clipCallBack.OnClipCallBack(canvas);
 	}
 	//长按事件参数值
@@ -298,30 +227,37 @@ public class DefineView extends View{
         	sCurrentX = (int) event.getX();  
             sCurrentY = (int) event.getY();  
 			if (DefineActivity.TYPE==Contants.SINGLE) {							
-				int i=linesModel.PitchOnLine(totallist, x, y);
+				int i=linesModel.PitchOnLine(linesModel.Getlines, x, y);
 				if (i>=0) {				
 					isMoveLinedrag=true;
-					linesModel.MoveLine_down(totallist, i, rx, ry);
+					linesModel.MoveLine_down(linesModel.Getlines, i, rx, ry);
 					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_touch_down(x, y);
 				}				
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {	
-				polygonModel.Continuous_touch_down(x, y);				
+				int i=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
+//				if (i>=0) {
+//					isMoveLinedrag=true;
+//					Logger.i("点中多边形", "i="+i);
+//					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
+//				}else {
+					polygonModel.Continuous_touch_down(x, y);
+//				}								
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
-				int i=rectangleModel.PitchOnRectangle(rectangleModel.getRectlist, x, y);
+				int i=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
 				if (i>=0) {
 					isMoveLinedrag=true;
-					rectangleModel.MoveRectangle_down(rectangleModel.getRectlist, i, rx, ry);
+					rectangleModel.MoveRectangle_down(rectangleModel.GetRectlist, i, rx, ry);
 					DrawAllOnBitmap();
 				}else {
 					rectangleModel.Rectangle_touch_down(x, y);
 				}			
 			}else if (DefineActivity.TYPE==Contants.COORDINATE) {
-				int i=coordinateModel.PitchOnCoordinate(coordinateModel.getCoordlist, x, y);	
+				int i=coordinateModel.PitchOnCoordinate(coordinateModel.GetCoordlist, x, y);	
 				if (i>=0) {
 					isMoveLinedrag=true;
-					coordinateModel.MoveCoordinate_down(coordinateModel.getCoordlist, i, rx, ry);
+					coordinateModel.MoveCoordinate_down(coordinateModel.GetCoordlist, i, rx, ry);
 					DrawAllOnBitmap();
 				} else {
 //					coordinateModel.Coordinate_touch_down(x, y);
@@ -364,7 +300,11 @@ public class DefineView extends View{
 	    			linesModel.Line_touch_move(x, y);
 				}
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {
-				polygonModel.Continuous_touch_move(x, y);
+//				if (isMoveLinedrag) {
+//					polygonModel.MovePolygon_move(rx, ry);
+//				}else {
+					polygonModel.Continuous_touch_move(x, y);
+//				}			
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					rectangleModel.MoveRectangle_move(rx, ry);
@@ -395,7 +335,7 @@ public class DefineView extends View{
 				}
 			}	
             if (!mIsLongPressed) {
-            	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
+            	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 750);
             	Yes=true;
         	}
             if (mIsLongPressed) {        		
@@ -403,39 +343,49 @@ public class DefineView extends View{
         			Yes=false;        			
         			if (angleModel.ExtandAngle(angleModel.getAnglelist, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
-        				DefineActivity.TYPE=Contants.ANGLE;
+        				DefineActivity.TYPE=Contants.ANGLE_AXIS;
+        				DrawAllOnBitmap();
 					}
-        			if (coordinateModel.ExtandCoordinate(coordinateModel.getCoordlist, x, y)) {
+        			if (coordinateModel.ExtandCoordinate(coordinateModel.GetCoordlist, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
-						DefineActivity.TYPE=Contants.COORDINATE;
+						DefineActivity.TYPE=Contants.COORDINATE_AXIS;
+						DrawAllOnBitmap();
 					}
-        			if (rectangleModel.ExtandRectangle(rectangleModel.getRectlist, x, y)) {
+        			if (rectangleModel.ExtandRectangle(rectangleModel.GetRectlist, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
 						DefineActivity.TYPE=Contants.RECTANGLE;
+						DrawAllOnBitmap();
 					} 
-        			if (linesModel.ExtendLine(totallist, x, y)) {
+        			if (linesModel.ExtendLine(linesModel.Getlines, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
 						DefineActivity.TYPE=Contants.SINGLE;
+						DrawAllOnBitmap();
 					} 
-        			
-        			DrawAllOnBitmap();
+        			Logger.i("长按时间了", "长按时间了");      			
 				}          		
         		if (DefineActivity.TYPE==Contants.SINGLE) {
 					linesModel.Line_touch_move(x, y);
 				}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 					rectangleModel.Rectangle_touch_move(x, y);
-				}else if (DefineActivity.TYPE==Contants.COORDINATE) {
-					coordinateModel.Coordinate_touch_move(x, y);
-				}else if (DefineActivity.TYPE==Contants.ANGLE) {
-					angleModel.Angle_touch_move(x, y);	
+				}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS) {
+					coordinateModel.ExtandCoordinateOneAxis_touch_move(x,y);
+				}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
+					angleModel.ExtandAngleBorder_touch_move(x, y);	
 				}
 			}
     	    invalidate();
             break;
         case MotionEvent.ACTION_UP:
         	isMovingdraw=false;
-			if (DefineActivity.TYPE==Contants.CONTINU) {      		
-        		polygonModel.Continuous_touch_up(x, y, mCanvas);  			
+        	mIsLongPressed=false;
+			if (DefineActivity.TYPE==Contants.CONTINU) {  
+//				if (isMoveLinedrag) {
+//					isMoveLinedrag=false;
+//					polygonModel.MovePolygon_up(mCanvas);
+//				}else {
+	        		polygonModel.Continuous_touch_up(x, y, mCanvas);		
+//				}
+        		
 			}else if (DefineActivity.TYPE==Contants.SINGLE) {						
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -443,7 +393,7 @@ public class DefineView extends View{
 				}else {
 					mIsLongPressed=false;				
 					linesModel.Line_touch_up(x, y , mCanvas);	
-				}
+				}				
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -468,39 +418,43 @@ public class DefineView extends View{
 					mIsLongPressed=false;
 					angleModel.Angle_touch_up(x, y, mCanvas);
 				}				
+			}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
+				angleModel.ExtandAngle_touch_up(mCanvas);
 			}else if (DefineActivity.TYPE==Contants.TEXT) {
 //				if (isMoveLinedrag) {
 //					isMoveLinedrag=false;
 					textModel.MoveText_up(mCanvas);
 //				}
+			}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS) {
+				mIsLongPressed=false;
+				coordinateModel.Coordinate_touch_up(x,y,mCanvas);
 			}else {
 				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
 				if (mIsShortPressed) {
-	        		int m=linesModel.PitchOnLine(totallist, x, y);
-	        		if (m>=0) {
-	    				dialogCallBack.onDialogCallBack(totallist.get(m), m);
+	        		int l=linesModel.PitchOnLine(linesModel.Getlines, x, y);
+	        		if (l>=0) {
+	    				dialogCallBack.onDialogCallBack(linesModel.Getlines.get(l), l);
 					}
+	        		int p=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
+	        		if (p>=0) {
+	        			dialogCallBack.onDialogCallBack(polygonModel.GetpolyList.get(p), p);
+	        			Logger.i("选中多边形", "p="+p);
+	        		}
+	        		int r=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
+	        		if (r>=0) {
+						dialogCallBack.onDialogCallBack(rectangleModel.GetRectlist.get(r), r);
+					}
+	        		int c=coordinateModel.PitchOnCoordinate(coordinateModel.GetCoordlist, x, y);
+	        		if (c>=0) {
+						dialogCallBack.onDialogCallBack(coordinateModel.GetCoordlist.get(c), c);
+					}
+	        		int a=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
+	        		if (a>=0) {
+						dialogCallBack.onDialogCallBack(angleModel.getAnglelist.get(a), a);
+					}   
 				}
 			}
-			Logger.i("添加个数", "在line中 ，lines="+linesModel.list.size());  
-			Logger.i("添加个数", "在polygon中 ， lines="+polygonModel.continuouslist.size());
-			for (int i = 0; i < linesModel.list.size(); i++) {
-	        	PointF start=linesModel.list.get(i).getStartPoint();
-	        	PointF stop=linesModel.list.get(i).getStopPoint();
-	        	linesModel.AddLinesParams(totallist, start, stop);	        	
-			}
-			linesModel.list.clear();
-			for (int i = 0; i < polygonModel.continuouslist.size(); i++) {
-				PointF start=polygonModel.continuouslist.get(i).getStartPoint();
-	        	PointF stop=polygonModel.continuouslist.get(i).getStopPoint(); 
-	        	linesModel.AddLinesParams(totallist, start, stop);
-	        	
-			} 
-			polygonModel.continuouslist.clear();
-			Logger.i("添加个数", "在total中 ， lines="+totallist.size());
-			if (totallist.size()>=3) {
-				polygonModel.DrawShadowArea(totallist, mCanvas);
-			}
+			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
 			DefineActivity.TYPE=Contants.DRAG;
     	    invalidate();
             break;
@@ -513,11 +467,12 @@ public class DefineView extends View{
 	}
 	private void DrawAllOnBitmap(){
 		initCanvas(); 
-		linesModel.DrawLinesOnBitmap(totallist, mCanvas);
-		rectangleModel.DrawRectanleOnBitmap(rectangleModel.getRectlist, mCanvas);
-		coordinateModel.DrawCoordinateOnBitmap(coordinateModel.getCoordlist, mCanvas);
+		linesModel.DrawLinesOnBitmap(linesModel.Getlines, mCanvas);
+		rectangleModel.DrawRectanleOnBitmap(rectangleModel.GetRectlist, mCanvas);
+		coordinateModel.DrawCoordinatesOnBitmap(coordinateModel.GetCoordlist, mCanvas);
 		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
 		textModel.DrawTextList(textModel.getTextlist, mCanvas);
+		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
 	}
 	/**
 	 * 画布拖拽
@@ -539,11 +494,16 @@ public class DefineView extends View{
 		    DefineActivity.LocationXY(screen_x, screen_y);
 		}
 	}
-
+	/**
+	 * 添加文字到直线中
+	 * @param rx
+	 * @param ry
+	 * @return
+	 */
 	public boolean SetLineText(int rx,int ry){
 		float gx=(float)(-screen_x+rx);
 		float gy=(float)(-screen_y+ry-50);
-		int i=linesModel.PitchOnLineToText(totallist, gx, gy);
+		int i=linesModel.PitchOnLineToText(linesModel.Getlines, gx, gy);
 		if (i>=0) {
 			m=i;			
 			return true;
@@ -556,10 +516,8 @@ public class DefineView extends View{
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
 		invalidate();
 	}
-	public void SetwriteLineText(String text,int place){
-		linesModel.AddTextOnLine(totallist, mCanvas, m,text,place);
-		layout(screen_x, screen_y, width+screen_x, height+screen_y);
-		linesModel.AddLineNameAtIndex(totallist,text,m);
+	public void SetwriteLineText(String text){
+		linesModel.AddTextOnLine(linesModel.Getlines, mCanvas, m,text,10);		
 	}
 	public void LineChangeToText(){
 		isWriteText=true;
@@ -568,6 +526,21 @@ public class DefineView extends View{
 	public void LineNoChangeToText(){
 		isWriteText=false;
 		invalidate();
+	}
+	public List<LineBean> BackLinelist(){
+		return linesModel.Getlines;
+	}
+	public List<RectangleBean> BackRectlist(){
+		return rectangleModel.GetRectlist;
+	}
+	public List<PolygonBean> BackPolylist(){
+		return polygonModel.GetpolyList;
+	}
+	public List<CoordinateBean> BackCoorlist(){
+		return coordinateModel.GetCoordlist;
+	}
+	public List<AngleBean> BackAnglelist(){
+		return angleModel.getAnglelist;
 	}
 	/**
 	 * 画布缩放
@@ -592,10 +565,10 @@ public class DefineView extends View{
 	  * 重新将路径画在画布上面。
 	  */
 	 public void UnDo(){
-	     if (totallist!=null&&totallist.size()>0) {
+	     if (linesModel.Getlines!=null&&linesModel.Getlines.size()>0) {
 	    	//调用初始化画布函数以清空画布
 	         initCanvas();  
-	         linesModel.DeleteLine(totallist, mCanvas);
+	         linesModel.DeleteLine(linesModel.Getlines, mCanvas);
 	         invalidate();
 		 }	 
      }
@@ -603,20 +576,47 @@ public class DefineView extends View{
 	  * 删掉某条
 	  */
 	 public void RemoveIndexLine(int index){
-         if(totallist != null && totallist.size() > 0){
+         if(linesModel.Getlines != null && linesModel.Getlines.size() > 0){
             //调用初始化画布函数以清空画布
-            initCanvas();            
-            linesModel.RemoveIndexLine(totallist, mCanvas, index);
+        	linesModel.Getlines.remove(index);
+            DrawAllOnBitmap();                       
             invalidate();// 刷新
          }
      }
-	 
-	 public void ChangeLineAttribute(int index,String name,double angle,int color
-				,double lenght,boolean isfull,float width,String desc){
+	 public void RemoveIndexRectangle(int index){
+		 if (rectangleModel.GetRectlist!=null&&rectangleModel.GetRectlist.size()>0) {
+			rectangleModel.GetRectlist.remove(index); 
+			DrawAllOnBitmap();  
+			invalidate();
+		}
+	 }
+	 public void RemoveIndexCoordinate(int index){
+		 if (coordinateModel.GetCoordlist!=null&&coordinateModel.GetCoordlist.size()>0) {
+			coordinateModel.GetCoordlist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
+	 public void ChangeLineAttribute(int index,LineBean line){
 		//调用初始化画布函数以清空画布
-         initCanvas(); 
-         linesModel.ChangeLineAttributeAtIndex(totallist, mCanvas, index, name, angle, color, lenght, isfull, width, desc);
+         DrawAllOnBitmap();
+         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
          invalidate();
+	 }
+	 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){
+		 DrawAllOnBitmap();
+		 rectangleModel.ChangeRectAttributeAtIndex(rectangleModel.GetRectlist, index, mCanvas, rectangleBean);
+		 invalidate();
+	 }
+	 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){
+		 DrawAllOnBitmap();
+		 coordinateModel.ChangeCoorAttributeAtIndex(coordinateModel.GetCoordlist, index,
+				 mCanvas, coordinateBean);
+		 invalidate();
+	 }
+	 public void ChangeAngleAttribute(int index,AngleBean angleBean){
+		 DrawAllOnBitmap();
+		 angleModel.ChangeAngleBeanAttributeAtIndex(angleModel.getAnglelist, index, mCanvas, angleBean);
 	 }
 	 public void LocationXY(){
 		 screen_x=-Contants.sreenWidth;

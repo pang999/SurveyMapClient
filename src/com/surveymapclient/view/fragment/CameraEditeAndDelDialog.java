@@ -3,7 +3,8 @@ package com.surveymapclient.view.fragment;
 import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.common.Contants;
+import com.surveymapclient.entity.LineBean;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -18,14 +19,14 @@ import android.widget.ImageView;
 @SuppressLint("NewApi")
 public class CameraEditeAndDelDialog extends DialogFragment implements OnClickListener{
 
-	CouplePointLineBean couplePointLine;
+	static int type;
 	int index;
 	ImageView edit;
 	ImageView delete;
-	public static CameraEditeAndDelDialog newIntance(){
+	public static CameraEditeAndDelDialog newIntance(int t){
 		CameraEditeAndDelDialog editeAndDelDialog=new CameraEditeAndDelDialog();
 		Bundle bundle=new Bundle();
-
+		type=t;
 		editeAndDelDialog.setArguments(bundle);
 		return editeAndDelDialog;
 		
@@ -58,6 +59,7 @@ public class CameraEditeAndDelDialog extends DialogFragment implements OnClickLi
         //可以设置dialog的显示风格，如style为STYLE_NO_TITLE，将被显示title。遗憾的是，我没有在DialogFragment中找到设置title内容的方法。theme为0，表示由系统选择合适的theme。
         int style = DialogFragment.STYLE_NO_FRAME, theme = 0; 
         setStyle(style,theme);  
+       
 
 	}
 	
@@ -67,7 +69,21 @@ public class CameraEditeAndDelDialog extends DialogFragment implements OnClickLi
 		CameraActivity cameraActivity=(CameraActivity) getActivity();
 		int id = v.getId();
 		if (id == R.id.dialogedit) {
-			cameraActivity.SendData();
+			if (type==0) {
+				cameraActivity.SendLineData();
+			}	
+			if (type==1) {
+				cameraActivity.SendPolygonData();
+			}
+			if (type==2) {
+				cameraActivity.SendRectangleData();
+			}
+			if (type==3) {
+				cameraActivity.SendCoordinateData();
+			}
+			if (type==4) {
+				cameraActivity.SendAngleData();
+			}
 			dismiss();
 		} else if (id == R.id.dialogdelete) {
 			cameraActivity.Remove();

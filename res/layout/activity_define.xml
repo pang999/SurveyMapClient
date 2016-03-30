@@ -10,13 +10,21 @@
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
+    
+	<com.surveymapclient.view.MagnifyView 
+	    android:id="@+id/magnifyview"
+	    android:layout_marginTop="60dp"
+	    android:layout_alignParentStart="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_width="100dp"
+        android:layout_height="100dp"
+	    />
     <RelativeLayout
         android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"     
         android:layout_gravity="top"
-        android:background="#00FFFF"
+        android:background="#000000"
          >
         <EditText 
             android:id="@+id/editTitle"
@@ -42,7 +50,7 @@
 	          android:layout_height="wrap_content"
 	          android:layout_alignParentLeft="true"
 	          android:layout_centerVertical="true"
-	          android:src="@drawable/back" />
+	          android:src="@drawable/backl" />
 
 	      <ImageView
 	          android:id="@+id/tolistlines"
@@ -69,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#00FFFF"
+        android:background="#000000"
         android:orientation="horizontal"
         android:gravity="center_vertical"
          >               

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.surveymapclient.activity.R;
+import com.surveymapclient.activity.adapter.HistoryAdapter;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -19,11 +20,12 @@ import android.widget.PopupWindow;
 public class HistPopupWindow extends PopupWindow {
 
 	View conentView;
+	HistoryAdapter adapter;
 	
 	public HistPopupWindow(final Activity context){
 		LayoutInflater inflater = (LayoutInflater) context  
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
-        conentView = inflater.inflate(R.layout.historypopupwindow, null);  
+        conentView = inflater.inflate(R.layout.fragment_and_popu_history, null);  
         int h = context.getWindowManager().getDefaultDisplay().getHeight();  
         int w = context.getWindowManager().getDefaultDisplay().getWidth();  
         // 设置SelectPicPopupWindow的View  
@@ -36,20 +38,8 @@ public class HistPopupWindow extends PopupWindow {
         this.setFocusable(true);  
         this.setOutsideTouchable(true);  
         ListView listView=(ListView) conentView.findViewById(R.id.list_history_item);
-        List<String> data = new ArrayList<String>();
-        data.add("历史数据1");
-        data.add("历史数据2");
-        data.add("历史数据3");
-        data.add("历史数据4");
-        data.add("历史数据5");
-        data.add("历史数据6");
-        data.add("历史数据7");
-        data.add("历史数据8");
-        data.add("历史数据9");
-        data.add("历史数据10");
-        data.add("历史数据11");
-        data.add("历史数据12");
-        listView.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1,data));
+        adapter=new HistoryAdapter(context);
+        listView.setAdapter(adapter);
         // 刷新状态  
         this.update();  
         // 实例化一个ColorDrawable颜色为半透明  

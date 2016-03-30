@@ -1,10 +1,16 @@
 package com.surveymapclient.activity;
 
+import java.io.Serializable;
+
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.ImageTools;
 import com.surveymapclient.common.Logger;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.CoordinateBean;
+import com.surveymapclient.entity.LineBean;
+import com.surveymapclient.entity.PolygonBean;
+import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.view.CameraBitMapView;
@@ -13,7 +19,6 @@ import com.surveymapclient.view.HistPopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.NotePopupWindow;
 import com.surveymapclient.view.fragment.CameraEditeAndDelDialog;
-import com.surveymapclient.view.fragment.EditeAndDelDialog;
 
 import android.R.string;
 import android.annotation.SuppressLint;
@@ -59,13 +64,18 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
     Bitmap bitmap;
 	private CameraBitMapView cameraBitMapView;
 	public static Bitmap smallBitmap ;
-	CouplePointLineBean couple;
+	LineBean couple;
 	private Button dataMove;
     int index;
     int screenWidth;
     int screenHeight;
     private Context mContext = null;
     public static int TYPE=0;
+    LineBean line;
+    PolygonBean polygon;
+    RectangleBean rectangle;
+    CoordinateBean coordinate;
+    AngleBean angle;
 	/**
      * 手机振动器
      */
@@ -101,11 +111,11 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 	private void initView(){
 		mContext=this;
 		//top		
-		btndefineback=(ImageView) findViewById(R.id.camera_defineBack);
-		btnhistoryItem=(ImageView) findViewById(R.id.camera_tohistory);
-		edittitle=(EditText) findViewById(R.id.camera_editTitle);
-		topLinearlaout=(RelativeLayout) findViewById(R.id.camera_topLinearlayout);
-		locationview=(LocationView) findViewById(R.id.camera_locationview);
+		btndefineback=(ImageView) findViewById(R.id.defineBack);
+		btnhistoryItem=(ImageView) findViewById(R.id.tohistory);
+		edittitle=(EditText) findViewById(R.id.editTitle);
+		topLinearlaout=(RelativeLayout) findViewById(R.id.topLinearlayout);
+		locationview=(LocationView) findViewById(R.id.locationview);
 		edittitle.setOnClickListener(this);		
 		btndefineback.setOnClickListener(this);			
 		//center
@@ -137,7 +147,12 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 	}
 	public void onListLines(View v){
 		Intent intent=new Intent();
-		intent.setClass(this, ListLinesActivity.class);
+		intent.putExtra("LineList",(Serializable)cameraBitMapView.BackLinelist());
+		intent.putExtra("RectList",(Serializable) cameraBitMapView.BackRectlist());
+		intent.putExtra("PolyList",(Serializable) cameraBitMapView.BackPolylist());
+		intent.putExtra("CoorList", (Serializable)cameraBitMapView.BackCoorlist());
+		intent.putExtra("AngleList",(Serializable) cameraBitMapView.BackAnglelist());
+		intent.setClass(this, DataListActivity.class);
 		startActivity(intent);
 	}
 	public void onHistory(View v){
@@ -159,32 +174,6 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
         // 下边是可以使震动有规律的震动   -1：表示不重复 0：循环的震动
         long[] pattern = {10,50};
         vibrator.vibrate(pattern, -1);
-	}
-	@SuppressLint("NewApi")
-	@Override
-	public void onDialogCallBack(CouplePointLineBean couplePoint, int i) {
-		// TODO Auto-generated method stub
-		this.couple=couplePoint;
-		this.index=i;
-		Toast.makeText(this, "短按事件发来的消息 x="+couplePoint.getStartPoint().x, Toast.LENGTH_SHORT).show();
-		CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance();
-		FragmentTransaction ft=getFragmentManager().beginTransaction();
-		eadd.show(ft, "");
-	}
-	public void SendData(){
-		Intent intent=new Intent();
-		Bundle bundle=new Bundle();
-		bundle.putString("name", couple.getName());
-		bundle.putString("descripte", couple.getDescripte());
-		bundle.putDouble("length", couple.getLength());
-		bundle.putDouble("angle", couple.getAngle());
-		bundle.putFloat("width", couple.getWidth());
-		bundle.putInt("color", couple.getColor());
-		bundle.putBoolean("style", couple.isFull());
-		bundle.putInt("i", 1);
-		intent.putExtras(bundle);
-		intent.setClass(CameraActivity.this, LineAttributeActivity.class);
-		startActivity(intent);
 	}
 	public void Remove(){
 		cameraBitMapView.RemoveIndexLine(index);
@@ -276,9 +265,127 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		case R.id.camera_type_angle:
 			TYPE=Contants.ANGLE;
 			break;
-		case R.id.camera_defineBack:
+		case R.id.defineBack:
 			IToast.show(this, "保存图片成功");
 			break;
 		}
 	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode==RESULT_OK) {
+			if (requestCode==Contants.LINEATTRIBUTEBACK) {	
+				Bundle bundle = data.getExtras();				
+				LineBean lineBeans=(LineBean) bundle.getSerializable("BackLine");
+				cameraBitMapView.ChangeLineAttribute(index, lineBeans);			
+			}
+			if (requestCode==Contants.RECTATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				RectangleBean rectangleBean=(RectangleBean) bundle.getSerializable("BackRectangle");
+				cameraBitMapView.ChangeRectangleAttribute(index,rectangleBean);
+				Logger.i("BackRectangle", rectangleBean.getRectName());
+			}
+			if (requestCode==Contants.COORDATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				CoordinateBean coordinateBean= (CoordinateBean) bundle.getSerializable("BackCoordinate");
+				cameraBitMapView.ChangeCoordinateAttribute(index, coordinateBean);
+			}
+			if (requestCode==Contants.ANGLEATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				AngleBean angleBean=(AngleBean) bundle.getSerializable("BackAngle");
+				cameraBitMapView.ChangeAngleAttribute(index, angleBean);
+			}
+		}
+	}
+	//直线属性显示及编辑
+		public void SendLineData(){
+			Intent intent=new Intent();
+			Bundle bundle=new Bundle();
+			bundle.putSerializable("Line", line);
+			bundle.putInt("TYPE", 1);
+			intent.putExtras(bundle);
+			intent.setClass(CameraActivity.this, AttributeLineActivity.class);
+			startActivityForResult(intent, Contants.LINEATTRIBUTEBACK);
+		}
+		public void SendPolygonData(){
+			Intent intent=new Intent();
+			Bundle bundle=new Bundle();
+			bundle.putSerializable("Polygon", (Serializable)polygon);
+			intent.putExtras(bundle);
+			intent.setClass(CameraActivity.this, AttributePolygonActivity.class);
+			startActivityForResult(intent, Contants.POLYGONATTRIBUTEBACK);
+		}
+		public void SendRectangleData(){
+			Intent intent=new Intent();
+			Bundle bundle=new Bundle();
+			bundle.putSerializable("Rectangle", rectangle);
+			intent.putExtras(bundle);
+			intent.setClass(CameraActivity.this, AttributeRectangleActivity.class);
+			startActivityForResult(intent, Contants.RECTATTRIBUTEBACK);
+		}
+		public void SendCoordinateData(){
+			Intent intent=new Intent();
+			Bundle bundle=new Bundle();
+			bundle.putSerializable("Coordinate", coordinate);
+			intent.putExtras(bundle);
+			intent.setClass(CameraActivity.this, AttributeCoordinateActivity.class);
+			startActivityForResult(intent, Contants.COORDATTRIBUTEBACK);
+		}
+		public void SendAngleData(){
+			Intent intent=new Intent();
+			Bundle bundle=new Bundle();
+			bundle.putSerializable("Angle", angle);
+			intent.putExtras(bundle);
+			intent.setClass(CameraActivity.this, AttributeAngleActivity.class);
+			startActivityForResult(intent, Contants.ANGLEATTRIBUTEBACK);
+		}
+		@SuppressLint("NewApi")
+		@Override
+		public void onDialogCallBack(LineBean couplePoint,int i) {
+			// TODO Auto-generated method stub
+			this.line=couplePoint;
+			this.index=i;
+			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(0);
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			eadd.show(ft, "");
+		}
+//		List<LineBean> list=new ArrayList<LineBean>();
+		@Override
+		public void onDialogCallBack(PolygonBean polygon, int i) {
+			// TODO Auto-generated method stub
+			this.polygon=polygon;
+			this.index=i;
+			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(1);
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			eadd.show(ft, "");
+		}
+		@Override
+		public void onDialogCallBack(RectangleBean rectangle, int i) {
+			// TODO Auto-generated method stub
+			this.rectangle=rectangle;
+			this.index=i;
+			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(2);
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			eadd.show(ft, "");
+		}
+		
+		@Override
+		public void onDialogCallBack(CoordinateBean coordinate, int i) {
+			// TODO Auto-generated method stub
+			this.coordinate=coordinate;
+			this.index=i;
+			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(3);
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			eadd.show(ft, "");
+		}
+		@Override
+		public void onDialogCallBack(AngleBean angleLine, int i) {
+			// TODO Auto-generated method stub
+			this.angle=angleLine;
+			this.index=i;
+			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(4);
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			eadd.show(ft, "");
+		}
 }

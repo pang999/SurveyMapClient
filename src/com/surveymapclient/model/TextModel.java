@@ -17,7 +17,7 @@ import android.graphics.PointF;
 
 public class TextModel {
 	
-	private Paint mPaint=ViewContans.generatePaint(Color.BLACK, 4);
+//	private Paint mPaint=ViewContans.generatePaint(Color.BLACK, 4,true);
 	public List<TextBean> getTextlist=new ArrayList<TextBean>();
 	private float loca_x,loca_y;
 	private TextBean tb;

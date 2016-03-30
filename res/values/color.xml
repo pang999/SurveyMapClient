@@ -12,7 +12,9 @@
 	<color name="add_pop_bg_color">#696969</color>
 	<color name="blue_s">#104E8B</color>
    <color name="blue_n">#436EEE</color>
-    
+    <!-- 底栏字体颜色 -->
+	<color name="footer_text_color_normal">#343434</color>
+	<color name="footer_text_color_selected">#FF601C</color>
     <color name="gray_sixsix">#666666</color>
 	<color name="gray_sixthree">#333333</color>
      <color name="gray_light">#cccccc</color>
@@ -23,4 +25,5 @@
      <color name="seekbar_secondaryprogress_color">#3F4DB5A4</color>
      <color name="item_common_select">#e8e8e5</color>
      <color name="red_n">#ff7676</color>
+     <color name="background_tab_pressed">#c30013</color>
 </resources>

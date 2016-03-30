@@ -36,13 +36,14 @@ public class NotePopupWindow extends PopupWindow{
         this.update();  
         Button edittext=(Button) conentView.findViewById(R.id.editetext);
         Button tape=(Button) conentView.findViewById(R.id.tape);
+        final DefineActivity defineActivity=(DefineActivity) context;
         edittext.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				NotePopupWindow.this.dismiss();
-				DefineActivity defineActivity=(DefineActivity) context;
+				
 				defineActivity.showEditeView();
 			}
 		});
@@ -52,6 +53,7 @@ public class NotePopupWindow extends PopupWindow{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				NotePopupWindow.this.dismiss();
+				defineActivity.showTapeDialog();
 			}
 		});
         // 实例化一个ColorDrawable颜色为半透明  
