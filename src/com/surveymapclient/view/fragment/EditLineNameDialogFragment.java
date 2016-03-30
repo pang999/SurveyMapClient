@@ -71,10 +71,10 @@ public class EditLineNameDialogFragment extends DialogFragment implements OnClic
 			}else {
 				name="text";
 			}
-			daActivity.EditLineName(name);
+//			daActivity.EditLineName(name);
 			dismiss();
 		} else if (id == R.id.dialogdelete) {
-			daActivity.EditLineName("");
+//			daActivity.EditLineName("");
 			dismiss();
 		} else {
 		}

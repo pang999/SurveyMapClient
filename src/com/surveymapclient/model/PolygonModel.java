@@ -1,5 +1,6 @@
 package com.surveymapclient.model;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,12 +9,14 @@ import java.util.Random;
 
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.entity.CouplePointLineBean;
+import com.surveymapclient.entity.LineBean;
+import com.surveymapclient.entity.PolygonBean;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Looper;
 import android.provider.MediaStore.Video;
@@ -25,25 +28,89 @@ public class PolygonModel {
     //连续线段获得终止画点
     private List<PointF> linePoint=new ArrayList<PointF>();
     //连续线段获得条数
-    public List<CouplePointLineBean> continuouslist=new ArrayList<CouplePointLineBean>();
+    private List<LineBean> continuouslist=new ArrayList<LineBean>();
     private float mX, mY;// 临时点坐标
     private static final float TOUCH_TOLERANCE = 4;
-    
+    public List<PolygonBean> GetpolyList=new ArrayList<PolygonBean>();
+    private PolygonBean drawpolygon=new PolygonBean();
     //每隔10像素取点
   	private static int space=10;
-    
+  	private PointF movePoint=new PointF();
 	private Path mPath;
 	
-	private Paint mPaint=ViewContans.generatePaint(Color.RED, 4);
-	
-	private LinesModel linesModel=new LinesModel();
+	//直线两头端点画点
+	private Paint point=ViewContans.generatePaint(Color.RED, 18,true);
+	//画在Bitmap的线笔
+	private Paint mPaint=ViewContans.generatePaint(Color.BLACK, 6, false);
+	//画图过程画笔
+	private Paint painting=ViewContans.generatePaint(Color.RED, 4,true);
+	//选中画笔
+	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10,true);
 	//画阴影
-    List<PointF> shadowpoints;
     Path mshadowpath; 
-		
+    
+    private Paint generatePaint(int color){
+		Paint p = new Paint();
+        p.setAntiAlias(true);
+        p.setDither(true);
+        p.setColor(color);
+        p.setStyle(Paint.Style.FILL);
+        p.setStrokeJoin(Paint.Join.ROUND);
+        p.setStrokeCap(Paint.Cap.ROUND);
+        p.setStrokeWidth(10); 
+    	p.setAlpha(0x40); 
+    	return p;
+	}	
 	public void DrawPath(Canvas canvas){
 		if (mPath!=null) {
-			canvas.drawPath(mPath, mPaint);
+			canvas.drawPath(mPath, painting);
+		}
+	}
+	public void DrawPolygonOnBitmap(Canvas canvas){
+		mshadowpath=new Path();
+   		mshadowpath.reset();
+   		List<LineBean> lineBeans=GetpolyList.get(GetpolyList.size()-1).getPolyLine();
+   		for (int j = 0;j < lineBeans.size(); j++) {
+			float sx=lineBeans.get(j).getStartX();
+			float sy=lineBeans.get(j).getStartY();
+			float ex=lineBeans.get(j).getEndX();
+			float ey=lineBeans.get(j).getEndY();
+			canvas.drawLine(sx, sy, ex, ey, mPaint);
+			canvas.drawPoint(sx, sy, point);
+			canvas.drawPoint(ex, ey, point);
+			if (j==0) {
+				mshadowpath.moveTo(lineBeans.get(0).getStartX(), lineBeans.get(0).getStartY());
+			}else {
+				mshadowpath.quadTo(lineBeans.get(j-1).getEndX(), lineBeans.get(j-1).getEndY(),
+						lineBeans.get(j).getStartX(), lineBeans.get(j).getStartY());
+			}
+		}
+		canvas.drawPath(mshadowpath, generatePaint(Color.RED));
+		mshadowpath=null;
+	}
+	public void DrawPolygonsOnBitmap(List<PolygonBean> polylist,Canvas canvas){
+	   	for (int i = 0; i < polylist.size(); i++) {
+	   		mshadowpath=new Path();
+	   		mshadowpath.reset();
+	   		Logger.i("多边形次数", "i="+i);
+	   		for (int j = 0;j < polylist.get(i).getPolyLine().size(); j++) {
+				float sx=polylist.get(i).getPolyLine().get(j).getStartX();
+				float sy=polylist.get(i).getPolyLine().get(j).getStartY();
+				float ex=polylist.get(i).getPolyLine().get(j).getEndX();
+				float ey=polylist.get(i).getPolyLine().get(j).getEndY();
+				canvas.drawLine(sx, sy, ex, ey, mPaint);
+				canvas.drawPoint(sx, sy, point);
+				canvas.drawPoint(ex, ey, point);
+				if (j==0) {
+					mshadowpath.moveTo(polylist.get(i).getPolyLine().get(0).getStartX(), polylist.get(i).getPolyLine().get(0).getStartY());
+				}else {
+					mshadowpath.quadTo(polylist.get(i).getPolyLine().get(j-1).getEndX(), polylist.get(i).getPolyLine().get(j-1).getEndY(),
+							polylist.get(i).getPolyLine().get(j).getStartX(), polylist.get(i).getPolyLine().get(j).getStartY());
+				}
+			}
+			Logger.i("多边形次数", "i="+i);
+			canvas.drawPath(mshadowpath, generatePaint(Color.RED));
+			mshadowpath=null;
 		}
 	}
 	
@@ -77,57 +144,185 @@ public class PolygonModel {
 		int count =linePoint.size();
 		for (int i = 0; i < count; i++) {
 			if (i==count-1) {
-				linesModel.AddLineParams(continuouslist,ViewContans.AdsorbPoint((int)linePoint.get(i).x), 
+				GetLines(continuouslist,ViewContans.AdsorbPoint((int)linePoint.get(i).x), 
 						ViewContans.AdsorbPoint((int)linePoint.get(i).y), ViewContans.AdsorbPoint((int)linePoint.get(0).x), 
 						ViewContans.AdsorbPoint((int)linePoint.get(0).y));
 			}else {
-				linesModel.AddLineParams(continuouslist,ViewContans.AdsorbPoint((int)linePoint.get(i).x), 
+				GetLines(continuouslist,ViewContans.AdsorbPoint((int)linePoint.get(i).x), 
 						ViewContans.AdsorbPoint((int)linePoint.get(i).y), ViewContans.AdsorbPoint((int)linePoint.get(i+1).x), 
 						ViewContans.AdsorbPoint((int)linePoint.get(i+1).y));
-			}		
+			}	
+			
 		}
 		for (int i = 0; i < continuouslist.size(); i++) {
-        	float sx=continuouslist.get(i).getStartPoint().x;
-        	float sy=continuouslist.get(i).getStartPoint().y;
-        	float ex=continuouslist.get(i).getStopPoint().x;
-        	float ey=continuouslist.get(i).getStopPoint().y;
+        	float sx=continuouslist.get(i).getStartX();
+        	float sy=continuouslist.get(i).getStartY();
+        	float ex=continuouslist.get(i).getEndX();
+        	float ey=continuouslist.get(i).getEndY();
         	if (sx==ex&&sy==ey) {
-				continuouslist.remove(i);
+        		continuouslist.remove(i);
 			}	
-		}
-		linesModel.DrawLinesOnBitmap(continuouslist, canvas);	
+		}	
+		if (continuouslist.size()>=3) {
+			AddPolygonParams(GetpolyList, continuouslist);
+			DrawPolygonOnBitmap(canvas);
+		}		
+		Logger.i("多边形总数", "GetpolyList="+GetpolyList.size());
+		for (int i = 0; i < GetpolyList.size(); i++) {
+			Logger.i("多边形总数", "lines("+i+")="+GetpolyList.get(i).getPolyLine().size());
+			Logger.i("多边形总数", "描述("+i+")="+GetpolyList.get(i).getDescripe());
+		}	
         mPath = null;// 重新置空	
 		
 	}
+	List<LineBean> lineBeans=new ArrayList<LineBean>();
+	public void MovePolygon_down(List<PolygonBean> polylist,int i,float x,float y){		
+		Logger.i("多边形移动", "down--按下--polylist="+polylist.size());
+		lineBeans.clear();
+		for (int j = 0; j < polylist.get(i).getPolyLine().size(); j++) {
+			LineBean lineBean=new LineBean();
+			float sx=polylist.get(i).getPolyLine().get(j).getStartX();
+			float sy=polylist.get(i).getPolyLine().get(j).getStartY();
+			float ex=polylist.get(i).getPolyLine().get(j).getEndX();
+			float ey=polylist.get(i).getPolyLine().get(j).getEndY();			
+			lineBean.setStartX(sx);
+			lineBean.setStartY(sy);
+			lineBean.setEndX(ex);
+			lineBean.setEndY(ey);
+			lineBeans.add(lineBean);
+		}
+		drawpolygon.setPolyLine(lineBeans);
+		movePoint.set(x, y);
+		Logger.i("多边形移动", "down--按下--lines="+lineBeans.size());		
+		polylist.remove(i);
+	}
+	List<LineBean> list=new ArrayList<LineBean>();
+	LineBean lineBean=new LineBean();
+	public void MovePolygon_move(float rx,float ry){
+		
+		list.clear();
+		float dx=rx-movePoint.x;
+	    float dy=ry-movePoint.y;	
+	    Logger.i("多边形移动", "move---->"+drawpolygon.getPolyLine().size());
+	    if (Math.sqrt(dx*dx+dy*dy)>5f) {	    	
+	    	movePoint.set(rx, ry);
+	    	for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+	    		float sx=drawpolygon.getPolyLine().get(i).getStartX()+dx;
+				float sy=drawpolygon.getPolyLine().get(i).getStartY()+dy;
+				float ex=drawpolygon.getPolyLine().get(i).getEndX()+dx;
+				float ey=drawpolygon.getPolyLine().get(i).getEndY()+dy;			
+				lineBean.setStartX(sx);
+				lineBean.setStartY(sy);
+				lineBean.setEndX(ex);
+				lineBean.setEndY(ey);
+				list.add(lineBean);
+			}	
+	    	drawpolygon.setPolyLine(list);	    	
+	    }
+	    Logger.i("多边形移动", "move---->"+drawpolygon.getPolyLine().size());
+	}
+	public void MovePolygon_up(Canvas canvas){
+	    Logger.i("多边形移动", "up---->"+drawpolygon.getPolyLine().size());
+
+		list.clear();
+		for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+    		float sx=drawpolygon.getPolyLine().get(i).getStartX();
+			float sy=drawpolygon.getPolyLine().get(i).getStartY();
+			float ex=drawpolygon.getPolyLine().get(i).getEndX();
+			float ey=drawpolygon.getPolyLine().get(i).getEndY();
+			sx= ViewContans.AdsorbPoint((int)Math.floor(sx));
+			sy= ViewContans.AdsorbPoint((int)Math.floor(sy));
+			ex= ViewContans.AdsorbPoint((int)Math.floor(ex));
+			ey= ViewContans.AdsorbPoint((int)Math.floor(ey)); 
+			lineBean.setStartX(sx);
+			lineBean.setStartY(sy);
+			lineBean.setEndX(ex);
+			lineBean.setEndY(ey);
+			list.add(lineBean);
+		}
+    	drawpolygon.setPolyLine(list);
+    	GetpolyList.add(drawpolygon);
+    	DrawPolygonOnBitmap(canvas);
+	}
+	public void MoveDrawPolygon(Canvas canvas){	
+		mshadowpath=new Path();
+		Logger.i("多边形移动", "down---->lines="+drawpolygon.getPolyLine().size());		
+		for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+			Logger.i("多边形移动", "i="+i);
+			float sx=drawpolygon.getPolyLine().get(i).getStartX();
+			float sy=drawpolygon.getPolyLine().get(i).getStartY();
+			float ex=drawpolygon.getPolyLine().get(i).getEndX();
+			float ey=drawpolygon.getPolyLine().get(i).getEndY();
+			canvas.drawLine(sx, sy, ex, ey, checkpaint);
+			canvas.drawPoint(sx, sy, point);
+			canvas.drawPoint(ex, ey, point);
+			if (i==0) {
+				mshadowpath.moveTo(drawpolygon.getPolyLine().get(0).getStartX(), drawpolygon.getPolyLine().get(0).getStartY());
+			}else {
+				mshadowpath.quadTo(drawpolygon.getPolyLine().get(i-1).getEndX(), drawpolygon.getPolyLine().get(i-1).getEndY(),
+						drawpolygon.getPolyLine().get(i).getStartX(), drawpolygon.getPolyLine().get(i).getStartY());
+			}
+		}
+		canvas.drawPath(mshadowpath, generatePaint(Color.BLUE));
+		mshadowpath=null;
+	}
 	public void Continuous_camera_touch_up(float x,float y,Canvas canvas){
+		
 		drawpolygon(0, 0);
 		int count =linePoint.size();
 		for (int i = 0; i < count; i++) {
 			if (i==count-1) {
-				linesModel.AddLineParams(continuouslist,linePoint.get(i).x, 
+				GetLines(continuouslist,linePoint.get(i).x, 
 						linePoint.get(i).y, linePoint.get(0).x, 
 						linePoint.get(0).y);
 			}else {
-				linesModel.AddLineParams(continuouslist,linePoint.get(i).x, 
+				GetLines(continuouslist,linePoint.get(i).x, 
 						linePoint.get(i).y, linePoint.get(i+1).x, 
 						linePoint.get(i+1).y);
 			}		
 		}
 		for (int i = 0; i < continuouslist.size(); i++) {
-        	float sx=continuouslist.get(i).getStartPoint().x;
-        	float sy=continuouslist.get(i).getStartPoint().y;
-        	float ex=continuouslist.get(i).getStopPoint().x;
-        	float ey=continuouslist.get(i).getStopPoint().y;
+        	float sx=continuouslist.get(i).getStartX();
+        	float sy=continuouslist.get(i).getStartY();
+        	float ex=continuouslist.get(i).getEndX();
+        	float ey=continuouslist.get(i).getEndY();
         	if (sx==ex&&sy==ey) {
-				continuouslist.remove(i);
+        		continuouslist.remove(i);
 			}	
 		}
-		linesModel.DrawLinesOnBitmap(continuouslist, canvas);	
+		
+		AddPolygonParams(GetpolyList,continuouslist);
+		DrawPolygonOnBitmap(canvas);
         mPath = null;// 重新置空	
 		
 	}
-	private void drawpolygon(int i,int j){
-			
+	private List<PointF> points=new ArrayList<PointF>();
+	
+	public int PitchOnPolygon(List<PolygonBean> list,float x,float y){		
+	    int dx=(int) x;
+	    int dy=(int) y;
+	    for (int i = 0; i < list.size(); i++) {	    	
+			double area=0;
+			points.clear();
+	   		for (int j = 0;j < list.get(i).getPolyLine().size(); j++) {
+	   			Logger.i("For循环", "i="+i+",j="+j);
+				int sx=(int) list.get(i).getPolyLine().get(j).getStartX();
+				int sy=(int) list.get(i).getPolyLine().get(j).getStartY();
+				int ex=(int) list.get(i).getPolyLine().get(j).getEndX();
+				int ey=(int) list.get(i).getPolyLine().get(j).getEndY();
+				points.add(new PointF(sx, sy));
+				area+=ViewContans.triangleArea(new PointF(dx, dy),
+						new PointF(sx, sy), new PointF(ex, ey));				
+			}
+	   		Logger.i("选中多边形", "点面积="+area);
+	   		Logger.i("选中多边形", "原面积="+Math.abs(ViewContans.getArea(points)));
+	   		if (Math.abs(Math.abs(ViewContans.getArea(points))-area)<2) {
+				return i;
+			}
+		}
+	    return -1;
+	}
+	private void drawpolygon(int i,int j){		
 		List<PointF> currePoint=new ArrayList<PointF>();
 		try {
 			currePoint.add(continuousPoints.get(i));
@@ -144,154 +339,42 @@ public class PolygonModel {
 			drawpolygon((space*(j+1) + space + i), 0);
 		}else {
 			drawpolygon(i, j+1);
-		}
-			
-	}
-	
-	private List<CouplePointLineBean> jiLines=new ArrayList<CouplePointLineBean>();
-	boolean goFoot=false;
-	boolean goHead=true;
-	private boolean isFromFor=false;
-	private boolean isFromBack=false;
-	private boolean isFromCrack=false;
-	private List<Integer> getInt=new ArrayList<Integer>(); 
-	public void DrawShadowArea(List<CouplePointLineBean> lines,Canvas canvas){
-		jiLines.clear();
-		for (int i = 0; i < lines.size(); i++) {
-    		int sxi=(int) lines.get(i).getStartPoint().x;
-			int syi=(int) lines.get(i).getStartPoint().y;
-			int exi=(int) lines.get(i).getStopPoint().x;
-			int eyi=(int) lines.get(i).getStopPoint().y;
-			for (int j = 0; j < lines.size(); j++) {
-				if (j!=i) {				  
-					int sxj=(int) lines.get(j).getStartPoint().x;
-					int syj=(int) lines.get(j).getStartPoint().y;
-					int exj=(int) lines.get(j).getStopPoint().x;
-					int eyj=(int) lines.get(j).getStopPoint().y;
-					Logger.i("选择重叠点", "成功了");
-					boolean isHead=((sxi==sxj)&&(syi==syj))||((sxi==exj)&&(syi==eyj));
-					if (isHead) { 
-						for (int k = 0; k < lines.size(); k++) {
-							if (k!=j&&k!=i) {
-								int nsxj=(int) lines.get(k).getStartPoint().x;
-								int nsyj=(int) lines.get(k).getStartPoint().y;
-								int nexj=(int) lines.get(k).getStopPoint().x;
-								int neyj=(int) lines.get(k).getStopPoint().y;
-								boolean isFoot=((exi==nsxj)&&(eyi==nsyj))||((exi==nexj)&&(eyi==neyj));
-								if (isFoot) {
-									Logger.i("头尾相接", "第   i= "+i);
-//									Logger.i("头尾相接", "第   j= "+j);
-//									Logger.i("头尾相接", "第   k= "+k);									
-									jiLines.add(new CouplePointLineBean(new PointF((float)sxi, (float)syi), new PointF((float)exi,(float)eyi)));
-									
-								}
-							}
-						}
-					}
-				}
-			}			
-		}
-		Logger.i("相接总数", "jiLines总数="+jiLines.size());
-		if (jiLines.size()>=3) {
-			jisuang(jiLines,0,canvas);
-		}  		
-	}
-	
-	private void jisuang(List<CouplePointLineBean> lines,int i,Canvas canvas){	
-		int n=0;
-		int ex=(int) lines.get(0).getStopPoint().x;
-	 	int ey=(int) lines.get(0).getStopPoint().y;
-		int sxi=(int) lines.get(i).getStartPoint().x;
-		int syi=(int) lines.get(i).getStartPoint().y;
-		int exi = 0;
-		int eyi = 0;
-		if (i!=0) {
-			 exi=(int) lines.get(i).getStopPoint().x;
-			 eyi=(int) lines.get(i).getStopPoint().y;
-		    	Logger.i("起点终点", "jiLines-->i="+i+": ("+sxi+","+syi+")  ,  ("+exi+","+eyi+")");
-		}
-    	Logger.i("起点终点", "jiLines-->i="+i+": ("+sxi+","+syi+")  ,  ("+ex+","+ey+")");
-		boolean isBack=((ex==sxi)&&(ey==syi))||((ex==exi)&&(ey==eyi));
-    	for (int j = 1; j< lines.size(); j++) {
-			if (j!=i) {
-				int sxj=(int) lines.get(j).getStartPoint().x;
-				int syj=(int) lines.get(j).getStartPoint().y;
-				int exj=(int) lines.get(j).getStopPoint().x;
-				int eyj=(int) lines.get(j).getStopPoint().y;
-//				Logger.i("第几个数", "--j-->"+j);
-				boolean isHead=false;
-				boolean isFoot=false;
-				if (goHead) {
-					Logger.i("第几个数", "--goHead-->"+j);
-					if ((sxi==sxj)&&(syi==syj)) {
-						Logger.i("第几个数", "-ss-isHead-->"+j);
-//						isHead=true;
-//						goHead=false;
-//						goFoot=true;
-					}else if ((sxi==exj)&&(syi==eyj)) {
-						Logger.i("第几个数", "-se-isHead-->"+j);
-						goHead=true;
-//						goFoot=false;
-						getInt.add(i);
-						n=j;
-						isFromFor=true;
-						break;
-					}else if (isBack) {
-						Logger.i("第几个数", "--isFromBack-->"+n);
-						getInt.add(i);
-						isFromBack=true;
-						shadowpoints=new ArrayList<PointF>();						
-						for (int k = getInt.size()-1; k >=0 ; k--) {						
-							shadowpoints.add(new PointF(lines.get(getInt.get(k).intValue()).getStartPoint().x, lines.get(getInt.get(k).intValue()).getStartPoint().y));
-							shadowpoints.add(new PointF(lines.get(getInt.get(k).intValue()).getStopPoint().x, lines.get(getInt.get(k).intValue()).getStopPoint().y));
-						}	
-						Collections.sort(getInt);
-						ShadowArea(canvas);		
-						for (int k = getInt.size()-1; k >=0 ; k--) {
-							Logger.i("第几个数", "--sort-->"+getInt.get(k).intValue());
-							lines.remove(getInt.get(k).intValue());
-						}
-						getInt.clear();
-						if (lines.size()>=3) {
-							jisuang(lines, 0, canvas);
-						}
-						Logger.i("相接总数", "lines总数="+lines.size());	
-						break;
-					}
-				}	
-			}		
-		}
-		if (isFromFor) {
-			isFromFor=false;
-			int m=getInt.get(getInt.size()-1).intValue();
-			Logger.i("第几个数", "--isFromFor-->n="+n+",m="+m);
-			jisuang(lines,n,canvas);
 		}			
+	}	
+	public void GetLines(List<LineBean> lists,float sx,float sy,float ex,float ey){
+		LineBean line=new LineBean();
+		line.setStartX(sx);
+		line.setStartY(sy);
+		line.setEndX(ex);
+		line.setEndY(ey);
+		line.setAngle(0.00);
+		line.setPaintColor(Color.BLACK);
+		line.setLength(0);
+		line.setName("polylineName-"+lists.size());
+		line.setPaintIsFull(false);
+		line.setPaintWidth(4);
+		line.setDescripte("描述"+lists.size());
+		lists.add(line);
 	}
-	
-	public void ShadowArea(Canvas canvas){
-	   	Logger.i("画阴影点数", ""+shadowpoints.size());
-	   	mshadowpath=new Path();
-    	if (shadowpoints.size()>0) {
-    		Paint p = new Paint();
-            p.setAntiAlias(true);
-            p.setDither(true);
-            p.setColor(Color.RED);
-            p.setStyle(Paint.Style.FILL);
-            p.setStrokeJoin(Paint.Join.ROUND);
-            p.setStrokeCap(Paint.Cap.ROUND);
-            p.setStrokeWidth(10); 
-        	p.setAlpha(0x40);           	
-        	mshadowpath.moveTo(shadowpoints.get(0).x, shadowpoints.get(0).y);
-        	for (int i = 1; i < shadowpoints.size(); i++) {    									        		        	
-        		mshadowpath.lineTo(shadowpoints.get(i).x, shadowpoints.get(i).y);	             	
-			}
-        	canvas.drawPath(mshadowpath, p);  
-        	shadowpoints.clear();
-        	mshadowpath.reset();
+	public void AddPolygonParams(List<PolygonBean> polylist,List<LineBean> linelist){
+		PolygonBean poly=new PolygonBean();
+		List<LineBean> lineslist=new ArrayList<LineBean>();
+		for (int i = 0; i <linelist.size(); i++) {
+			LineBean lineBean=new LineBean();
+			lineBean.setStartX(linelist.get(i).getStartX());
+			lineBean.setStartY(linelist.get(i).getStartY());
+			lineBean.setEndX(linelist.get(i).getEndX());
+			lineBean.setEndY(linelist.get(i).getEndY());
+			lineslist.add(lineBean);			
 		}
+		poly.setPolyName("polyName-"+polylist.size());
+		poly.setPolyArea(0);
+		poly.setPolyColor(Color.RED);
+		poly.setPolyLine(lineslist);
+		Logger.i("多边形总数", "linelist="+lineslist.size());
+		poly.setDescripe("描述"+lineslist.size());
+		polylist.add(poly);
 	}
-	
 	public static double Angle(List<PointF> points){		
 		double a=distance(points.get(0), points.get(1));
 		double b=distance(points.get(1), points.get(2));

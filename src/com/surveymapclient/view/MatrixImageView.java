@@ -82,7 +82,7 @@ public class MatrixImageView extends ImageView {
 	//初始化画布
     public void initCanvas(){
          
-        mPaint = ViewContans.generatePaint(Color.RED, 5);  
+        mPaint = ViewContans.generatePaint(Color.RED, 5,true);  
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);    
         //画布大小 
         mBitmap = Bitmap.createBitmap(Contants.sreenWidth*3, Contants.screenHeight*3, 

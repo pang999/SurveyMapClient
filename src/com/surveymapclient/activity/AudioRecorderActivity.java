@@ -1,7 +1,9 @@
 package com.surveymapclient.activity;
 
 import com.surveymapclient.common.FileUtils;
+import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.TimeUtils;
+import com.surveymapclient.impl.MyPlayerCallback;
 import com.surveymapclient.model.AudioRecordModel;
 import com.surveymapclient.model.PlayerModel;
 
@@ -19,6 +21,14 @@ import android.widget.TextView;
 
 public class AudioRecorderActivity extends Activity implements OnClickListener {
 
+	
+	/**
+	 * 测试Bypang
+	 */
+	
+	
+	
+	
 	/**
 	 * Status：录音初始状态
 	 */
@@ -100,6 +110,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
      * 录音文件名
      */
     private String audioRecordFileName;
+    
     Button audioDelete,audioCancelandaudio,audioSaveandPlay;   
     
 	@Override
@@ -111,42 +122,80 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	}
 	
 	private void initView(){
-		tvRecordTime=(TextView) findViewById(R.id.tv_time);
-		tvLength=(TextView) findViewById(R.id.tv_length);
-		tvPosition=(TextView) findViewById(R.id.tv_position);
-		layoutListen=(LinearLayout) findViewById(R.id.layout_listen);
-		seekBar=(SeekBar) findViewById(R.id.seekbar_play);
+		//音频录音的文件名称
+		audioRecordFileName = TimeUtils.getTimestamp();
+		audiorecordmodel=new AudioRecordModel(this, audioRecordFileName);
+		
+		tvRecordTime=(TextView) findViewById(R.id.tv_time);//录音时间
+		tvLength=(TextView) findViewById(R.id.tv_length);//录音(播音)总长度
+		tvPosition=(TextView) findViewById(R.id.tv_position);//播放进度
+		layoutListen=(LinearLayout) findViewById(R.id.layout_listen);//播放界面
+		seekBar=(SeekBar) findViewById(R.id.seekbar_play);//播放进度条
+		
 		audioDelete=(Button) findViewById(R.id.audio_delete);
 		audioCancelandaudio=(Button) findViewById(R.id.audio_cancle);
 		audioSaveandPlay=(Button) findViewById(R.id.audio_save);
+		
+		audioCancelandaudio.setOnClickListener(this);
+		audioDelete.setOnClickListener(this);
+		audioSaveandPlay.setOnClickListener(this);
+		
+		audioCancelandaudio.setText("录音");		
+		
+		seekBar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+		seekBar.setEnabled(false);
+		player=new PlayerModel(seekBar, tvPosition);
+		player.setMyPlayerCallback(new MyPlayerCallback() {
+			
+			@Override
+			public void onPrepared() {
+				// TODO Auto-generated method stub
+				seekBar.setEnabled(true);
+			}
+			
+			@Override
+			public void onCompletion() {
+				// TODO Auto-generated method stub
+				status = STATUS_PLAY_PREPARE;
+				seekBar.setEnabled(false);
+				seekBar.setProgress(0);
+				tvPosition.setText("00:00");
+			}
+		});
 	}
-	
-	public void handleRecord(){
+	public void AudioRecordHandle(){
 		switch(status){
-		case STATUS_PREPARE:
+		case STATUS_PREPARE://录音前初始化
 			audiorecordmodel.startRecord();
-			status = STATUS_RECORDING;
+			status = STATUS_RECORDING;			
 			voiceLength = 0;
+			audioCancelandaudio.setText("暂停");
 			timing();
 			break;
-		case STATUS_RECORDING:
+		case STATUS_RECORDING://正在录音....
 			pauseAudioRecord();		
 			status = STATUS_PAUSE;
+			audioCancelandaudio.setText("暂停");
 			break;
-		case STATUS_PAUSE:
+		case STATUS_PAUSE://录音暂停....
 			audiorecordmodel.startRecord();
 			status = STATUS_RECORDING;
+			audioCancelandaudio.setText("录音");
 			timing();
 			break;
-		case STATUS_PLAY_PREPARE:
+		}
+	}
+	public void RecordPlayHandle(){
+		switch(status){
+		case STATUS_PLAY_PREPARE://播放初始化.....
 			player.playUrl(FileUtils.getM4aFilePath(audioRecordFileName));
 			status = STATUS_PLAY_PLAYING;
 			break;
-		case STATUS_PLAY_PLAYING:
+		case STATUS_PLAY_PLAYING://正在播放.....
 			player.pause();
 			status = STATUS_PLAY_PAUSE;
 			break;
-		case STATUS_PLAY_PAUSE:
+		case STATUS_PLAY_PAUSE://播放暂停
 			player.play();
 			status = STATUS_PLAY_PLAYING;
 			break;
@@ -201,12 +250,9 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	 * 显示播放界面
 	 */
 	private void showListen() {
-
 		tvRecordTime.setVisibility(View.GONE);
 		seekBar.setProgress(0);
-		tvPosition.setText("00:00");
-
-		
+		tvPosition.setText("00:00");		
 	}
 	/**
 	 * 
@@ -246,18 +292,31 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		player.stop();
+		if (player!=null) {
+			player.stop();
+		}		
 	}
 
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
 		if (id == R.id.audio_delete) {
-			
+			this.finish();
 		}else if(id==R.id.audio_cancle){
-			finish();
+			if (audioCancelandaudio.getText().toString()=="取消") {
+				IToast.show(this, "取消");
+				this.finish();
+			}else {
+				AudioRecordHandle();
+			}		
 		}else if(id==R.id.audio_save){
-			handleRecord();
+			if (audioSaveandPlay.getText().toString()=="保存") {
+				 IToast.show(this, "停止并保存");
+				 stopAudioRecord();	
+			}
+			if (audioSaveandPlay.getText().toString()=="播放") {
+				IToast.show(this, "播放");
+			}
 		}
 		
 	}

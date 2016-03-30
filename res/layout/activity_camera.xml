@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"    
          />
      <RelativeLayout
-        android:id="@+id/camera_topLinearlayout"
+        android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"     
         android:layout_gravity="top"
-        android:background="#00FFFF"
+        android:background="#000000"
          >
         <EditText 
-            android:id="@+id/camera_editTitle"
+            android:id="@+id/editTitle"
             android:layout_width="200dp"
         	android:layout_height="wrap_content"  
         	android:layout_centerInParent="true"
@@ -30,22 +30,22 @@
         	android:text="Sketch1"
             />
 	      <com.surveymapclient.view.LocationView 
-	     	android:id="@+id/camera_locationview"
+	     	android:id="@+id/locationview"
 	        android:layout_width="wrap_content"
 	      	android:layout_height="wrap_content" 
 	      	android:onClick="LocationSketch"		
 	            />
 
 	      <ImageView
-	          android:id="@+id/camera_defineBack"
+	          android:id="@+id/defineBack"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:layout_alignParentLeft="true"
 	          android:layout_centerVertical="true"
-	          android:src="@drawable/back" />
+	          android:src="@drawable/backl" />
 
 	      <ImageView
-	          android:id="@+id/camera_tolistlines"
+	          android:id="@+id/tolistlines"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:layout_alignParentRight="true"
@@ -54,7 +54,7 @@
 	          android:src="@drawable/btnlines" />
 
 	      <ImageView
-	          android:id="@+id/camera_tohistory"
+	          android:id="@+id/tohistory"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:layout_alignTop="@+id/tolistlines"
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#00FFFF"
+        android:background="#000000"
         android:orientation="horizontal"
         android:gravity="center_vertical"
          >               
