@@ -66,9 +66,10 @@ public class HomeActivity extends FragmentActivity {
         showFragment();
     }
     private void showFragment() {
-
+    	  Fragment fragment=null;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
+      
+        if( fragmentManager!=null)fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
         if (fragment == null) {
             fragment = instantFragment(currIndex);
         }
