@@ -220,12 +220,7 @@ public class AngleModel {
 		float ay=list.get(index).getAngleY();
 		float ex=list.get(index).getEndX();
 		float ey=list.get(index).getEndY();
-		Paint paint=ViewContans.generatePaint(cangle.getPaintColor(), cangle.getPaintWidth(), cangle.isPaintIsFull());
-		canvas.drawLine(sx, sy, ax, ay, paint);
-		canvas.drawLine(ax, ay, ex, ey, paint);
-		if (cangle.getAngle()>0) {
-			ViewContans.AddTextOnAngle(list.get(index), canvas, cangle.getAngle()+"бу");
-		}
+		
 		list.remove(index);
 		AddChangeAngleAttributeParams(list, sx, sy, ex, ey, ax, ay, cangle.getName(),
 				cangle.getDescripte(), cangle.getAngle(), cangle.getPaintColor(), 

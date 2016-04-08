@@ -131,7 +131,7 @@ public class PlayerModel implements OnBufferingUpdateListener,
 			@Override
 			public void run() {
 				try {
-					mediaplayer.reset();
+//					mediaplayer.reset();
 					mediaplayer.setDataSource(videoUrl);
 					mediaplayer.prepare();
 				} catch (IllegalArgumentException e) {

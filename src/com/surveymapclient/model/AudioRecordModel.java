@@ -47,6 +47,8 @@ public class AudioRecordModel {
 	
 	private static final int RECORDED_COMPLETED_DELETE = 1;
 	
+	public int complite=0;
+	
 	public AudioRecordModel(Context context,String audioRecordFileName){
 		this.mContext=context;
 		this.mAudioRecordFileName=audioRecordFileName;
@@ -70,7 +72,7 @@ public class AudioRecordModel {
 				inBufSize);
 		
 		encoder = new AACEncoder();
-		deleteAllFiles(RECORDED_INIT_DELETE);
+//		deleteAllFiles(RECORDED_INIT_DELETE);
 		
 		mProgressDialog = new ProgressDialog(mContext);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -101,10 +103,10 @@ public class AudioRecordModel {
 	/**
 	 * 重新录制
 	 */
-	public void reRecord(){
-		//重新录制时，删除录音文件夹中的全部文件
-		deleteAllFiles(RECORDED_INIT_DELETE);
-	} 
+//	public void reRecord(){
+//		//重新录制时，删除录音文件夹中的全部文件
+//		deleteAllFiles(RECORDED_INIT_DELETE);
+//	} 
 	private void encodeAudio(){
 		try {
 			//读取录制的pcm音频文件
@@ -128,7 +130,7 @@ public class AudioRecordModel {
 		        } catch (IOException e) {
 		            Log.e("ERROR", "error converting", e);
 		        }
-		        deleteAllFiles(RECORDED_COMPLETED_DELETE);
+//		        deleteAllFiles(RECORDED_COMPLETED_DELETE);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -198,6 +200,7 @@ public class AudioRecordModel {
 			if(mProgressDialog.isShowing()){
 				mProgressDialog.cancel();
 				mProgressDialog.dismiss();
+				complite=1;
 			}
 		}
 	}
@@ -210,6 +213,7 @@ public class AudioRecordModel {
 		 File[] files = new File(FileUtils.getAudioRecordFilePath()).listFiles();
 		switch (isRecorded) {
 		case RECORDED_INIT_DELETE:
+			
 			for(File file: files){
 	        	file.delete();
 	        }

@@ -84,10 +84,10 @@ public class AttributeAngleActivity extends Activity {
 	public void onSetStyle(View v){
 		AlertDialog.Builder builder=new AlertDialog.Builder(AttributeAngleActivity.this);
 		builder.setIcon(R.drawable.ic_launcher);
-		//	    指定下拉列表的显示数据
+		//指定下拉列表的显示数据
 		final String[] linestyle = {"实线", "虚线"};
 		builder.setTitle("选择实/虚线");
-        //    设置一个下拉的列表选择项
+        //设置一个下拉的列表选择项
 		builder.setItems(linestyle, new OnClickListener() {
 			
 			@Override

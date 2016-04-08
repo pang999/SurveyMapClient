@@ -42,8 +42,7 @@ public class NotePopupWindow extends PopupWindow{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				NotePopupWindow.this.dismiss();
-				
+				NotePopupWindow.this.dismiss();				
 				defineActivity.showEditeView();
 			}
 		});

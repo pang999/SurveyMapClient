@@ -34,7 +34,7 @@
         	android:gravity="center"
         	android:background="@null"
         	android:singleLine="true"
-            android:imeOptions="actionDone"
+            android:textColor="#ffffff"
         	android:text="Sketch1"
             />
 	      <com.surveymapclient.view.LocationView 
@@ -53,22 +53,14 @@
 	          android:src="@drawable/backl" />
 
 	      <ImageView
-	          android:id="@+id/tolistlines"
+	          android:id="@+id/btnmoveoperator"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:layout_alignParentRight="true"
 	          android:layout_centerVertical="true"
-	          android:onClick="onListLines"
-	          android:src="@drawable/btnlines" />
+	          android:onClick="onMoreOperator"
+	          android:src="@drawable/movedata" />
 
-	      <ImageView
-	          android:id="@+id/tohistory"
-	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
-	          android:layout_alignTop="@+id/tolistlines"
-	          android:layout_toRightOf="@+id/defineBack"
-	          android:onClick="onHistory"
-	          android:src="@drawable/histories" />
 
     </RelativeLayout>
 	
@@ -121,7 +113,7 @@
 	            android:id="@+id/recall"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:onClick="onRecall"
+	            android:onClick="onReCall"
 	            android:layout_weight="1"
 	            android:src="@drawable/chehui" />
             <ImageView
@@ -130,7 +122,7 @@
 	             android:layout_height="wrap_content"
 	             android:onClick="onAnnotation"
 	             android:layout_weight="1"
-	             android:src="@drawable/zhusi" />
+	             android:src="@drawable/edit" />
 
     </LinearLayout>
  	<Button

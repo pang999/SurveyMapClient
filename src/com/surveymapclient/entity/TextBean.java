@@ -1,33 +1,37 @@
 package com.surveymapclient.entity;
 
-import android.graphics.Paint;
-import android.graphics.PointF;
+import java.io.Serializable;
 
-public class TextBean {
-	
-	private PointF locaPoint;
+public class TextBean implements Serializable{
+	private static final long serialVersionUID = -7060212344600432481L;
 	private String text;
-	private Paint paint;
+	private float tx;
+	private float ty;
 	
-	
-	public Paint getPaint() {
-		return paint;
-	}
-	public void setPaint(Paint paint) {
-		this.paint = paint;
-	}
 	public TextBean() {
 	}
-	public TextBean(PointF locaPoint) {
-		super();
-		this.locaPoint = locaPoint;
+	
+
+	public float getTx() {
+		return tx;
 	}
-	public PointF getLocaPoint() {
-		return locaPoint;
+
+
+	public void setTx(float tx) {
+		this.tx = tx;
 	}
-	public void setLocaPoint(PointF locaPoint) {
-		this.locaPoint = locaPoint;
+
+
+	public float getTy() {
+		return ty;
 	}
+
+
+	public void setTy(float ty) {
+		this.ty = ty;
+	}
+
+
 	public String getText() {
 		return text;
 	}

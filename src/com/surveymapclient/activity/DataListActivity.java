@@ -8,14 +8,19 @@ import com.surveymapclient.activity.R.layout;
 import com.surveymapclient.activity.fragment.AngleFragment;
 import com.surveymapclient.activity.fragment.CoordinateFragment;
 import com.surveymapclient.activity.fragment.LinesFragment;
+import com.surveymapclient.activity.fragment.NoteFragment;
 import com.surveymapclient.activity.fragment.PolygonFragment;
 import com.surveymapclient.activity.fragment.RectangleFragment;
 import com.surveymapclient.common.Logger;
+import com.surveymapclient.common.TimeUtils;
 import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
+import com.surveymapclient.entity.NoteBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.utils.PagerSlidingTabStrip;
 
 import android.R.menu;
@@ -47,6 +52,9 @@ public class DataListActivity extends FragmentActivity {
     List<RectangleBean> rectlist;
     List<CoordinateBean> coorlist;
     List<AngleBean> anglelist;
+    List<TextBean> textlist;
+    List<AudioBean> audiolist;
+    List<NoteBean> notelist;
     public Context mContext;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +63,28 @@ public class DataListActivity extends FragmentActivity {
 		setContentView(R.layout.activity_daralist);
 		pagerSlidingTabStrip=(PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager=(ViewPager) findViewById(R.id.pager);
+		notelist=new ArrayList<NoteBean>();
+		textlist=new ArrayList<TextBean>();
+		audiolist=new ArrayList<AudioBean>();
 		Intent intent=getIntent(); 
 		linelist=(List<LineBean>)intent.getSerializableExtra("LineList");
 		polygonlist=(List<PolygonBean>) intent.getSerializableExtra("PolyList");
 		rectlist=(List<RectangleBean>) intent.getSerializableExtra("RectList");	
 		coorlist=(List<CoordinateBean>) intent.getSerializableExtra("CoorList");
 		anglelist=(List<AngleBean>) intent.getSerializableExtra("AngleList");
+		textlist=(List<TextBean>) intent.getSerializableExtra("TextList");
+		audiolist=(List<AudioBean>) intent.getSerializableExtra("AudioList");
+		for (int i = 0; i < textlist.size(); i++) {
+			NoteBean note=new NoteBean();
+			note.setText(textlist.get(i).getText());
+			notelist.add(note);
+		}
+		for (int i = 0; i < audiolist.size(); i++) {
+			NoteBean note=new NoteBean();
+			note.setAudioUrl(audiolist.get(i).getUrl());
+			note.setAudioTime(TimeUtils.convertMilliSecondToMinute2(audiolist.get(i).getLenght()));
+			notelist.add(note);
+		}
 		Logger.i("传递linelist","传递linelist="+ linelist.size());
 		HandleData();
 		mContext=this;
@@ -81,6 +105,7 @@ public class DataListActivity extends FragmentActivity {
 	        list.add("矩形");
 	        list.add("坐标");
 	        list.add("角度");
+	        list.add("注释");
 	        myFragmentPagerAdapter = new MyFragmentPagerAdapter(
 	                getSupportFragmentManager(), list);
 	        pager.setAdapter(myFragmentPagerAdapter);
@@ -120,6 +145,8 @@ public class DataListActivity extends FragmentActivity {
 	                case 4:
 	                    fragment= AngleFragment.newInstance(mContext,anglelist);
 	                    break;
+	                case 5:
+	                	fragment=NoteFragment.newInstance(mContext, notelist);
 	            }
 	            return fragment;
 	        }

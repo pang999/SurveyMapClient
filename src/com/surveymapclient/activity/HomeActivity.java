@@ -6,6 +6,8 @@ import java.util.Arrays;
 import com.surveymapclient.activity.fragment.HistoryFragment;
 import com.surveymapclient.activity.fragment.HomeFragment;
 import com.surveymapclient.activity.fragment.SettingFragment;
+import com.surveymapclient.db.DBHelper;
+import com.tencent.a.a.a.a.h;
 
 import android.app.Activity;
 
@@ -26,11 +28,13 @@ public class HomeActivity extends FragmentActivity {
     private static int currIndex = 0;
 	private ArrayList<String> fragmentTags;
     private FragmentManager fragmentManager;
+    private DBHelper helper;
     RadioGroup group;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		helper=DBHelper.getInstance(this);
 		fragmentManager = getSupportFragmentManager();
 		if (savedInstanceState == null) {
             initData();
@@ -93,7 +97,7 @@ public class HomeActivity extends FragmentActivity {
                 fragment = new HomeFragment();
                 break;
             case 1:
-                fragment = new HistoryFragment(this);
+                fragment = new HistoryFragment(this,helper.searchDataModule());
                 break;
             case 2:
                 fragment = new SettingFragment();
