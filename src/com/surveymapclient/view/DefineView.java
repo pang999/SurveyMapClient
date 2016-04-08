@@ -455,7 +455,9 @@ public class DefineView extends View{
 				}
 			}
 			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
+			if(typeListener!=null)typeListener.onTypeChange(DefineActivity.TYPE);
 			DefineActivity.TYPE=Contants.DRAG;
+			
     	    invalidate();
             break;
         case MotionEvent.ACTION_POINTER_UP: //一只手指离开屏幕，但还有一只手指在上面会触此事件
@@ -634,4 +636,25 @@ public class DefineView extends View{
 		invalidate();
 	 }	  
 
+	 
+	 
+	 
+	 
+	 /**
+	  * @Description(描述):    切换形状触发此事件
+	  * @Package(包名): com.surveymapclient.view
+	  * @ClassName(类名): TypeChangeListener 
+	  * @author(作者): Pang
+	  * @date(时间): 2016-4-4 下午9:08:10 
+	  * @version(版本): V1.0
+	  */
+	 public interface TypeChangeListener{
+		 public void onTypeChange(int type);
+	 }
+	 
+	 private TypeChangeListener typeListener;
+	 public void setOnTypeChangeListener(TypeChangeListener listener){
+		 this.typeListener=listener;
+	 }
+	 
 }

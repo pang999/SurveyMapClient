@@ -68,8 +68,11 @@ public class HomeActivity extends FragmentActivity {
     private void showFragment() {
     	  Fragment fragment=null;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-      
+      try{
         if( fragmentManager!=null)fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
+      }catch(Exception e){
+    	  return;
+      }
         if (fragment == null) {
             fragment = instantFragment(currIndex);
         }

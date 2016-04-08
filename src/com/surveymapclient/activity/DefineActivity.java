@@ -18,6 +18,7 @@ import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.view.DefineView;
+import com.surveymapclient.view.DefineView.TypeChangeListener;
 import com.surveymapclient.view.HistPopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
@@ -57,7 +58,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DefineActivity extends Activity implements DialogCallBack,VibratorCallBack,OnClickListener{
+public class DefineActivity extends Activity implements TypeChangeListener, DialogCallBack,VibratorCallBack,OnClickListener{
 
 	//控件
 	private static MagnifyView magnifyview;
@@ -127,7 +128,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
 		
-
+		defineview.setOnTypeChangeListener(this);
 	}
 	//重置中心点
 	public void LocationSketch(View v){
@@ -242,22 +243,55 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		case R.id.type_single:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.SINGLE;
+			btnsingle.setSelected(true);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
+			
 			break;
 		case R.id.type_continuous:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.CONTINU;
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(true);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
 			break;
 		case R.id.type_rectangle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.RECTANGLE;
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(true);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
 			break;
 		case R.id.type_coordinate:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.COORDINATE;
+			
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(true);
+			btnangle.setSelected(false);
 			break;
 		case R.id.type_angle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.ANGLE;
+			
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(true);
 			break;
 		case R.id.defineBack:
 			IToast.show(this, "保存图片成功");
@@ -420,5 +454,17 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(4);
 		FragmentTransaction ft=getFragmentManager().beginTransaction();
 		eadd.show(ft, "");
+		
+		
+	}
+	@Override
+	public void onTypeChange(int type) {
+		// TODO Auto-generated method stub
+		btnsingle.setSelected(false);
+		btncontinuous.setSelected(false);
+		btnrectangle.setSelected(false);
+		
+		btncoordinate.setSelected(false);
+		btnangle.setSelected(false);
 	}
 }
