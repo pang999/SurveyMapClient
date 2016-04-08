@@ -1,7 +1,9 @@
 package com.surveymapclient.activity;
+import java.io.IOException;
 
+import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.FileUtils;
-import com.surveymapclient.common.IToast;
+import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.TimeUtils;
 import com.surveymapclient.impl.MyPlayerCallback;
 import com.surveymapclient.model.AudioRecordModel;
@@ -9,8 +11,12 @@ import com.surveymapclient.model.PlayerModel;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.SyncStateContract.Constants;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -59,7 +65,6 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
     private static final int STATUS_PLAY_PAUSE = 5;
     
     private int status = STATUS_PREPARE;
-    
     /**
      * 录音时间
      */
@@ -111,21 +116,33 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
      */
     private String audioRecordFileName;
     
+    private int type=-1;
+    boolean isfirst=true;
+    private String url="";
+    private int audiolenght=0;
     Button audioDelete,audioCancelandaudio,audioSaveandPlay;   
-    
+  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_audiorecorder);	
+		setContentView(R.layout.activity_audiorecorder);
+		Bundle bundle=getIntent().getExtras();		
+	    type=bundle.getInt("TYPE");
+	    if (type==1) {
+	    	url=bundle.getString("URL");
+	    	audiolenght=bundle.getInt("Len");
+	    	Logger.i("录音", "url="+url);
+			
+		}
+	    Logger.i("录音", ""+type);
 		initView();
+		initPlay();
+		initRecord();
 	}
 	
 	private void initView(){
-		//音频录音的文件名称
-		audioRecordFileName = TimeUtils.getTimestamp();
-		audiorecordmodel=new AudioRecordModel(this, audioRecordFileName);
-		
+				
 		tvRecordTime=(TextView) findViewById(R.id.tv_time);//录音时间
 		tvLength=(TextView) findViewById(R.id.tv_length);//录音(播音)总长度
 		tvPosition=(TextView) findViewById(R.id.tv_position);//播放进度
@@ -138,10 +155,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 		
 		audioCancelandaudio.setOnClickListener(this);
 		audioDelete.setOnClickListener(this);
-		audioSaveandPlay.setOnClickListener(this);
-		
-		audioCancelandaudio.setText("录音");		
-		
+		audioSaveandPlay.setOnClickListener(this);			
 		seekBar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
 		seekBar.setEnabled(false);
 		player=new PlayerModel(seekBar, tvPosition);
@@ -163,43 +177,34 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 			}
 		});
 	}
-	public void AudioRecordHandle(){
-		switch(status){
-		case STATUS_PREPARE://录音前初始化
-			audiorecordmodel.startRecord();
-			status = STATUS_RECORDING;			
-			voiceLength = 0;
-			audioCancelandaudio.setText("暂停");
-			timing();
-			break;
-		case STATUS_RECORDING://正在录音....
-			pauseAudioRecord();		
-			status = STATUS_PAUSE;
-			audioCancelandaudio.setText("暂停");
-			break;
-		case STATUS_PAUSE://录音暂停....
-			audiorecordmodel.startRecord();
-			status = STATUS_RECORDING;
+	/**
+	 * 录音初始化
+	 */
+	private void initRecord(){
+		if (type==0) {
+			//音频录音的文件名称
+			audioRecordFileName = TimeUtils.getTimestamp();
+			audiorecordmodel=new AudioRecordModel(this, audioRecordFileName);
+			audioDelete.setText("撤销");	
 			audioCancelandaudio.setText("录音");
-			timing();
-			break;
-		}
+			audioSaveandPlay.setText("保存");
+		}				
 	}
-	public void RecordPlayHandle(){
-		switch(status){
-		case STATUS_PLAY_PREPARE://播放初始化.....
-			player.playUrl(FileUtils.getM4aFilePath(audioRecordFileName));
-			status = STATUS_PLAY_PLAYING;
-			break;
-		case STATUS_PLAY_PLAYING://正在播放.....
-			player.pause();
-			status = STATUS_PLAY_PAUSE;
-			break;
-		case STATUS_PLAY_PAUSE://播放暂停
-			player.play();
-			status = STATUS_PLAY_PLAYING;
-			break;
-		}
+	/**
+	 * 播放初始化
+	 */
+	private void initPlay(){
+		if (type==1) {
+			audioDelete.setText("撤销");	
+			audioCancelandaudio.setText("播放");
+			audioSaveandPlay.setText("取消");
+			status=STATUS_PLAY_PREPARE;			
+			tvRecordTime.setVisibility(View.GONE);
+			layoutListen.setVisibility(View.VISIBLE);
+			tvLength.setText(TimeUtils.convertMilliSecondToMinute2(audiolenght));
+			seekBar.setProgress(0);
+			tvPosition.setText("00:00");
+		}		
 	}
 	/**
 	 * 暂停录音
@@ -218,8 +223,6 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	public void stopAudioRecord(){
 		pauseAudioRecord();
 		audiorecordmodel.stopRecord();
-		status = STATUS_PLAY_PREPARE;
-		showListen();
 	}
 	/**
 	 * 计时功能
@@ -236,8 +239,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 					tvRecordTime.setTextColor(Color.WHITE);
 				}
 				if (voiceLength > MAX_LENGTH) {
-					stopAudioRecord();
-					
+					stopAudioRecord();				
 				} else {
 					tvRecordTime.setText(TimeUtils.convertMilliSecondToMinute2(voiceLength));
 					handler.postDelayed(this, 100);
@@ -246,14 +248,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 		};
 		handler.postDelayed(runnable, 100);
 	}
-	/**
-	 * 显示播放界面
-	 */
-	private void showListen() {
-		tvRecordTime.setVisibility(View.GONE);
-		seekBar.setProgress(0);
-		tvPosition.setText("00:00");		
-	}
+
 	/**
 	 * 
 	 * SeekBar进度条改变事件监听类
@@ -301,23 +296,80 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		int id = v.getId();
 		if (id == R.id.audio_delete) {
-			this.finish();
-		}else if(id==R.id.audio_cancle){
-			if (audioCancelandaudio.getText().toString()=="取消") {
-				IToast.show(this, "取消");
+			if (type==0) {
 				this.finish();
-			}else {
-				AudioRecordHandle();
-			}		
-		}else if(id==R.id.audio_save){
-			if (audioSaveandPlay.getText().toString()=="保存") {
-				 IToast.show(this, "停止并保存");
-				 stopAudioRecord();	
+			}else if (type==1) {
+				Bundle bundle=new Bundle();
+				bundle.putInt("BackAudio", 1);
+				AudioRecorderActivity.this.setResult(RESULT_OK, getIntent().putExtras(bundle));			
+				this.finish();
 			}
-			if (audioSaveandPlay.getText().toString()=="播放") {
-				IToast.show(this, "播放");
+		}else if(id==R.id.audio_cancle){
+			if (type==0) {
+				AudioRecordHandle();
+			}else if (type==1) {
+				RecordPlayHandle();
+			}	
+		}else if(id==R.id.audio_save){
+			if (type==0) {
+				stopAudioRecord();
+				audioSaveandPlay.setText("确定");
+				type=100;
+				
+			}else if (type==1) {
+				this.finish();
+			}else if (audiorecordmodel.complite==1) {			
+				Bundle bundle=new Bundle();
+				bundle.putInt("BackAudio", 0);
+				bundle.putInt("AudioLen", voiceLength);
+				bundle.putString("AudioUrl", audioRecordFileName);
+				AudioRecorderActivity.this.setResult(RESULT_OK, getIntent().putExtras(bundle));			
+				this.finish();
 			}
 		}
 		
+	}
+	
+	public void AudioRecordHandle(){
+		switch(status){
+		case STATUS_PREPARE:
+			audiorecordmodel.startRecord();
+			status = STATUS_RECORDING;
+			audioCancelandaudio.setText("暂停");
+			voiceLength = 0;
+			timing();
+			break;
+		case STATUS_RECORDING:
+			pauseAudioRecord();
+			audioCancelandaudio.setText("录音");
+			status = STATUS_PAUSE;
+			break;
+		case STATUS_PAUSE:
+			audiorecordmodel.startRecord();
+			audioCancelandaudio.setText("暂停");
+			status = STATUS_RECORDING;
+			timing();
+			break;
+		}
+	}
+	public void RecordPlayHandle(){
+		switch(status){
+		case STATUS_PLAY_PREPARE:
+			player.playUrl(FileUtils.getM4aFilePath(url));
+			Log.i("录音", "Audio="+FileUtils.getM4aFilePath(url));
+			audioCancelandaudio.setText("暂停");
+			status = STATUS_PLAY_PLAYING;
+			break;
+		case STATUS_PLAY_PLAYING:
+			player.pause();
+			audioCancelandaudio.setText("播放");
+			status = STATUS_PLAY_PAUSE;
+			break;
+		case STATUS_PLAY_PAUSE:
+			player.play();
+			audioCancelandaudio.setText("暂停");
+			status = STATUS_PLAY_PLAYING;
+			break;
+		}
 	}
 }

@@ -70,8 +70,8 @@ public class ViewContans {
         String   str   =   formatter.format(curDate);  
         String paintPath = "";
         str = str + "paint.png";
-        File dir = new File("/sdcard/notes/");
-        File file = new File("/sdcard/notes/",str);
+        File dir = new File("/sdcard/surveymap/png/");
+        File file = new File("/sdcard/surveymap/png/",str);
         if (!dir.exists()) { 
             dir.mkdir(); 
         } 
@@ -87,7 +87,7 @@ public class ViewContans {
             out.flush(); 
             out.close(); 
             //保存绘图文件路径
-            paintPath = "/sdcard/notes/" + str;
+            paintPath = "/sdcard/surveymap/png/" + str;
              
      
         } catch (FileNotFoundException e) {
@@ -206,7 +206,7 @@ public class ViewContans {
         canvas.drawPoint(0, 0, point);
 	    canvas.drawPoint( width, 0, point);
 	    canvas.drawPoint(0,  height, point);
-	    canvas.drawPoint( width,  height, point) ;
+	    canvas.drawPoint( width,  height, point);
 	    canvas.drawPoint(width/2, height/2, point);
 	}
 	public static double getArea(List<PointF> list) {

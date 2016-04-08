@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.graphics.PointF;
 
 public class AngleBean implements Serializable{
+	
 	private static final long serialVersionUID = -7060210544600432481L;
 	
 	private float startX;

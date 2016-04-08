@@ -26,12 +26,13 @@ public class Contants {
 	public static final int COORDATTRIBUTEBACK=15;
 	public static final int ANGLEATTRIBUTEBACK=16;
 	public static final int POLYGONATTRIBUTEBACK=17;
-	
-    // branch 'master' of https://github.com/luxiansheng/SurveyMap.git
+	public static final int TEXTATTRIBUTEBACK=18;
+	public static final int AUDIOATTRIBUTEBACK=19;
+	public static final int AUDIO=20;
 	/**
 	 * 根目录
 	 */
-	public static String fish_saying_root = "/com.androidleaf.audiorecord";
+	public static String fish_saying_root = "/surveymap/";
 	
 	/**
 	 * 获取音频保存目录

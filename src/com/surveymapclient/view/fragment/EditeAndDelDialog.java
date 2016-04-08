@@ -98,6 +98,9 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 			if (type==3) {
 				daActivity.RemoveCoordinateIndex();
 			}
+			if (type==4) {
+				daActivity.RemoveAngleIndex();
+			}
 			dismiss();
 		} else {
 		}

@@ -1,6 +1,10 @@
 package com.surveymapclient.activity.adapter;
 
+import java.util.List;
+
 import com.surveymapclient.activity.R;
+import com.surveymapclient.db.greendao.Module;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +16,23 @@ import android.widget.TextView;
 public class HistoryAdapter extends BaseAdapter {
 
 	private  LayoutInflater layoutInflater;
+	private List<Module> mList;
 	
-	public HistoryAdapter(Context context) {
+	public HistoryAdapter(Context context,List<Module> list) {
 		// TODO Auto-generated constructor stub
 		layoutInflater = LayoutInflater.from(context);
+		mList=list;
 	}
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return 10;
+		return mList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return position;
+		return mList.get(position);
 	}
 
 	@Override
@@ -46,9 +52,10 @@ public class HistoryAdapter extends BaseAdapter {
 		}else {
 			viewHolder=(ViewHolder) convertView.getTag();
 		}
-		viewHolder.historyName.setText("测得墙体的数据");
+		viewHolder.historyName.setText(mList.get(position).getName());
 		return convertView;
 	}
+	
 	private ViewHolder viewHolder;
 
 	private static class ViewHolder{

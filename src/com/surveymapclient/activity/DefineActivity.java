@@ -4,26 +4,37 @@ package com.surveymapclient.activity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
+import com.surveymapclient.common.ViewContans;
+import com.surveymapclient.db.DBHelper;
+import com.surveymapclient.db.OperateData;
+import com.surveymapclient.db.greendao.Line;
+import com.surveymapclient.db.greendao.Polygon;
 import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.LinesModel;
+import com.surveymapclient.pdf.PDFCreater;
 import com.surveymapclient.view.DefineView;
+
 import com.surveymapclient.view.DefineView.TypeChangeListener;
-import com.surveymapclient.view.HistPopupWindow;
+import com.surveymapclient.view.MovePopupWindow;
+
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
-import com.surveymapclient.view.fragment.EditLineNameDialogFragment;
+import com.surveymapclient.view.fragment.EditTextDialog;
 import com.surveymapclient.view.fragment.EditeAndDelDialog;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -64,7 +75,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 	private static MagnifyView magnifyview;
 	private DefineView defineview;
 	private EditText edittitle;
-	private ImageView btndefineback,btneditNote,btnhistoryItem,btnrectangle,
+	private ImageView btndefineback,btneditNote,btnmoveoperator,btnrectangle,
 			btncoordinate,btnangle,btnsingle,btncontinuous;
 	
 	private static LocationView locationview;
@@ -74,6 +85,8 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 	private Context mContext = null;
 	private Button dataMove;
 	public static int TYPE=0;
+	//数据库
+	private DBHelper helper;
 	/**
      * 手机振动器
      */
@@ -84,6 +97,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
     RectangleBean rectangle;
     CoordinateBean coordinate;
     AngleBean angle;
+    TextBean textBean;
     int index;
    
     public static int TopHeaght;
@@ -92,6 +106,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_define);	
+		helper=DBHelper.getInstance(this);
 		initView();
 		// 震动效果的系统服务
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -100,10 +115,11 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 //        initData();
 		
 	}
+	
 	private void initView(){
 		//top		
 		btndefineback=(ImageView) findViewById(R.id.defineBack);
-		btnhistoryItem=(ImageView) findViewById(R.id.tohistory);
+		btnmoveoperator=(ImageView) findViewById(R.id.btnmoveoperator);
 		edittitle=(EditText) findViewById(R.id.editTitle);
 		topLinearlaout=(RelativeLayout) findViewById(R.id.topLinearlayout);
 		locationview=(LocationView) findViewById(R.id.locationview);
@@ -136,24 +152,46 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 	}
 
 	public void onReCall(View v){
-		defineview.UnDo();
+//		defineview.UnDo();
+//		String pngurl=defineview.SavaBitmap();
+//		IToast.show(this, "保存图片");
+//		new PDFCreater("/sdcard/surveymap/pdf/", new Date().getTime()+".pdf").createPDF(pngurl, 
+//				defineview.BackLinelist(), 
+//				defineview.BackPolylist(), 
+//				defineview.BackRectlist(), 
+//				defineview.BackCoorlist(), 
+//				defineview.BackAnglelist(), 
+//				defineview.BackTextlist(), 
+//				defineview.BackAudiolist());
+		
 	}
-
-	public void onListLines(View v){
+	public void onDatalist(){
 		Intent intent=new Intent();
 		intent.putExtra("LineList",(Serializable)defineview.BackLinelist());
 		intent.putExtra("RectList",(Serializable) defineview.BackRectlist());
 		intent.putExtra("PolyList",(Serializable) defineview.BackPolylist());
 		intent.putExtra("CoorList", (Serializable)defineview.BackCoorlist());
 		intent.putExtra("AngleList",(Serializable) defineview.BackAnglelist());
+		intent.putExtra("TextList",(Serializable) defineview.BackTextlist());
+		intent.putExtra("AudioList",(Serializable) defineview.BackAudiolist());
 		intent.setClass(this, DataListActivity.class);
 		startActivity(intent);
 	}
-	public void onHistory(View v){
-		HistPopupWindow histPopupWindow=new HistPopupWindow(DefineActivity.this);
-		histPopupWindow.showPopupWindow(btnhistoryItem);
+	public void ShareData(){
+		Intent intent=new Intent();
+		intent.setClass(this, ShareActivity.class);
+		startActivity(intent);
+		
 	}
-	
+	public void onMoreOperator(View v){
+		MovePopupWindow movePopupWindow=new MovePopupWindow(DefineActivity.this);
+		movePopupWindow.showPopupWindow(btnmoveoperator);
+	}
+	public void HistoryData(){
+		Intent intent=new Intent();
+		intent.setClass(this, HistoryActivity.class);
+		startActivity(intent);
+	}
 	public static void LocationXY(int x,int y){
 		locationview.LocationSketch(x, y);
 	}
@@ -213,7 +251,20 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 				AngleBean angleBean=(AngleBean) bundle.getSerializable("BackAngle");
 				defineview.ChangeAngleAttribute(index, angleBean);
 			}
+			if (requestCode==Contants.AUDIOATTRIBUTEBACK) {
+				Bundle bundle=data.getExtras();
+				if (bundle.getInt("BackAudio")==0) {					
+					defineview.setAudioOnView(bundle.getString("AudioUrl"),bundle.getInt("AudioLen"));
+				}	
+				if (bundle.getInt("BackAudio")==1) {
+					defineview.RemoveIndexAudio(index);
+				}
+			}
 		}
+	}
+	public void ChangeTextContent(String text){
+		defineview.ChangeTextContent(index,text);
+		defineview.BackLocation();
 	}
 	public void RemoveLineIndex(){
 		defineview.RemoveIndexLine(index);
@@ -224,18 +275,23 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 	public void RemoveCoordinateIndex(){
 		defineview.RemoveIndexCoordinate(index);
 	}
+	public void RemoveAngleIndex(){
+		defineview.RemoveIndexAngle(index);
+	}
+	public void RemoveTextIndex(){
+		defineview.RemoveIndexText(index);
+	}
+	
 	public void showEditeView(){
 		defineview.setManyTextOnView();	
 	}
 	public void showTapeDialog(){
 		Intent intent=new Intent(this, AudioRecorderActivity.class);
-		startActivity(intent);
+		intent.putExtra("TYPE", 0);
+		Logger.i("录音", "showTapeDialog"+"");
+		startActivityForResult(intent, Contants.AUDIOATTRIBUTEBACK);
 	}
-//	public void EditLineName(String text){
-//		if (!text.equals("")&&""!=text) {
-//			defineview.SetwriteLineText(text,-25);		
-//		}		
-//	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -294,11 +350,18 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 			btnangle.setSelected(true);
 			break;
 		case R.id.defineBack:
-			IToast.show(this, "保存图片成功");
+//			IToast.show(this, "保存图片成功");
+			long key=121212;
+			OperateData.insertLine(key, defineview.BackLinelist(), helper);
+			OperateData.insertRectangle(key, defineview.BackRectlist(), helper);
+			OperateData.insertCoordinate(key, defineview.BackCoorlist(), helper);
+			OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
+			OperateData.insertText(key, defineview.BackTextlist(), helper);
+			OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
+			OperateData.insertModule(key, "Sketch1", 0, helper);
+			finish();
 			break;
 		case R.id.annotation:
-			IToast.show(this, "hvoifdh");
-			TYPE=Contants.TEXT;
 			NotePopupWindow notePopupWindow=new NotePopupWindow(DefineActivity.this);
 			notePopupWindow.showPopupWindow(btneditNote);
 			break;
@@ -342,7 +405,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
                     top = bottom - v.getHeight();  
                 }  
                 v.layout(left, top, right, bottom);  
-                if (defineview.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
+                if (defineview.SetTextToLine((int) event.getRawX(), (int) event.getRawY())) {
 					Logger.i("设置线段", "设置成功了！");
 					defineview.LineChangeToText();						
 				}else {
@@ -352,7 +415,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
                 lastY = (int) event.getRawY();  
                 break;  
             case MotionEvent.ACTION_UP:  
-            	if (defineview.SetLineText((int) event.getRawX(), (int) event.getRawY())) {
+            	if (defineview.SetTextToLine((int) event.getRawX(), (int) event.getRawY())) {
 //					Logger.i("设置线段", "设置成功了！");            		           		
             		if (v==dataMove) {
             			defineview.SetwriteLineText("2.985");
@@ -417,7 +480,6 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		FragmentTransaction ft=getFragmentManager().beginTransaction();
 		eadd.show(ft, "");
 	}
-//	List<LineBean> list=new ArrayList<LineBean>();
 	@Override
 	public void onDialogCallBack(PolygonBean polygon, int i) {
 		// TODO Auto-generated method stub
@@ -466,5 +528,25 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		
 		btncoordinate.setSelected(false);
 		btnangle.setSelected(false);
+	}
+	@Override
+	public void onDialogCallBack(TextBean textBean, int i) {
+		// TODO Auto-generated method stub
+		this.textBean=textBean;
+		this.index=i;
+		EditTextDialog etd=EditTextDialog.newIntance();
+		FragmentTransaction ft=getFragmentManager().beginTransaction();
+		etd.show(ft, "");
+	}
+	@Override
+	public void onDialogCallBack(AudioBean audioBean, int i) {
+		// TODO Auto-generated method stub
+		this.index=i;
+		Intent intent=new Intent(this, AudioRecorderActivity.class);
+		intent.putExtra("TYPE", 1);
+		intent.putExtra("URL", audioBean.getUrl());
+		intent.putExtra("Len", audioBean.getLenght());
+		Logger.i("录音", "onDialogCallBack");
+		startActivityForResult(intent, Contants.AUDIOATTRIBUTEBACK);
 	}
 }

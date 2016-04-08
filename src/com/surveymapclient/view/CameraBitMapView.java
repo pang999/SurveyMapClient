@@ -246,12 +246,12 @@ public class CameraBitMapView extends View {
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
 			}
-			int ti=textModel.PitchOnText(textModel.getTextlist, x, y);
+			int ti=textModel.PitchOnText(textModel.GetTextlist, x, y);
 			if (ti>=0) {
 				CameraActivity.TYPE=Contants.TEXT;
 				Logger.i("»ñÈ¡ÎÄ×Ö", "i="+ti);
 //				isMoveLinedrag=true;
-				textModel.MoveText_down(textModel.getTextlist, ti, rx, ry);
+				textModel.MoveText_down(textModel.GetTextlist, ti, rx, ry);
 				DrawAllOnBitmap();
 			}
 			invalidate();
@@ -423,7 +423,7 @@ public class CameraBitMapView extends View {
 		rectangleModel.DrawRectanleOnBitmap(rectangleModel.GetRectlist, mCanvas);
 		coordinateModel.DrawCoordinatesOnBitmap(coordinateModel.GetCoordlist, mCanvas);
 		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
-		textModel.DrawTextList(textModel.getTextlist, mCanvas);
+		textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
 		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
 	}
 	private void drag_touch_start(float rx,float ry){

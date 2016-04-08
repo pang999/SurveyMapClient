@@ -7,15 +7,17 @@ import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.ImageTools;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.view.CameraBitMapView;
 import com.surveymapclient.view.DefineView;
-import com.surveymapclient.view.HistPopupWindow;
+import com.surveymapclient.view.MovePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.NotePopupWindow;
 import com.surveymapclient.view.fragment.CameraEditeAndDelDialog;
@@ -156,7 +158,7 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		startActivity(intent);
 	}
 	public void onHistory(View v){
-		HistPopupWindow histPopupWindow=new HistPopupWindow(CameraActivity.this);
+		MovePopupWindow histPopupWindow=new MovePopupWindow(CameraActivity.this);
 		histPopupWindow.showPopupWindow(btnhistoryItem);
 	}
 	public static void LocationXY(int x,int y){
@@ -387,5 +389,15 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 			CameraEditeAndDelDialog eadd=CameraEditeAndDelDialog.newIntance(4);
 			FragmentTransaction ft=getFragmentManager().beginTransaction();
 			eadd.show(ft, "");
+		}
+		@Override
+		public void onDialogCallBack(TextBean textBean, int i) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void onDialogCallBack(AudioBean audioBean, int i) {
+			// TODO Auto-generated method stub
+			
 		}
 }

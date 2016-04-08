@@ -35,7 +35,7 @@
         	android:background="@null"
         	android:textColor="@color/white"
         	android:singleLine="true"
-            android:imeOptions="actionDone"
+
         	android:text="Sketch1"
             />
 	      <com.surveymapclient.view.LocationView 
@@ -55,24 +55,18 @@
 	          android:src="@drawable/defineback_bg" />
 
 	      <ImageView
-	          android:id="@+id/tolistlines"
+
+	          android:id="@+id/btnmoveoperator"
 	          android:layout_width="@dimen/bottom_img_w_h"
 	          android:layout_height="@dimen/bottom_img_w_h"
 	          android:layout_alignParentRight="true"
 	          android:layout_centerVertical="true"
-	          android:onClick="onListLines"
+	          android:onClick="onMoreOperator"
 	          android:layout_marginRight="5dp"
 	          android:src="@drawable/tolistlines_bg" />
 
-	      <ImageView
-	          android:id="@+id/tohistory"
-	          android:layout_width="@dimen/bottom_img_w_h"
-	          android:layout_height="@dimen/bottom_img_w_h"
-	          android:layout_alignTop="@+id/tolistlines"
-	          android:layout_toRightOf="@+id/defineBack"
-	          android:layout_marginLeft="10dp"
-	          android:onClick="onHistory"
-	          android:src="@drawable/tohistory_bg" />
+	
+
 
     </RelativeLayout>
 	
@@ -162,6 +156,7 @@
     >
             <ImageView
 	            android:id="@+id/recall"
+
 	             android:layout_width="@dimen/bottom_img_w_h"
 	             android:layout_height="@dimen/bottom_img_w_h"
 	            android:onClick="onRecall"
@@ -174,14 +169,17 @@
       android:layout_height="match_parent"
             android:gravity="center"
     >
+
             <ImageView
 	             android:id="@+id/annotation"
 	             android:layout_width="@dimen/bottom_img_w_h"
 	             android:layout_height="@dimen/bottom_img_w_h"
 	             android:onClick="onAnnotation"
+
 	    
 	             android:src="@drawable/annotation_bg" />
             </LinearLayout>
+
 
     </LinearLayout>
  	<Button

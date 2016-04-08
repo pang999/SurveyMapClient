@@ -465,14 +465,14 @@ public class LinesModel {
     	float sy=list.get(index).getStartY();
     	float ex=list.get(index).getEndX();
     	float ey=list.get(index).getEndY();  
-    	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
-    			ViewContans.generatePaint(line.getPaintColor(), line.getPaintWidth(), line.isPaintIsFull()), point);           	
-    	if (line.getName().length()<8&&line.getName().length()>0) {
-    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getName(),-25);
-		}            	
-    	if (line.getLength()>0||line.getAngle()>0) {
-    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getLength()+"m "+line.getAngle()+"бу",10);
-		}
+//    	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
+//    			ViewContans.generatePaint(line.getPaintColor(), line.getPaintWidth(), line.isPaintIsFull()), point);           	
+//    	if (line.getName().length()<8&&line.getName().length()>0) {
+//    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getName(),-25);
+//		}            	
+//    	if (line.getLength()>0||line.getAngle()>0) {
+//    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getLength()+"m "+line.getAngle()+"бу",10);
+//		}
     	list.remove(index);
     	AddChangeLineParams(list,
     			sx, sy, ex, ey, 

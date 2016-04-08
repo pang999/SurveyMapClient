@@ -7,14 +7,17 @@ import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.impl.ClipCallBack;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.AngleModel;
+import com.surveymapclient.model.AudioModel;
 import com.surveymapclient.model.CoordinateModel;
 import com.surveymapclient.model.LineAndPolygonModel;
 import com.surveymapclient.model.LinesModel;
@@ -81,7 +84,7 @@ public class DefineView extends View{
     private CoordinateModel coordinateModel;
     private AngleModel angleModel;
     private TextModel textModel;
-    
+    private AudioModel audioModel;
 //    float left, top, right, bottom;
     private  Path sPath = new Path();  
     private  Matrix matrix = new Matrix();  
@@ -104,6 +107,7 @@ public class DefineView extends View{
 		linepoly=new LineAndPolygonModel();
 		angleModel=new AngleModel();
 		textModel=new TextModel();
+		audioModel=new AudioModel(context);
 		initCanvas();
 		isFirst=true;	
 		dialogCallBack=(DialogCallBack) context;
@@ -147,8 +151,7 @@ public class DefineView extends View{
         if (DefineActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
         	if (isMoveLinedrag) {
         		polygonModel.MoveDrawPolygon(canvas);
-			}
-			
+			}			
 		}
         if (DefineActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
         	if (isMoveLinedrag) {
@@ -170,8 +173,9 @@ public class DefineView extends View{
 		}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS&&isMovingdraw) {
 			angleModel.DrawAngle(canvas);
 		}else if (DefineActivity.TYPE==Contants.TEXT) {
-			textModel.DrawText(canvas);
-//			DefineActivity.TYPE=Contants.DRAG;
+			textModel.DrawMoveText(canvas);
+		}else if (DefineActivity.TYPE==Contants.AUDIO) {
+			audioModel.DrawMoveAudio(canvas);
 		}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS&&isMovingdraw) {
 			coordinateModel.DrawCoordinate(canvas);
 		}if (isWriteText) {
@@ -275,12 +279,18 @@ public class DefineView extends View{
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
 			}
-			int ti=textModel.PitchOnText(textModel.getTextlist, x, y);
+			int ti=textModel.PitchOnText(textModel.GetTextlist, x, y);
 			if (ti>=0) {
 				DefineActivity.TYPE=Contants.TEXT;
 				Logger.i("获取文字", "i="+ti);
 //				isMoveLinedrag=true;
-				textModel.MoveText_down(textModel.getTextlist, ti, rx, ry);
+				textModel.MoveText_down(textModel.GetTextlist, ti, rx, ry);
+				DrawAllOnBitmap();
+			}
+			int au=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
+			if (au>=0) {
+				DefineActivity.TYPE=Contants.AUDIO;
+				audioModel.MoveAudio_dowm(audioModel.GetAudiolist, au, rx, ry);
 				DrawAllOnBitmap();
 			}
     	    invalidate();
@@ -327,6 +337,8 @@ public class DefineView extends View{
 //				if (isMoveLinedrag) {
 					textModel.MoveText_move(rx, ry);
 //				}
+			}else if (DefineActivity.TYPE==Contants.AUDIO) {
+				audioModel.MoveAudio_move(rx, ry);
 			}else if(DefineActivity.TYPE==Contants.DRAG) {				
 				if (mode==DRAG) {
 	            	drag_touch_move(rx, ry);
@@ -424,7 +436,24 @@ public class DefineView extends View{
 //				if (isMoveLinedrag) {
 //					isMoveLinedrag=false;
 					textModel.MoveText_up(mCanvas);
+					mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
+					if (mIsShortPressed) {
+						int tx=textModel.PitchOnText(textModel.GetTextlist, x, y);
+		        		if (tx>=0) {
+		        			Logger.i("选中文字", "t="+tx);
+							dialogCallBack.onDialogCallBack(textModel.GetTextlist.get(tx), tx);
+						}
+					}
 //				}
+			}else if (DefineActivity.TYPE==Contants.AUDIO) {
+				audioModel.MoveAudio_up(mCanvas);
+				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
+				if (mIsShortPressed) {
+					int aud=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
+					if (aud>=0) {
+						dialogCallBack.onDialogCallBack(audioModel.GetAudiolist.get(aud), aud);
+					}
+				}
 			}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS) {
 				mIsLongPressed=false;
 				coordinateModel.Coordinate_touch_up(x,y,mCanvas);
@@ -451,7 +480,8 @@ public class DefineView extends View{
 	        		int a=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
 	        		if (a>=0) {
 						dialogCallBack.onDialogCallBack(angleModel.getAnglelist.get(a), a);
-					}   
+					}	
+	        		
 				}
 			}
 			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
@@ -473,8 +503,9 @@ public class DefineView extends View{
 		rectangleModel.DrawRectanleOnBitmap(rectangleModel.GetRectlist, mCanvas);
 		coordinateModel.DrawCoordinatesOnBitmap(coordinateModel.GetCoordlist, mCanvas);
 		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
-		textModel.DrawTextList(textModel.getTextlist, mCanvas);
+		textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
 		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
+		audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
 	}
 	/**
 	 * 画布拖拽
@@ -502,7 +533,7 @@ public class DefineView extends View{
 	 * @param ry
 	 * @return
 	 */
-	public boolean SetLineText(int rx,int ry){
+	public boolean SetTextToLine(int rx,int ry){
 		float gx=(float)(-screen_x+rx);
 		float gy=(float)(-screen_y+ry-50);
 		int i=linesModel.PitchOnLineToText(linesModel.Getlines, gx, gy);
@@ -516,7 +547,10 @@ public class DefineView extends View{
 	public void setManyTextOnView(){
 		Logger.i("文字位置", "x="+(Contants.sreenWidth/2-screen_x)+"y="+(Contants.screenHeight/2-screen_y));
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
-		invalidate();
+//		invalidate();
+	}
+	public void setAudioOnView(String url,int len){
+		audioModel.Audio_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url,len);
 	}
 	public void SetwriteLineText(String text){
 		linesModel.AddTextOnLine(linesModel.Getlines, mCanvas, m,text,10);		
@@ -543,6 +577,12 @@ public class DefineView extends View{
 	}
 	public List<AngleBean> BackAnglelist(){
 		return angleModel.getAnglelist;
+	}
+	public List<TextBean> BackTextlist(){
+		return textModel.GetTextlist;
+	}
+	public List<AudioBean> BackAudiolist(){
+		return audioModel.GetAudiolist;
 	}
 	/**
 	 * 画布缩放
@@ -599,26 +639,51 @@ public class DefineView extends View{
 			invalidate();
 		}
 	 }
+	 public void RemoveIndexAngle(int index){
+		 if (angleModel.getAnglelist!=null&&angleModel.getAnglelist.size()>0) {
+			angleModel.getAnglelist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
+	 public void RemoveIndexText(int index){
+		 if (textModel.GetTextlist!=null&&textModel.GetTextlist.size()>0) {
+			textModel.GetTextlist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
+	 public void RemoveIndexAudio(int index){
+		 if (audioModel.GetAudiolist!=null&&audioModel.GetAudiolist.size()>0) {
+			audioModel.GetAudiolist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
 	 public void ChangeLineAttribute(int index,LineBean line){
 		//调用初始化画布函数以清空画布
-         DrawAllOnBitmap();
+         
          linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
-         invalidate();
+         DrawAllOnBitmap();
 	 }
 	 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){
-		 DrawAllOnBitmap();
+		 
 		 rectangleModel.ChangeRectAttributeAtIndex(rectangleModel.GetRectlist, index, mCanvas, rectangleBean);
-		 invalidate();
-	 }
-	 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){
 		 DrawAllOnBitmap();
+	 }
+	 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){		 
 		 coordinateModel.ChangeCoorAttributeAtIndex(coordinateModel.GetCoordlist, index,
 				 mCanvas, coordinateBean);
-		 invalidate();
+		 DrawAllOnBitmap();
 	 }
 	 public void ChangeAngleAttribute(int index,AngleBean angleBean){
-		 DrawAllOnBitmap();
+		 
 		 angleModel.ChangeAngleBeanAttributeAtIndex(angleModel.getAnglelist, index, mCanvas, angleBean);
+		 DrawAllOnBitmap();
+	 }
+	 public void ChangeTextContent(int index,String text){		 
+		 textModel.ChangeTextContentAtIndex(textModel.GetTextlist,index,mCanvas,text);
+		 DrawAllOnBitmap();
 	 }
 	 public void LocationXY(){
 		 screen_x=-Contants.sreenWidth;
@@ -626,9 +691,12 @@ public class DefineView extends View{
 		 layout(screen_x, screen_y, width+screen_x, height+screen_y);
 		 DefineActivity.LocationXY(screen_x, screen_y);
 	 }
+	 public void BackLocation(){
+		 layout(screen_x, screen_y, width+screen_x, height+screen_y);
+	 }
 	 //保存图片
-	 public void SavaBitmap(){
-		 ViewContans.saveBitmap(mBitmap);
+	 public String SavaBitmap(){
+		return ViewContans.saveBitmap(mBitmap);
 	 }	
 	 //画布网格大小初始化
 	 public void ZoomCanvas(float cale){
