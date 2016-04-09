@@ -76,4 +76,17 @@ public class AttributePolygonActivity extends Activity {
 		});
 		builder.show();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void AttributeBack(View v){
+		finish();
+	}
 }

@@ -8,7 +8,7 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="#1E90FF"
+      android:background="@color/main_color"
       android:padding="8dp" >
 
       <ImageView
@@ -17,7 +17,7 @@
           android:layout_height="wrap_content"
           android:layout_alignParentLeft="true"
           android:onClick="AttributeBack"
-          android:src="@drawable/back" />
+          android:src="@drawable/back_bg" />
 
       <Button
           android:id="@+id/button1"
@@ -25,7 +25,7 @@
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
-          android:background="#1E90FF"
+          android:background="@color/main_color"
           android:onClick="EditComplete"
           android:text="完成"
           android:textColor="#FFFFFF"
@@ -50,19 +50,19 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="名称:" />
 
         <EditText
             android:id="@+id/editpolygonName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1.4"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -79,19 +79,19 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="面积:" />
 
         <EditText
             android:id="@+id/editpolygonArea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1.4"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -113,17 +113,19 @@
 
         <TextView
             android:id="@+id/lineColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="颜色:" />
 
         <TextView
-            android:paddingLeft="40dp"
+
             android:id="@+id/editpolygoneColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
             android:textSize="18sp"          
             android:text="红" />
     </LinearLayout>
@@ -138,19 +140,21 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="1"
+
             android:text="描述:" />
 
         <EditText
             android:id="@+id/editpolygonDescripte"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
             android:textSize="18sp"
-            android:layout_weight="4"
+
             android:background="@null"
             android:imeOptions="actionDone"
             android:text="描述" />
@@ -166,19 +170,21 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="1"
-            android:text="总共直线有(条):" />
+
+            android:text="直线(条):" />
 
         <EditText
             android:id="@+id/polygonlineshow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
             android:textSize="18sp"
-            android:layout_weight="4"
+
             android:background="@null"
             android:imeOptions="actionDone"
             android:text="3" />
