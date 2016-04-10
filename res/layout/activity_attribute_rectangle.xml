@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/main_color"
+          android:padding="8dp" >
+
+          <ImageView
+              android:id="@+id/imageButton1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentLeft="true"
+              android:onClick="AttributeBack"
+              android:src="@drawable/back_bg" />
+
+          <Button
+              android:id="@+id/button1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:background="@color/main_color"
+              android:onClick="EditComplete"
+              android:text="完成"
+              android:textColor="#FFFFFF"
+              android:textSize="20sp" />
+
+          <TextView
+              android:id="@+id/textView1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignBottom="@+id/button1"
+              android:layout_centerHorizontal="true"
+              android:layout_centerVertical="true"
+              android:text="矩形"
+              android:textColor="#FFFFFF"
+              android:textSize="20sp"/>
+      </RelativeLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+            android:text="名称:" />
+
+        <EditText
+            android:id="@+id/editrectangleName"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:text="rectangle" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+            android:text="面积:" />
+
+        <EditText
+            
+            android:id="@+id/editrectangleArea"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:text="20m" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+            android:text="长度:" />
+
+        <EditText
+            android:id="@+id/editrectangleLengh"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="18sp"
+            android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:layout_weight="1"
+            android:text="90" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+     <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+            android:text="宽度:" />
+
+        <EditText
+            android:id="@+id/editrectanglewidth"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="18sp"
+            android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:layout_weight="1"
+            android:text="90" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSetColor"
+         >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:text="颜色:" />
+
+        <TextView
+
+            android:id="@+id/editrectlinecolor"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"          
+            android:text="红" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:onClick="onSetWidth"
+        >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:text="大小:" />
+
+        <TextView
+
+            android:id="@+id/editrectlinewidth"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:text="3" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:onClick="onSetStyle"
+         >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:text="样式:" />
+
+        <TextView
+
+            android:id="@+id/editrectlineStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"          
+            android:text="虚线" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/lineDescripte"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:text="描述:" />
+
+        <EditText
+            android:id="@+id/editlineDescripte"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:background="@null"
+            android:imeOptions="actionDone"
+            android:hint="描述" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DCDCDC"
+        />
+
+</LinearLayout>

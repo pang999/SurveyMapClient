@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="0dp"
+    android:layout_margin="0dp"
+    android:orientation="vertical" >
+ 
+    <com.surveymapclient.view.CameraBitMapView
+        android:id="@+id/CameraBitMapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"    
+         />
+     <RelativeLayout
+        android:id="@+id/topLinearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"     
+        android:layout_gravity="top"
+        android:background="#000000"
+         >
+        <EditText 
+            android:id="@+id/editTitle"
+            android:layout_width="200dp"
+        	android:layout_height="wrap_content"  
+        	android:layout_centerInParent="true"
+        	android:gravity="center"
+        	android:background="@null"
+        	android:singleLine="true"
+            android:imeOptions="actionDone"
+        	android:text="Sketch1"
+            />
+	      <com.surveymapclient.view.LocationView 
+	     	android:id="@+id/locationview"
+	        android:layout_width="wrap_content"
+	      	android:layout_height="wrap_content" 
+	      	android:onClick="LocationSketch"		
+	            />
+
+	      <ImageView
+	          android:id="@+id/defineBack"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentLeft="true"
+	          android:layout_centerVertical="true"
+	          android:src="@drawable/backl" />
+
+	      <ImageView
+	          android:id="@+id/tolistlines"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignParentRight="true"
+	          android:layout_centerVertical="true"
+	          android:onClick="onListLines"
+	          android:src="@drawable/btnlines" />
+
+	      <ImageView
+	          android:id="@+id/tohistory"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_alignTop="@+id/tolistlines"
+	          android:layout_toRightOf="@+id/defineBack"
+	          android:onClick="onHistory"
+	          android:src="@drawable/histories" />
+
+    </RelativeLayout>
+
+     <LinearLayout
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#000000"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+         >               
+
+            <ImageView 
+	             android:id="@+id/camera_type_single"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:src="@drawable/danlianxian"
+	             android:layout_weight="1"
+             />
+            <ImageView
+	             android:id="@+id/camera_type_continuous"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_weight="1"
+	             android:src="@drawable/duolianxian" />
+
+            <ImageView
+                android:id="@+id/camera_type_rectangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/rectangle" />
+
+            <ImageView
+                android:id="@+id/camera_type_coordinate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/coordinate" />
+
+            <ImageView
+                android:id="@+id/camera_type_angle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/angle" />
+
+            <ImageView
+	            android:id="@+id/camera_recall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onRecall"
+	            android:layout_weight="1"
+	            android:src="@drawable/chehui" />
+            <ImageView
+	             android:id="@+id/camera_annotation"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:onClick="onAnnotation"
+	             android:layout_weight="1"
+	             android:src="@drawable/zhusi" />
+
+    </LinearLayout>
+ 	<Button
+             android:id="@+id/camera_data_move"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_centerHorizontal="true"
+             android:text="2.289m" />
+ 	<Button
+             android:id="@+id/camera_center_move"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             android:textSize="18sp"
+             android:textColor="#000000"
+             android:background="#DCDCDCFA"
+             android:visibility="invisible"
+             android:paddingRight="10dp"
+             android:paddingLeft="10dp"
+             android:text="text" />
+    
+</RelativeLayout>

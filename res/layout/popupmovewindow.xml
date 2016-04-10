@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#DCDCDC"
+    android:padding="10dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="5dp"
+        android:id="@+id/datalist"
+         >
+
+        <ImageView
+      android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
+            android:src="@drawable/datalist" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/main_color"
+                 android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:text="数据清单" />      
+    </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+         android:id="@+id/datashare"
+             android:paddingTop="8dp"
+         >
+
+        <ImageView
+         android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
+            android:src="@drawable/share" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/main_color"
+            android:textSize="18sp"
+                 android:paddingLeft="10dp"
+            android:text="分享" />      
+    </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+         android:id="@+id/datahistory"
+             android:paddingTop="8dp"
+         >
+
+        <ImageView
+            android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
+            android:src="@drawable/history" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="@color/main_color"
+            android:textSize="18sp"
+            android:text="历史数据" />      
+    </LinearLayout>
+	
+</LinearLayout>

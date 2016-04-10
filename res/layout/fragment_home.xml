@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="#DCDCDC" >
 
-<<<<<<< HEAD
     <LinearLayout
         android:id="@+id/ll1"
         android:layout_width="fill_parent"
@@ -21,42 +20,33 @@
             android:textSize="@dimen/title_txt_size" />
     </LinearLayout>
 
-=======
->>>>>>> 12602bbd5a8112d94f22db16d516e70faf13b238
     <ImageView
         android:id="@+id/takephoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignLeft="@+id/imageView1"
-        android:layout_below="@+id/imageView3"
+        android:layout_below="@+id/ll1"
         android:layout_marginLeft="47dp"
-        android:layout_marginTop="53dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/takephoto" />
 
     <ImageView
         android:id="@+id/ablum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignLeft="@+id/takephoto"
         android:layout_below="@+id/takephoto"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="144dp"
         android:src="@drawable/ablum" />
 
     <ImageView
         android:id="@+id/define"
-<<<<<<< HEAD
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/takephoto"
         android:layout_marginRight="16dp"
-=======
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/takephoto"
-        android:layout_marginLeft="60dp"
->>>>>>> 12602bbd5a8112d94f22db16d516e70faf13b238
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@+id/ablum"
         android:src="@drawable/define" />
