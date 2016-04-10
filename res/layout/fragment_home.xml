@@ -2,31 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:background="#DCDCDC"
-     >
+    android:background="#DCDCDC" >
 
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/title_height"  
+    <LinearLayout
         android:id="@+id/ll1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height"
         android:background="@color/main_color"
-        android:orientation="horizontal"
         android:gravity="center"
-        >
-        <TextView 
+        android:orientation="horizontal" >
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="测量"
-            android:textSize="@dimen/title_txt_size"
             android:textColor="@color/white"
-            />
-        
+            android:textSize="@dimen/title_txt_size" />
     </LinearLayout>
-    
-    
-    
-    
-    
+
     <ImageView
         android:id="@+id/takephoto"
         android:layout_width="100dp"
@@ -51,12 +44,11 @@
         android:id="@+id/define"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/takephoto"
-  
         android:layout_marginRight="16dp"
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@+id/ablum"
-        android:layout_alignParentRight="true"
         android:src="@drawable/define" />
 
 </RelativeLayout>
