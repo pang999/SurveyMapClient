@@ -97,6 +97,7 @@ public class HomeFragment extends Fragment implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.define:
 			Intent defineintent=new Intent(getActivity(),DefineActivity.class);
+			defineintent.putExtra("TYPE", 3);
 			startActivity(defineintent);	
 			break;
 		case R.id.takephoto:

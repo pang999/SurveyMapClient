@@ -53,14 +53,14 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 		return dialog;
 	}
 	
-	//锟斤拷onCreate锟斤拷锟斤拷锟矫对伙拷锟斤拷姆锟斤拷锟斤拷锟皆碉拷
+	//在onCreate中设置对话框的风格、属性等
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		//锟斤拷锟絪etCancelable()锟叫诧拷锟斤拷为true锟斤拷锟斤拷锟斤拷锟絛ialog锟斤拷锟角诧拷锟斤拷锟斤拷activity锟侥空白伙拷锟竭帮拷锟斤拷锟截硷拷锟斤拷锟斤拷锟絚ancel锟斤拷状态锟斤拷锟斤拷锟斤拷锟給nCancel()锟斤拷onDismiss()锟斤拷锟斤拷锟斤拷锟轿猣alse锟斤拷锟津按空白达拷锟津返回硷拷锟睫凤拷应锟斤拷缺省为true 
+		//如果setCancelable()中参数为true，若点击dialog覆盖不到的activity的空白或者按返回键，则进行cancel，状态检测依次onCancel()和onDismiss()。如参数为false，则按空白处或返回键无反应。缺省为true 
         this.setCancelable(true); 
-        //锟斤拷锟斤拷锟斤拷锟斤拷dialog锟斤拷锟斤拷示锟斤拷锟斤拷锟絪tyle为STYLE_NO_TITLE锟斤拷锟斤拷锟斤拷锟斤拷示title锟斤拷锟脚猴拷锟斤拷锟角ｏ拷锟斤拷没锟斤拷锟斤拷DialogFragment锟斤拷锟揭碉拷锟斤拷锟斤拷title锟斤拷锟捷的凤拷锟斤拷锟斤拷theme为0锟斤拷锟斤拷示锟斤拷系统选锟斤拷锟斤拷实锟絫heme锟斤拷
+        //可以设置dialog的显示风格，如style为STYLE_NO_TITLE，将被显示title。遗憾的是，我没有在DialogFragment中找到设置title内容的方法。theme为0，表示由系统选择合适的theme。
         int style = DialogFragment.STYLE_NO_FRAME, theme = 0; 
         setStyle(style,theme);  
 

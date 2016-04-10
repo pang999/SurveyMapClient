@@ -2,6 +2,7 @@ package com.surveymapclient.activity;
 
 import java.io.Serializable;
 
+import com.surveymapclient.Dialog.CameraEditeAndDelDialog;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.ImageTools;
@@ -20,7 +21,6 @@ import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.MovePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.NotePopupWindow;
-import com.surveymapclient.view.fragment.CameraEditeAndDelDialog;
 
 import android.R.string;
 import android.annotation.SuppressLint;

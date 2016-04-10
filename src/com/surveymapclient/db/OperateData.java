@@ -1,5 +1,6 @@
 package com.surveymapclient.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.surveymapclient.common.Logger;
@@ -43,7 +44,31 @@ public class OperateData {
 			helper.insertDateLine(line);
 		}			
 	}
-	
+	public static List<LineBean> searchLine(long key,DBHelper helper){
+		List<Line> list=helper.searchDataLine(key);
+		List<LineBean> lineBeans=new ArrayList<LineBean>();
+		for (int i = 0; i < list.size(); i++) {
+			LineBean lineBean=new LineBean();
+			lineBean.setName(list.get(i).getName());
+			lineBean.setDescripte(list.get(i).getDesc());
+			lineBean.setAngle(list.get(i).getAngle());
+			lineBean.setLength(list.get(i).getLenght());
+			lineBean.setPaintColor(list.get(i).getPcolor());
+			lineBean.setPaintWidth(list.get(i).getPwidth());
+			lineBean.setPaintIsFull(list.get(i).getIsfull());
+			lineBean.setStartX(list.get(i).getStartx());
+			lineBean.setStartY(list.get(i).getStarty());
+			lineBean.setEndX(list.get(i).getEndx());
+			lineBean.setEndY(list.get(i).getEndy());
+			lineBeans.add(lineBean);
+		}
+		return lineBeans;		
+	}
+	public static void dedeleLine(List<Line> lines,DBHelper helper){
+		for (int i = 0; i < lines.size(); i++) {
+			helper.deleteDataLine(lines.get(i));
+		}		
+	}
 	public static void insertPolygon(long key,List<PolygonBean> list,DBHelper helper){
 		for (int i = 0; i < list.size(); i++) {
 			Polygon polygon=new Polygon();
@@ -51,10 +76,13 @@ public class OperateData {
 			polygon.setArea(list.get(i).getPolyArea());
 			polygon.setDesc(list.get(i).getDescripe());
 			polygon.setColor(list.get(i).getPolyColor());
+			polygon.setPolygon_id(key+i);
 			polygon.setKey(key);
-			List<LineBean> linelist=list.get(i).getPolyLine();
-			for (int j = 0; j < list.get(i).getPolyLine().size(); j++) {
-				Lines lines=new Lines();				
+			List<LineBean> linelist=list.get(i).getPolyLine();				
+			for (int j = 0; j < linelist.size(); j++) {
+//				Logger.i("数据库数据", "多边形直线insert="+linelist.get(j).getName());
+				Lines lines=new Lines();
+				lines.setKey(key);
 				lines.setName(linelist.get(j).getName());
 				lines.setDesc(linelist.get(j).getDescripte());
 				lines.setAngle(linelist.get(j).getAngle());
@@ -65,12 +93,52 @@ public class OperateData {
 				lines.setStartx(linelist.get(j).getStartX());
 				lines.setStarty(linelist.get(j).getStartY());
 				lines.setEndx(linelist.get(j).getEndX());
-				lines.setEndy(linelist.get(j).getEndY());
-				lines.setKey(key);
-				lines.setPolygon(polygon);
+				lines.setEndy(linelist.get(j).getEndY());	
+				lines.setPolygon_id(Long.parseLong(String.valueOf(i)));
+				lines.setPolygon(polygon);			
 				helper.insertDataLines(lines);
 			}
 			helper.insertDataPolygon(polygon);
+		}
+	}
+	
+	public static List<PolygonBean> searchPolygon(long key,DBHelper helper){
+		List<Polygon> list=helper.searchDataPolygon(key);
+		Logger.i("数据库数据", "多边形总数前="+list.size());
+
+		List<PolygonBean> polygonlist=new ArrayList<PolygonBean>();
+		for (int i = 0; i < list.size(); i++) {
+			PolygonBean polygon=new PolygonBean();
+			polygon.setPolyName(list.get(i).getName());
+			polygon.setDescripe(list.get(i).getDesc());
+			polygon.setPolyColor(list.get(i).getColor());
+			polygon.setPolyArea(list.get(i).getArea());
+			List<LineBean> linelist=new ArrayList<LineBean>();
+			for (int j = 0; j < list.get(i).getLines().size(); j++) {
+				LineBean line=new LineBean();
+				line.setName(list.get(i).getLines().get(j).getName());
+				line.setDescripte(list.get(i).getLines().get(j).getDesc());
+				line.setAngle(list.get(i).getLines().get(j).getAngle());
+				line.setLength(list.get(i).getLines().get(j).getLenght());
+				line.setStartX(list.get(i).getLines().get(j).getStartx());
+				line.setStartY(list.get(i).getLines().get(j).getStarty());
+				line.setEndX(list.get(i).getLines().get(j).getEndx());
+				line.setEndY(list.get(i).getLines().get(j).getEndy());
+				line.setPaintColor(list.get(i).getLines().get(j).getPcolor());
+				line.setPaintWidth(list.get(i).getLines().get(j).getPwidth());
+				line.setPaintIsFull(list.get(i).getLines().get(j).getIsfull());
+				linelist.add(line);
+			}
+			polygon.setPolyLine(linelist);
+			polygonlist.add(polygon);			
+		}
+		Logger.i("数据库数据", "多边形总数="+polygonlist.size());
+		return polygonlist;
+	}
+	
+	public static void deletePolygon(List<Polygon> list,DBHelper helper){
+		for (int i = 0; i <list.size(); i++) {
+			helper.deleteDataPolygon(list.get(i));
 		}
 	}
 	
@@ -91,6 +159,33 @@ public class OperateData {
 			rectangle.setEndy(list.get(i).getEndY());
 			rectangle.setKey(key);
 			helper.insertDataRect(rectangle);
+		}
+	}
+	public static List<RectangleBean> searchRectangle(long key,DBHelper helper){
+		List<Rectangle> list=helper.searchDataRectangle(key);
+		List<RectangleBean> rectlist=new ArrayList<RectangleBean>();
+		for (int i = 0; i < list.size(); i++) {
+			RectangleBean rect=new RectangleBean();
+			rect.setRectName(list.get(i).getName());
+			rect.setRectArea(list.get(i).getArea());
+			rect.setRectLenght(list.get(i).getLenght());
+			rect.setRectWidth(list.get(i).getPwidth());
+			rect.setPaintColor(list.get(i).getPcolor());
+			rect.setPaintWidth(list.get(i).getPwidth());
+			rect.setFull(list.get(i).getIsfull());
+			rect.setDescripte(list.get(i).getDesc());
+			rect.setStartX(list.get(i).getStartx());
+			rect.setStartY(list.get(i).getStarty());
+			rect.setEndX(list.get(i).getEndx());
+			rect.setEndY(list.get(i).getEndy());
+			rectlist.add(rect);
+		}
+		return rectlist;
+		
+	}
+	public static void deleteRectangle(List<Rectangle> list,DBHelper helper){
+		for (int i = 0; i < list.size(); i++) {
+			helper.deleteDataRectangle(list.get(i));
 		}
 	}
 	public static void insertCoordinate(long key,List<CoordinateBean> list,DBHelper helper){
@@ -117,6 +212,37 @@ public class OperateData {
 			helper.insertDataCoor(coor);
 		}
 	}
+	public static List<CoordinateBean> searchCoordinate(long key,DBHelper helper){
+		List<Coordinate> list=helper.searchDataCoordinate(key);
+		List<CoordinateBean> coorlist=new ArrayList<CoordinateBean>();
+		for (int i = 0; i < list.size(); i++) {
+			CoordinateBean coor=new CoordinateBean();
+			coor.setName(list.get(i).getName());
+			coor.setDescripte(list.get(i).getDesc());
+			coor.setVolum(list.get(i).getVolum());
+			coor.setLenght(list.get(i).getLenght());
+			coor.setWidth(list.get(i).getWidth());
+			coor.setHeight(list.get(i).getHeight());
+			coor.setPaintColor(list.get(i).getPcolor());
+			coor.setPaintWidth(list.get(i).getPwidth());
+			coor.setPaintIsFull(list.get(i).getIsfull());
+			coor.setCenterX(list.get(i).getCenterx());
+			coor.setCenterY(list.get(i).getCentery());
+			coor.setXaxisX(list.get(i).getXaxisx());
+			coor.setXaxisY(list.get(i).getXaxisy());
+			coor.setYaxisX(list.get(i).getYaxisx());
+			coor.setYaxisY(list.get(i).getYaxisy());
+			coor.setZaxisX(list.get(i).getZaxisx());
+			coor.setZaxisY(list.get(i).getZaxisy());
+			coorlist.add(coor);
+		}
+		return coorlist;
+	}
+	public static void deleteCoordinate(List<Coordinate> list,DBHelper helper){
+		for (int i = 0; i < list.size(); i++) {
+			helper.deleteDataCoor(list.get(i));
+		}
+	}
 	public static void insertAngle(long key,List<AngleBean> list,DBHelper helper){
 		for (int i = 0; i <list.size(); i++) {
 			Angle angle=new Angle();
@@ -136,10 +262,35 @@ public class OperateData {
 			helper.insertDataAngle(angle);
 		}
 	}
+	public static void deleteAngle(List<Angle> list,DBHelper helper){
+		for (int i = 0; i < list.size(); i++) {
+			helper.deleteDataAngle(list.get(i));
+		}
+	}
+	public static List<AngleBean> searchAngle(long key,DBHelper helper){
+		List<Angle> list=helper.searchDataAngle(key);
+		List<AngleBean> anglelist=new ArrayList<AngleBean>();
+		for (int i = 0; i < list.size(); i++) {
+			AngleBean angle=new AngleBean();
+			angle.setName(list.get(i).getName());
+			angle.setDescripte(list.get(i).getDesc());
+			angle.setAngle(list.get(i).getAngle());
+			angle.setPaintColor(list.get(i).getPcolor());
+			angle.setPaintWidth(list.get(i).getPwidth());
+			angle.setPaintIsFull(list.get(i).getIsfull());
+			angle.setStartX(list.get(i).getStartx());
+			angle.setStartY(list.get(i).getStarty());
+			angle.setAngleX(list.get(i).getAnglex());
+			angle.setAngleY(list.get(i).getAngley());
+			angle.setEndX(list.get(i).getEndx());
+			angle.setEndY(list.get(i).getEndy());
+			anglelist.add(angle);
+		}
+		return anglelist;
+	}
 	public static void insertText(long key,List<TextBean> list,DBHelper helper){
 		for (int i = 0; i < list.size(); i++) {
-			TextNote text=new TextNote();
-			
+			TextNote text=new TextNote();		
 			text.setContent(list.get(i).getText());
 			text.setTx(list.get(i).getTx());
 			text.setTy(list.get(i).getTy());	
@@ -148,6 +299,23 @@ public class OperateData {
 		}
 	}
 	
+	public static List<TextBean> searchText(long key,DBHelper helper){
+		List<TextNote> list=helper.searchDataText(key);
+		List<TextBean> textlist=new ArrayList<TextBean>();
+		for (int i = 0; i < list.size(); i++) {
+			TextBean text=new TextBean();
+			text.setText(list.get(i).getContent());
+			text.setTx(list.get(i).getTx());
+			text.setTy(list.get(i).getTy());
+			textlist.add(text);
+		}
+		return textlist;
+	}
+	public static void deleteText(List<TextNote> list,DBHelper helper){
+		for (int i = 0; i < list.size(); i++) {
+			helper.deleteDataText(list.get(i));
+		}
+	}
 	public static void insertAudio(long key,List<AudioBean> list,DBHelper helper){
 		for (int i = 0; i <list.size(); i++) {
 			AudioNote audio=new AudioNote();
@@ -159,12 +327,39 @@ public class OperateData {
 			helper.insertDataAudio(audio);
 		}
 	}
-	public static void insertModule(long key,String name,int type, DBHelper helper){
+	
+	public static List<AudioBean> searchAudio(long key,DBHelper helper){
+		
+		List<AudioNote> list=helper.searchDataAudio(key);
+		List<AudioBean> audiolist=new ArrayList<AudioBean>();
+		for (int i = 0; i < list.size(); i++) {
+			AudioBean audio=new AudioBean();
+			audio.setUrl(list.get(i).getUrl());
+			audio.setLenght(list.get(i).getLenght());
+			audio.setAx(list.get(i).getAx());
+			audio.setAy(list.get(i).getAy());
+			audiolist.add(audio);
+		}		
+		return audiolist;		
+	}
+	public static void deleteAudio(List<AudioNote> list,DBHelper helper){
+		for (int i = 0; i < list.size(); i++) {
+			helper.deleteDataAudio(list.get(i));
+		}
+	}
+	public static void insertModule(long key,String name,String imgurl,int type, DBHelper helper){
 		Module module=new Module();
 		module.setName(name);
+		module.setImgUrl(imgurl);
 		module.setType(type);
 		module.setKey(key);
 		helper.insertDataModule(module);
+	}
+	public static List<Module> searchModule(DBHelper helper){
+		return helper.searchDataModule();
+	}
+	public static void deleteModule(List<Module> list,int i,DBHelper helper){
+		helper.deleteDataModule(list.get(i));
 	}
 //	long key=121212;
 //	OperateData.insertLine(key, defineview.BackLinelist(), helper);

@@ -22,7 +22,7 @@ public class Lines {
     private Integer pcolor;
     private Float pwidth;
     private Boolean isfull;
-    private Long polygon_id;
+    private long polygon_id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -41,7 +41,7 @@ public class Lines {
         this.lines_id = lines_id;
     }
 
-    public Lines(Long lines_id, Long key, String name, Float startx, Float starty, Float endx, Float endy, Double lenght, Double angle, String desc, Integer pcolor, Float pwidth, Boolean isfull, Long polygon_id) {
+    public Lines(Long lines_id, Long key, String name, Float startx, Float starty, Float endx, Float endy, Double lenght, Double angle, String desc, Integer pcolor, Float pwidth, Boolean isfull, long polygon_id) {
         this.lines_id = lines_id;
         this.key = key;
         this.name = name;
@@ -168,17 +168,17 @@ public class Lines {
         this.isfull = isfull;
     }
 
-    public Long getPolygon_id() {
+    public long getPolygon_id() {
         return polygon_id;
     }
 
-    public void setPolygon_id(Long polygon_id) {
+    public void setPolygon_id(long polygon_id) {
         this.polygon_id = polygon_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public Polygon getPolygon() {
-        Long __key = this.polygon_id;
+        long __key = this.polygon_id;
         if (polygon__resolvedKey == null || !polygon__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -194,9 +194,12 @@ public class Lines {
     }
 
     public void setPolygon(Polygon polygon) {
+        if (polygon == null) {
+            throw new DaoException("To-one property 'polygon_id' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.polygon = polygon;
-            polygon_id = polygon == null ? null : polygon.getPolygon_id();
+            polygon_id = polygon.getPolygon_id();
             polygon__resolvedKey = polygon_id;
         }
     }

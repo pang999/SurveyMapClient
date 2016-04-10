@@ -2,41 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-           android:background="#00000000"
     android:orientation="vertical" >
 
-    
-    
-    <LinearLayout
-            android:background="#00000000"
-                   android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" 
-
-        android:orientation="vertical"
-        >
-        
-        
-        <TextView
+    <Button
         android:id="@+id/editetext"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-             android:gravity="center" 
-                 android:background="#DCDCDC"
-        android:textColor="@color/main_color"
+        android:layout_height="wrap_content"
         android:text="文本" />
 
-    <TextView
-        android:layout_marginTop="2dp"
+    <Button
         android:id="@+id/tape"
         android:layout_width="match_parent"
-         android:layout_height="30dp"
-              android:gravity="center" 
-                     android:background="#DCDCDC"
-              android:textColor="@color/main_color"
-        android:text="录音" /> 
-        
-    </LinearLayout>
-   
+        android:layout_height="wrap_content"
+        android:text="录音" />
 
 </LinearLayout>

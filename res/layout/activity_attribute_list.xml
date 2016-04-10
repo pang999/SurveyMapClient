@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@color/main_color"
+        android:background="#1E90FF"
          >
 
         <ImageView
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="AttributeBack"
-            android:src="@drawable/back_bg" />
+            android:src="@drawable/back" />
 
         <Button
           
@@ -27,7 +27,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="完成"
-            android:background="@color/main_color"
+            android:background="#1E90FF"
             android:textColor="#FFFFFF"
             android:onClick="EditComplete"
             android:textSize="20sp" />
@@ -52,21 +52,19 @@
 
         <TextView
             android:id="@+id/lineName"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:textSize="18sp"
             android:text="名称:" />
 
         <EditText
             android:id="@+id/editlineName"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-   
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -84,22 +82,20 @@
 
         <TextView
             android:id="@+id/lineLength"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
-
+            android:layout_weight="1"
             android:textSize="18sp"
             
             android:text="长度:" />
 
         <EditText
             android:id="@+id/editlineLength"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
-
+            android:layout_weight="4"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -118,22 +114,20 @@
 
         <TextView
             android:id="@+id/lineAngle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
-
+            android:layout_weight="1"
             android:textSize="18sp"
             android:text="角度:" />
 
         <EditText
             android:id="@+id/editlineAngle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:background="@null"
-
+            android:layout_weight="4"
         	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
@@ -153,19 +147,17 @@
 
         <TextView
             android:id="@+id/lineColor"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="颜色:" />
 
         <TextView
-   
+            android:paddingLeft="40dp"
             android:id="@+id/editlineColor"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             
             android:text="红" />
@@ -184,19 +176,17 @@
 
         <TextView
             android:id="@+id/lineWidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="宽度:" />
 
         <TextView
-   
+            android:paddingLeft="40dp"
             android:id="@+id/editlineWidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="3" />
     </LinearLayout>
@@ -214,19 +204,17 @@
 
         <TextView
             android:id="@+id/lineStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="样式:" />
 
         <TextView
-        
+            android:paddingLeft="40dp"
             android:id="@+id/editlineStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
            
             android:text="虚线" />
@@ -243,21 +231,19 @@
 
         <TextView
             android:id="@+id/lineDescripte"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-
+            android:layout_weight="1"
             android:text="描述:" />
 
         <EditText
             android:id="@+id/editlineDescripte"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
-
+            android:layout_weight="4"
             android:background="@null"
             android:imeOptions="actionDone"
             android:text="line1" />

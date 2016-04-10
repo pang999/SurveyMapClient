@@ -10,6 +10,7 @@ public class Module {
     private Long key;
     private String name;
     private Integer type;
+    private String imgUrl;
 
     public Module() {
     }
@@ -18,11 +19,12 @@ public class Module {
         this.id = id;
     }
 
-    public Module(Long id, Long key, String name, Integer type) {
+    public Module(Long id, Long key, String name, Integer type, String imgUrl) {
         this.id = id;
         this.key = key;
         this.name = name;
         this.type = type;
+        this.imgUrl = imgUrl;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class Module {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
 }

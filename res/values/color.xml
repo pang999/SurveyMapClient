@@ -27,10 +27,4 @@
      <color name="item_common_select">#e8e8e5</color>
      <color name="red_n">#ff7676</color>
      <color name="background_tab_pressed">#c30013</color>
-     
-     
-     
-     
-     <!--主题红色 -->
-     <color name="main_color">#bf1e2e</color>
 </resources>

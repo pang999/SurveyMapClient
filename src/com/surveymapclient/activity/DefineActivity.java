@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.surveymapclient.Dialog.EditTextDialog;
+import com.surveymapclient.Dialog.EditeAndDelDialog;
+import com.surveymapclient.Dialog.ExitSaveSketchDialog;
+import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
@@ -27,15 +31,12 @@ import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.pdf.PDFCreater;
 import com.surveymapclient.view.DefineView;
-
-import com.surveymapclient.view.DefineView.TypeChangeListener;
 import com.surveymapclient.view.MovePopupWindow;
-
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
-import com.surveymapclient.view.fragment.EditTextDialog;
-import com.surveymapclient.view.fragment.EditeAndDelDialog;
+import com.tencent.a.a.a.a.h;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -51,9 +52,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,7 +72,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DefineActivity extends Activity implements TypeChangeListener, DialogCallBack,VibratorCallBack,OnClickListener{
+public class DefineActivity extends Activity implements DialogCallBack,VibratorCallBack,OnClickListener,DialogFragmentClickImpl{
 
 	//控件
 	private static MagnifyView magnifyview;
@@ -80,6 +83,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 	
 	private static LocationView locationview;
 	private RelativeLayout topLinearlaout;
+	DialogFragmentClickImpl impl;
     Bitmap bitmap;
 	boolean isdrag=true;
 	private Context mContext = null;
@@ -113,7 +117,33 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
         mContext=this;
         TopHeaght=100;
 //        initData();
-		
+        Bundle bundle=this.getIntent().getExtras();
+        if (bundle.getInt("TYPE")==0) {
+        	long key=bundle.getLong("KEY");
+        	edittitle.setText(bundle.getString("Title"));
+			defineview.AddAllDataFromActivity(OperateData.searchLine(key, helper),
+					OperateData.searchPolygon(key, helper),
+					OperateData.searchRectangle(key, helper), 
+					OperateData.searchAngle(key, helper), 
+					OperateData.searchCoordinate(key, helper), 
+					OperateData.searchText(key, helper), 
+					OperateData.searchAudio(key, helper));
+			for (int i = 0; i < OperateData.searchPolygon(key, helper).size(); i++) {
+				Logger.i("数据库数据", "多边形="+OperateData.searchPolygon(key, helper).get(i).getPolyName());
+				Logger.i("数据库数据", "多边形直线总数="+OperateData.searchPolygon(key, helper).get(i).getPolyLine().size());				
+				for (int j = 0; j < helper.searchDataPolygon(key).get(i).getLines().size(); j++) {
+					Logger.i("数据库数据", "多边形直线="+OperateData.searchPolygon(key, helper).get(i).getPolyLine().get(j).getName());				
+				}
+			}
+			OperateData.dedeleLine(helper.searchDataLine(key), helper);
+			OperateData.deletePolygon(helper.searchDataPolygon(key), helper);
+			OperateData.deleteRectangle(helper.searchDataRectangle(key), helper);
+			OperateData.deleteCoordinate(helper.searchDataCoordinate(key), helper);
+			OperateData.deleteAngle(helper.searchDataAngle(key), helper);
+			OperateData.deleteText(helper.searchDataText(key), helper);
+			OperateData.deleteAudio(helper.searchDataAudio(key), helper);
+		}
+        
 	}
 	
 	private void initView(){
@@ -144,7 +174,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
 		
-		defineview.setOnTypeChangeListener(this);
+
 	}
 	//重置中心点
 	public void LocationSketch(View v){
@@ -163,6 +193,18 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 //				defineview.BackAnglelist(), 
 //				defineview.BackTextlist(), 
 //				defineview.BackAudiolist());
+		long key=System.currentTimeMillis();
+		OperateData.insertPolygon(key, defineview.BackPolylist(), helper);
+		for (int i = 0; i < helper.searchDataPolygon(key).size(); i++) {
+			Logger.i("数据库数据", "多边形="+helper.searchDataPolygon(key).get(i).getName());
+			Logger.i("数据库数据", "多边形直线总数="+helper.searchDataPolygon(key).get(i).getLines().size());				
+			for (int j = 0; j < helper.searchDataPolygon(key).get(i).getLines().size(); j++) {
+				Logger.i("数据库数据", "多边形直线="+helper.searchDataPolygon(key).get(i).getLines().get(j).getName());				
+			}
+		}
+//		for (int j = 0; j < helper.getLines(key).size(); j++) {
+//			Logger.i("数据库数据", "多边形直线="+helper.getLines(key).get(j).getName());				
+//		}
 		
 	}
 	public void onDatalist(){
@@ -215,6 +257,7 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		// TODO Auto-generated method stub
 		super.onResume();
 		initData();
+		Logger.i("activity生命周期", "onResume");
 	}
 	private void initData(){
 		if (AttributeLineActivity.BACKLINE==Contants.LINEATTRIBUTEBACK) {	
@@ -299,67 +342,26 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		case R.id.type_single:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.SINGLE;
-			btnsingle.setSelected(true);
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(false);
-			
-			btncoordinate.setSelected(false);
-			btnangle.setSelected(false);
-			
 			break;
 		case R.id.type_continuous:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.CONTINU;
-			btnsingle.setSelected(false);
-			btncontinuous.setSelected(true);
-			btnrectangle.setSelected(false);
-			
-			btncoordinate.setSelected(false);
-			btnangle.setSelected(false);
 			break;
 		case R.id.type_rectangle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.RECTANGLE;
-			btnsingle.setSelected(false);
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(true);
-			
-			btncoordinate.setSelected(false);
-			btnangle.setSelected(false);
 			break;
 		case R.id.type_coordinate:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.COORDINATE;
-			
-			btnsingle.setSelected(false);
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(false);
-			
-			btncoordinate.setSelected(true);
-			btnangle.setSelected(false);
 			break;
 		case R.id.type_angle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.ANGLE;
-			
-			btnsingle.setSelected(false);
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(false);
-			
-			btncoordinate.setSelected(false);
-			btnangle.setSelected(true);
 			break;
 		case R.id.defineBack:
 //			IToast.show(this, "保存图片成功");
-			long key=121212;
-			OperateData.insertLine(key, defineview.BackLinelist(), helper);
-			OperateData.insertRectangle(key, defineview.BackRectlist(), helper);
-			OperateData.insertCoordinate(key, defineview.BackCoorlist(), helper);
-			OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
-			OperateData.insertText(key, defineview.BackTextlist(), helper);
-			OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
-			OperateData.insertModule(key, "Sketch1", 0, helper);
-			finish();
+			showAlertDialog();
 			break;
 		case R.id.annotation:
 			NotePopupWindow notePopupWindow=new NotePopupWindow(DefineActivity.this);
@@ -516,18 +518,6 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(4);
 		FragmentTransaction ft=getFragmentManager().beginTransaction();
 		eadd.show(ft, "");
-		
-		
-	}
-	@Override
-	public void onTypeChange(int type) {
-		// TODO Auto-generated method stub
-		btnsingle.setSelected(false);
-		btncontinuous.setSelected(false);
-		btnrectangle.setSelected(false);
-		
-		btncoordinate.setSelected(false);
-		btnangle.setSelected(false);
 	}
 	@Override
 	public void onDialogCallBack(TextBean textBean, int i) {
@@ -548,5 +538,53 @@ public class DefineActivity extends Activity implements TypeChangeListener, Dial
 		intent.putExtra("Len", audioBean.getLenght());
 		Logger.i("录音", "onDialogCallBack");
 		startActivityForResult(intent, Contants.AUDIOATTRIBUTEBACK);
+	}
+
+	 @Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		Logger.i("activity生命周期", "onRestart");
+	}
+	 @Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		Logger.i("activity生命周期", "onStart");
+	}
+	 private void showAlertDialog() {
+		 ExitSaveSketchDialog ess=ExitSaveSketchDialog.newInstance();
+			FragmentTransaction ft=getFragmentManager().beginTransaction();
+			ess.show(ft, "");
+	 }
+	@Override
+	public void doPositiveClick() {
+		// TODO Auto-generated method stub
+		long key=System.currentTimeMillis();
+		OperateData.insertLine(key, defineview.BackLinelist(), helper);
+		OperateData.insertPolygon(key, defineview.BackPolylist(), helper);
+		OperateData.insertRectangle(key, defineview.BackRectlist(), helper);
+		OperateData.insertCoordinate(key, defineview.BackCoorlist(), helper);
+		OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
+		OperateData.insertText(key, defineview.BackTextlist(), helper);
+		OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
+		OperateData.insertModule(key, edittitle.getText().toString(),null, 0, helper);
+		finish();
+	}
+
+	@Override
+	public void doNegativeClick() {
+		// TODO Auto-generated method stub
+		finish();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode==event.KEYCODE_BACK) {
+			showAlertDialog();
+//			return true;
+		}
+		return false;
 	}
 }
