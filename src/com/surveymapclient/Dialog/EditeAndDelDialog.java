@@ -1,4 +1,4 @@
-package com.surveymapclient.view.fragment;
+package com.surveymapclient.Dialog;
 
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.AttributeLineActivity;

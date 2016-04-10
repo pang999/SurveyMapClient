@@ -22,22 +22,11 @@
     <RelativeLayout
         android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"     
+        android:layout_height="50dp"     
         android:layout_gravity="top"
-        android:background="@color/main_color"
+        android:background="#000000"
          >
-        <EditText 
-            android:id="@+id/editTitle"
-            android:layout_width="200dp"
-        	android:layout_height="wrap_content"  
-        	android:layout_centerInParent="true"
-        	android:gravity="center"
-        	android:background="@null"
-        	android:textColor="@color/white"
-        	android:singleLine="true"
-
-        	android:text="Sketch1"
-            />
+        
 	      <com.surveymapclient.view.LocationView 
 	     	android:id="@+id/locationview"
 	        android:layout_width="wrap_content"
@@ -47,139 +36,95 @@
 
 	      <ImageView
 	          android:id="@+id/defineBack"
-	          android:layout_width="@dimen/bottom_img_w_h"
-	          android:layout_height="@dimen/bottom_img_w_h"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
 	          android:layout_alignParentLeft="true"
-	          android:layout_marginLeft="5dp"
 	          android:layout_centerVertical="true"
-	          android:src="@drawable/defineback_bg" />
+	          android:src="@drawable/backl" />
 
 	      <ImageView
-
 	          android:id="@+id/btnmoveoperator"
-	          android:layout_width="@dimen/bottom_img_w_h"
-	          android:layout_height="@dimen/bottom_img_w_h"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
 	          android:layout_alignParentRight="true"
 	          android:layout_centerVertical="true"
 	          android:onClick="onMoreOperator"
-	          android:layout_marginRight="5dp"
-	          android:src="@drawable/tolistlines_bg" />
-
-	
+	          android:src="@drawable/movedata" />
 
 
     </RelativeLayout>
-	
+	<EditText 
+            android:id="@+id/editTitle"
+            android:layout_width="200dp"
+        	android:layout_height="wrap_content"  
+        	android:layout_alignParentTop="true"
+        	android:layout_centerInParent="true"
+        	android:paddingTop="12dp"
+        	android:gravity="center"
+        	android:background="@null"
+        	android:singleLine="true"
+            android:textColor="#ffffff"
+        	android:text="Sketch1"
+            />
     <LinearLayout
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/main_color"
+        android:background="#000000"
         android:orientation="horizontal"
         android:gravity="center_vertical"
          >               
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-    >
-    
-    <ImageView 
-	             android:id="@+id/type_single"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-	             android:src="@drawable/type_single_bg"
-	          
-             />
-</LinearLayout>
-            
 
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-            android:gravity="center"
-    >
+            <ImageView 
+	             android:id="@+id/type_single"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:src="@drawable/danlianxian"
+	             android:layout_weight="1"
+             />
             <ImageView
 	             android:id="@+id/type_continuous"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-	    
-	             android:src="@drawable/type_continuous_bg" />
-</LinearLayout>
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-            android:gravity="center"
-    >
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_weight="1"
+	             android:src="@drawable/duolianxian" />
+
             <ImageView
                 android:id="@+id/type_rectangle"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-         
-                android:src="@drawable/type_rectangle_bg" />
-</LinearLayout>
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-            android:gravity="center"
-    >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/rectangle" />
+
             <ImageView
                 android:id="@+id/type_coordinate"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-          
-                android:src="@drawable/type_coordinate_bg" />
-            </LinearLayout>
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-            android:gravity="center"
-    >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/coordinate" />
+
             <ImageView
                 android:id="@+id/type_angle"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-          
-                android:src="@drawable/type_angle_bg" />
-</LinearLayout>
-<LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-            android:gravity="center"
-      android:layout_height="match_parent"
-    >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/angle" />
+
             <ImageView
 	            android:id="@+id/recall"
-
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
-	            android:onClick="onRecall"
-	       
-	            android:src="@drawable/recall_bg" />
-            </LinearLayout>
-            <LinearLayout 
-      android:layout_weight="1" 
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-            android:gravity="center"
-    >
-
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onReCall"
+	            android:layout_weight="1"
+	            android:src="@drawable/chehui" />
             <ImageView
 	             android:id="@+id/annotation"
-	             android:layout_width="@dimen/bottom_img_w_h"
-	             android:layout_height="@dimen/bottom_img_w_h"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
 	             android:onClick="onAnnotation"
-
-	    
-	             android:src="@drawable/annotation_bg" />
-            </LinearLayout>
-
+	             android:layout_weight="1"
+	             android:src="@drawable/edit" />
 
     </LinearLayout>
  	<Button

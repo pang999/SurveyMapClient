@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.surveymapclient.activity.fragment.HistoryFragment;
 import com.surveymapclient.activity.fragment.HomeFragment;
 import com.surveymapclient.activity.fragment.SettingFragment;
+import com.surveymapclient.common.Logger;
 import com.surveymapclient.db.DBHelper;
 import com.tencent.a.a.a.a.h;
 
@@ -28,13 +29,12 @@ public class HomeActivity extends FragmentActivity {
     private static int currIndex = 0;
 	private ArrayList<String> fragmentTags;
     private FragmentManager fragmentManager;
-    private DBHelper helper;
     RadioGroup group;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		helper=DBHelper.getInstance(this);
+		
 		fragmentManager = getSupportFragmentManager();
 		if (savedInstanceState == null) {
             initData();
@@ -70,13 +70,9 @@ public class HomeActivity extends FragmentActivity {
         showFragment();
     }
     private void showFragment() {
-    	  Fragment fragment=null;
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-      try{
-        if( fragmentManager!=null)fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
-      }catch(Exception e){
-    	  return;
-      }
+        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
         if (fragment == null) {
             fragment = instantFragment(currIndex);
         }
@@ -101,7 +97,8 @@ public class HomeActivity extends FragmentActivity {
                 fragment = new HomeFragment();
                 break;
             case 1:
-                fragment = new HistoryFragment(this,helper.searchDataModule());
+            	
+                fragment = new HistoryFragment(this);
                 break;
             case 2:
                 fragment = new SettingFragment();
@@ -109,11 +106,25 @@ public class HomeActivity extends FragmentActivity {
         }
         return fragment;
     }
-	 @Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-	}
+    
+//	 @Override
+//	protected void onResume() {
+//		// TODO Auto-generated method stub
+//		super.onResume();
+//		Logger.i("activity生命周期", "onResume");
+//	}
+//	 @Override
+//	protected void onRestart() {
+//		// TODO Auto-generated method stub
+//		super.onRestart();
+//		Logger.i("activity生命周期", "onRestart");
+//	}
+//	 @Override
+//	protected void onStart() {
+//		// TODO Auto-generated method stub
+//		super.onStart();
+//		Logger.i("activity生命周期", "onStart");
+//	}
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

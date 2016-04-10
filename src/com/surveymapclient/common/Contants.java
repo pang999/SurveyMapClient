@@ -16,6 +16,8 @@ public class Contants {
 	public static final int TEXT=7;
 	public static final int COORDINATE_AXIS=8;
 	public static final int ANGLE_AXIS=9;
+	public static final int CONTINU_XETEND=21;
+
 	
 	public static final int IS_CONTINUES=10;
 	public static final int IS_ONE_LINE=11;

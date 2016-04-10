@@ -7,6 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:layout_height="40dp"
         android:background="@color/main_color"
         android:padding="4dp" >
@@ -27,14 +28,32 @@
                 android:paddingTop="10dp"
                 android:src="@drawable/back_bg" />
         </LinearLayout>
+=======
+        android:layout_height="wrap_content" 
+        android:background="#00FFFF"
+        android:padding="4dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"          
+            android:src="@drawable/back" />
+>>>>>>> 12602bbd5a8112d94f22db16d516e70faf13b238
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+<<<<<<< HEAD
             android:text="数据清单"
             android:textColor="#ffffff" />
+=======
+            android:textColor="#000000"
+            android:text="数据清单" />
+        
+>>>>>>> 12602bbd5a8112d94f22db16d516e70faf13b238
     </RelativeLayout>
 
     <LinearLayout

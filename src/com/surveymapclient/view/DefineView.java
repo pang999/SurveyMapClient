@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.common.Contants;
+import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
@@ -152,6 +153,8 @@ public class DefineView extends View{
         	if (isMoveLinedrag) {
         		polygonModel.MoveDrawPolygon(canvas);
 			}			
+		}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND&&isMovingdraw) {
+			polygonModel.ExtendDrawPolygon(canvas);
 		}
         if (DefineActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
         	if (isMoveLinedrag) {
@@ -238,16 +241,19 @@ public class DefineView extends View{
 					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_touch_down(x, y);
-				}				
+				}
+				
+				
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {	
 				int i=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
-//				if (i>=0) {
-//					isMoveLinedrag=true;
-//					Logger.i("点中多边形", "i="+i);
-//					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
-//				}else {
+				if (i>=0) {
+					isMoveLinedrag=true;
+					Logger.i("点中多边形", "i="+i);
+					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
+					DrawAllOnBitmap();
+				}else {
 					polygonModel.Continuous_touch_down(x, y);
-//				}								
+				}								
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				int i=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
 				if (i>=0) {
@@ -310,11 +316,11 @@ public class DefineView extends View{
 	    			linesModel.Line_touch_move(x, y);
 				}
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {
-//				if (isMoveLinedrag) {
-//					polygonModel.MovePolygon_move(rx, ry);
-//				}else {
+				if (isMoveLinedrag) {
+					polygonModel.MovePolygon_move(rx, ry);
+				}else {
 					polygonModel.Continuous_touch_move(x, y);
-//				}			
+				}			
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					rectangleModel.MoveRectangle_move(rx, ry);
@@ -373,6 +379,11 @@ public class DefineView extends View{
 						DefineActivity.TYPE=Contants.SINGLE;
 						DrawAllOnBitmap();
 					} 
+        			if (polygonModel.ExtendPolygon(polygonModel.GetpolyList, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						DefineActivity.TYPE=Contants.CONTINU_XETEND;
+						DrawAllOnBitmap();
+					}
         			Logger.i("长按时间了", "长按时间了");      			
 				}          		
         		if (DefineActivity.TYPE==Contants.SINGLE) {
@@ -383,6 +394,8 @@ public class DefineView extends View{
 					coordinateModel.ExtandCoordinateOneAxis_touch_move(x,y);
 				}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
 					angleModel.ExtandAngleBorder_touch_move(x, y);	
+				}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
+					polygonModel.ExtendPolygonLine(x, y);
 				}
 			}
     	    invalidate();
@@ -391,13 +404,15 @@ public class DefineView extends View{
         	isMovingdraw=false;
         	mIsLongPressed=false;
 			if (DefineActivity.TYPE==Contants.CONTINU) {  
-//				if (isMoveLinedrag) {
-//					isMoveLinedrag=false;
-//					polygonModel.MovePolygon_up(mCanvas);
-//				}else {
+				if (isMoveLinedrag) {
+					isMoveLinedrag=false;
+					polygonModel.MovePolygon_up(mCanvas);
+				}else {
 	        		polygonModel.Continuous_touch_up(x, y, mCanvas);		
-//				}
+				}
         		
+			}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
+				polygonModel.MovePolygon_up(mCanvas);
 			}else if (DefineActivity.TYPE==Contants.SINGLE) {						
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -405,7 +420,20 @@ public class DefineView extends View{
 				}else {
 					mIsLongPressed=false;				
 					linesModel.Line_touch_up(x, y , mCanvas);	
-				}				
+				}
+				if (linesModel.Getlines.size()>=3) {					
+					linepoly.CalculatePolyFromlist(linesModel.Getlines);
+					for (int i = 0; i < linepoly.GetPolyInt.size(); i++) {
+						Logger.i("直线剩余总数", "GetPolyInt="+linepoly.GetPolyInt.get(i).intValue());
+						linesModel.Getlines.remove(linepoly.GetPolyInt.get(i).intValue());
+					}
+					for (int i = 0; i < linepoly.backpolylist.size(); i++) {
+						polygonModel.GetpolyList.add(linepoly.backpolylist.get(i));
+						DrawAllOnBitmap();
+					}
+					linepoly.ClearInt();					
+				}	
+								
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -485,9 +513,7 @@ public class DefineView extends View{
 				}
 			}
 			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
-			if(typeListener!=null)typeListener.onTypeChange(DefineActivity.TYPE);
 			DefineActivity.TYPE=Contants.DRAG;
-			
     	    invalidate();
             break;
         case MotionEvent.ACTION_POINTER_UP: //一只手指离开屏幕，但还有一只手指在上面会触此事件
@@ -506,6 +532,23 @@ public class DefineView extends View{
 		textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
 		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
 		audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
+	}
+	public void AddAllDataFromActivity(
+			List<LineBean> linelist,
+			List<PolygonBean> polygonlist,
+			List<RectangleBean> rectlist,
+			List<AngleBean> anglelist,
+			List<CoordinateBean> coorlist,
+			List<TextBean> textlist,
+			List<AudioBean> audiolist){
+		linesModel.Getlines=linelist;
+		polygonModel.GetpolyList=polygonlist;
+		rectangleModel.GetRectlist=rectlist;
+		coordinateModel.GetCoordlist=coorlist;
+		angleModel.getAnglelist=anglelist;
+		textModel.GetTextlist=textlist;
+		audioModel.GetAudiolist=audiolist;
+		DrawAllOnBitmap();
 	}
 	/**
 	 * 画布拖拽
@@ -704,25 +747,4 @@ public class DefineView extends View{
 		invalidate();
 	 }	  
 
-	 
-	 
-	 
-	 
-	 /**
-	  * @Description(描述):    切换形状触发此事件
-	  * @Package(包名): com.surveymapclient.view
-	  * @ClassName(类名): TypeChangeListener 
-	  * @author(作者): Pang
-	  * @date(时间): 2016-4-4 下午9:08:10 
-	  * @version(版本): V1.0
-	  */
-	 public interface TypeChangeListener{
-		 public void onTypeChange(int type);
-	 }
-	 
-	 private TypeChangeListener typeListener;
-	 public void setOnTypeChangeListener(TypeChangeListener listener){
-		 this.typeListener=listener;
-	 }
-	 
 }

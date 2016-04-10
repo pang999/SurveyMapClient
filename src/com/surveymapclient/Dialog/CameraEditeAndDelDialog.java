@@ -1,34 +1,30 @@
-package com.surveymapclient.view.fragment;
+package com.surveymapclient.Dialog;
 
+import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
-import com.surveymapclient.activity.AttributeLineActivity;
 import com.surveymapclient.activity.R;
-import com.surveymapclient.common.IToast;
+import com.surveymapclient.common.Contants;
 import com.surveymapclient.entity.LineBean;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class EditeAndDelDialog extends DialogFragment implements OnClickListener{
+public class CameraEditeAndDelDialog extends DialogFragment implements OnClickListener{
 
 	static int type;
+	int index;
 	ImageView edit;
 	ImageView delete;
-	public static EditeAndDelDialog newIntance(int t){
-		EditeAndDelDialog editeAndDelDialog=new EditeAndDelDialog();
+	public static CameraEditeAndDelDialog newIntance(int t){
+		CameraEditeAndDelDialog editeAndDelDialog=new CameraEditeAndDelDialog();
 		Bundle bundle=new Bundle();
 		type=t;
 		editeAndDelDialog.setArguments(bundle);
@@ -63,54 +59,41 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
         //可以设置dialog的显示风格，如style为STYLE_NO_TITLE，将被显示title。遗憾的是，我没有在DialogFragment中找到设置title内容的方法。theme为0，表示由系统选择合适的theme。
         int style = DialogFragment.STYLE_NO_FRAME, theme = 0; 
         setStyle(style,theme);  
+       
 
 	}
 	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		DefineActivity daActivity=(DefineActivity) getActivity();
+		CameraActivity cameraActivity=(CameraActivity) getActivity();
 		int id = v.getId();
 		if (id == R.id.dialogedit) {
 			if (type==0) {
-				daActivity.SendLineData();
+				cameraActivity.SendLineData();
 			}	
 			if (type==1) {
-				daActivity.SendPolygonData();
+				cameraActivity.SendPolygonData();
 			}
 			if (type==2) {
-				daActivity.SendRectangleData();
+				cameraActivity.SendRectangleData();
 			}
 			if (type==3) {
-				daActivity.SendCoordinateData();
+				cameraActivity.SendCoordinateData();
 			}
 			if (type==4) {
-				daActivity.SendAngleData();
+				cameraActivity.SendAngleData();
 			}
 			dismiss();
 		} else if (id == R.id.dialogdelete) {
-			if (type==0) {
-				daActivity.RemoveLineIndex();
-			}
-			if (type==2) {
-				daActivity.RemoveRectangleIndex();
-			}
-			if (type==3) {
-				daActivity.RemoveCoordinateIndex();
-			}
-			if (type==4) {
-				daActivity.RemoveAngleIndex();
-			}
+			cameraActivity.Remove();
 			dismiss();
 		} else {
 		}
 	}
-	
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 	}
-	
-	
 }

@@ -8,7 +8,7 @@
       <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/main_color"
+          android:background="#1E90FF"
           android:padding="8dp" >
 
           <ImageView
@@ -17,7 +17,7 @@
               android:layout_height="wrap_content"
               android:layout_alignParentLeft="true"
               android:onClick="AttributeBack"
-              android:src="@drawable/back_bg" />
+              android:src="@drawable/back" />
 
           <Button
               android:id="@+id/button1"
@@ -25,7 +25,7 @@
               android:layout_height="wrap_content"
               android:layout_alignParentRight="true"
               android:layout_centerVertical="true"
-              android:background="@color/main_color"
+              android:background="#1E90FF"
               android:onClick="EditComplete"
               android:text="完成"
               android:textColor="#FFFFFF"
@@ -49,18 +49,18 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:text="名称:" />
 
         <EditText
             android:id="@+id/editrectangleName"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
@@ -78,19 +78,19 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:text="面积:" />
 
         <EditText
             
             android:id="@+id/editrectangleArea"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
@@ -109,23 +109,23 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:text="长度:" />
 
         <EditText
             android:id="@+id/editrectangleLengh"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="90" />
     </LinearLayout>
     <View 
@@ -139,23 +139,23 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:text="宽度:" />
 
         <EditText
             android:id="@+id/editrectanglewidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:text="90" />
     </LinearLayout>
     <View 
@@ -171,19 +171,17 @@
          >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="颜色:" />
 
         <TextView
-
+            android:paddingLeft="40dp"
             android:id="@+id/editrectlinecolor"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"          
             android:text="红" />
     </LinearLayout>
@@ -200,19 +198,17 @@
         >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
-            android:text="大小:" />
+            android:text="线段大小:" />
 
         <TextView
-
+            android:paddingLeft="40dp"
             android:id="@+id/editrectlinewidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="3" />
     </LinearLayout>
@@ -229,19 +225,17 @@
          >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="样式:" />
 
         <TextView
-
+            android:paddingLeft="40dp"
             android:id="@+id/editrectlineStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="18sp"          
             android:text="虚线" />
     </LinearLayout>
@@ -257,22 +251,22 @@
 
         <TextView
             android:id="@+id/lineDescripte"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="描述:" />
 
         <EditText
             android:id="@+id/editlineDescripte"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:textSize="18sp"
             android:background="@null"
             android:imeOptions="actionDone"
-            android:hint="描述" />
+            android:text="描述" />
     </LinearLayout>
     <View 
         android:layout_width="match_parent"
