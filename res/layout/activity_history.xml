@@ -2,10 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
-    android:background="#ffffff"
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     android:orientation="vertical" >
 
     <ListView

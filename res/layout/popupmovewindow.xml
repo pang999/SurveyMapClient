@@ -10,33 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-<<<<<<< HEAD
-=======
         android:paddingTop="5dp"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:id="@+id/datalist"
          >
 
         <ImageView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
-=======
       android:layout_width="@dimen/bottom_img_w_h"
             android:layout_height="@dimen/bottom_img_w_h"
             android:src="@drawable/datalist" />
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:textColor="#E66c6c"
-=======
             android:textColor="@color/main_color"
                  android:paddingLeft="10dp"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:text="数据清单" />      
     </LinearLayout>
@@ -45,14 +32,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
          android:id="@+id/datashare"
-<<<<<<< HEAD
-         >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
-=======
              android:paddingTop="8dp"
          >
 
@@ -60,19 +39,13 @@
          android:layout_width="@dimen/bottom_img_w_h"
             android:layout_height="@dimen/bottom_img_w_h"
             android:src="@drawable/share" />
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:textColor="#E66c6c"
-            android:textSize="18sp"
-=======
             android:textColor="@color/main_color"
             android:textSize="18sp"
                  android:paddingLeft="10dp"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="分享" />      
     </LinearLayout>
       <LinearLayout
@@ -80,14 +53,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
          android:id="@+id/datahistory"
-<<<<<<< HEAD
-         >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
-=======
              android:paddingTop="8dp"
          >
 
@@ -95,17 +60,12 @@
             android:layout_width="@dimen/bottom_img_w_h"
             android:layout_height="@dimen/bottom_img_w_h"
             android:src="@drawable/history" />
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:textColor="#E66c6c"
-=======
             android:paddingLeft="10dp"
             android:textColor="@color/main_color"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:text="历史数据" />      
     </LinearLayout>

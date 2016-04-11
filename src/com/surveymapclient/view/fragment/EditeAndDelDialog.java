@@ -53,24 +53,14 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 		return dialog;
 	}
 	
-<<<<<<< HEAD
 	//ÔÚonCreateÖÐÉèÖÃ¶Ô»°¿òµÄ·ç¸ñ¡¢ÊôÐÔµÈ
-=======
-	//ï¿½ï¿½onCreateï¿½ï¿½ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 		//Èç¹ûsetCancelable()ÖÐ²ÎÊýÎªtrue£¬Èôµã»÷dialog¸²¸Ç²»µ½µÄactivityµÄ¿Õ°×»òÕß°´·µ»Ø¼ü£¬Ôò½øÐÐcancel£¬×´Ì¬¼ì²âÒÀ´ÎonCancel()ºÍonDismiss()¡£Èç²ÎÊýÎªfalse£¬Ôò°´¿Õ°×´¦»ò·µ»Ø¼üÎÞ·´Ó¦¡£È±Ê¡Îªtrue 
         this.setCancelable(true); 
         //¿ÉÒÔÉèÖÃdialogµÄÏÔÊ¾·ç¸ñ£¬ÈçstyleÎªSTYLE_NO_TITLE£¬½«±»ÏÔÊ¾title¡£ÒÅº¶µÄÊÇ£¬ÎÒÃ»ÓÐÔÚDialogFragmentÖÐÕÒµ½ÉèÖÃtitleÄÚÈÝµÄ·½·¨¡£themeÎª0£¬±íÊ¾ÓÉÏµÍ³Ñ¡ÔñºÏÊÊµÄtheme¡£
-=======
-		//ï¿½ï¿½ï¿½setCancelable()ï¿½Ð²ï¿½ï¿½ï¿½Îªtrueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dialogï¿½ï¿½ï¿½Ç²ï¿½ï¿½ï¿½ï¿½ï¿½activityï¿½Ä¿Õ°×»ï¿½ï¿½ß°ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cancelï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½onCancel()ï¿½ï¿½onDismiss()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªfalseï¿½ï¿½ï¿½ò°´¿Õ°×´ï¿½ï¿½ò·µ»Ø¼ï¿½ï¿½Þ·ï¿½Ó¦ï¿½ï¿½È±Ê¡Îªtrue 
-        this.setCancelable(true); 
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dialogï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½styleÎªSTYLE_NO_TITLEï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾titleï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½DialogFragmentï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½titleï¿½ï¿½ï¿½ÝµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½themeÎª0ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ÏµÍ³Ñ¡ï¿½ï¿½ï¿½ï¿½Êµï¿½themeï¿½ï¿½
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         int style = DialogFragment.STYLE_NO_FRAME, theme = 0; 
         setStyle(style,theme);  
 

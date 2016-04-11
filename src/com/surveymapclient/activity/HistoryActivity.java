@@ -4,25 +4,24 @@ import java.util.List;
 
 import com.surveymapclient.activity.adapter.HistoryAdapter;
 import com.surveymapclient.db.DBHelper;
-<<<<<<< HEAD
+
 import com.surveymapclient.db.OperateData;
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
+
 import com.surveymapclient.db.greendao.Module;
 import com.tencent.a.a.a.a.h;
 
 import android.app.Activity;
-<<<<<<< HEAD
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-=======
+
 import android.os.Bundle;
 import android.widget.ListView;
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
+
 
 public class HistoryActivity extends Activity {
 	HistoryAdapter adapter;
@@ -35,7 +34,7 @@ public class HistoryActivity extends Activity {
 		setContentView(R.layout.activity_history);
 		helper=DBHelper.getInstance(this);
 		listview=(ListView) findViewById(R.id.historylist);
-<<<<<<< HEAD
+
 		final List<Module> mList=OperateData.searchModule(helper);
 		adapter=new HistoryAdapter(this,mList);
 		listview.setAdapter(adapter);
@@ -55,10 +54,10 @@ public class HistoryActivity extends Activity {
 				finish();
 			}
 		});
-=======
+
 		adapter=new HistoryAdapter(this,helper.searchDataModule());
 		listview.setAdapter(adapter);
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
+
 	}
 
 }

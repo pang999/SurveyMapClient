@@ -2,10 +2,7 @@ package com.surveymapclient.activity;
 
 import java.io.Serializable;
 
-<<<<<<< HEAD
 import com.surveymapclient.Dialog.CameraEditeAndDelDialog;
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.ImageTools;
@@ -24,10 +21,6 @@ import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.MovePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.NotePopupWindow;
-<<<<<<< HEAD
-=======
-import com.surveymapclient.view.fragment.CameraEditeAndDelDialog;
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
 import android.R.string;
 import android.annotation.SuppressLint;

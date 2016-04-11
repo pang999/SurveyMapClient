@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.common.Contants;
-<<<<<<< HEAD
 import com.surveymapclient.common.IToast;
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
@@ -156,11 +153,8 @@ public class DefineView extends View{
         	if (isMoveLinedrag) {
         		polygonModel.MoveDrawPolygon(canvas);
 			}			
-<<<<<<< HEAD
 		}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND&&isMovingdraw) {
 			polygonModel.ExtendDrawPolygon(canvas);
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 		}
         if (DefineActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
         	if (isMoveLinedrag) {
@@ -247,7 +241,6 @@ public class DefineView extends View{
 					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_touch_down(x, y);
-<<<<<<< HEAD
 				}
 				
 				
@@ -261,18 +254,6 @@ public class DefineView extends View{
 				}else {
 					polygonModel.Continuous_touch_down(x, y);
 				}								
-=======
-				}				
-			}else if (DefineActivity.TYPE==Contants.CONTINU) {	
-				int i=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
-//				if (i>=0) {
-//					isMoveLinedrag=true;
-//					Logger.i("点中多边形", "i="+i);
-//					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
-//				}else {
-					polygonModel.Continuous_touch_down(x, y);
-//				}								
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				int i=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
 				if (i>=0) {
@@ -335,19 +316,11 @@ public class DefineView extends View{
 	    			linesModel.Line_touch_move(x, y);
 				}
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {
-<<<<<<< HEAD
 				if (isMoveLinedrag) {
 					polygonModel.MovePolygon_move(rx, ry);
 				}else {
 					polygonModel.Continuous_touch_move(x, y);
 				}			
-=======
-//				if (isMoveLinedrag) {
-//					polygonModel.MovePolygon_move(rx, ry);
-//				}else {
-					polygonModel.Continuous_touch_move(x, y);
-//				}			
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					rectangleModel.MoveRectangle_move(rx, ry);
@@ -406,14 +379,11 @@ public class DefineView extends View{
 						DefineActivity.TYPE=Contants.SINGLE;
 						DrawAllOnBitmap();
 					} 
-<<<<<<< HEAD
         			if (polygonModel.ExtendPolygon(polygonModel.GetpolyList, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
 						DefineActivity.TYPE=Contants.CONTINU_XETEND;
 						DrawAllOnBitmap();
 					}
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         			Logger.i("长按时间了", "长按时间了");      			
 				}          		
         		if (DefineActivity.TYPE==Contants.SINGLE) {
@@ -424,11 +394,8 @@ public class DefineView extends View{
 					coordinateModel.ExtandCoordinateOneAxis_touch_move(x,y);
 				}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
 					angleModel.ExtandAngleBorder_touch_move(x, y);	
-<<<<<<< HEAD
 				}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
 					polygonModel.ExtendPolygonLine(x, y);
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 				}
 			}
     	    invalidate();
@@ -437,7 +404,6 @@ public class DefineView extends View{
         	isMovingdraw=false;
         	mIsLongPressed=false;
 			if (DefineActivity.TYPE==Contants.CONTINU) {  
-<<<<<<< HEAD
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
 					polygonModel.MovePolygon_up(mCanvas);
@@ -447,15 +413,6 @@ public class DefineView extends View{
         		
 			}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
 				polygonModel.MovePolygon_up(mCanvas);
-=======
-//				if (isMoveLinedrag) {
-//					isMoveLinedrag=false;
-//					polygonModel.MovePolygon_up(mCanvas);
-//				}else {
-	        		polygonModel.Continuous_touch_up(x, y, mCanvas);		
-//				}
-        		
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			}else if (DefineActivity.TYPE==Contants.SINGLE) {						
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -463,7 +420,6 @@ public class DefineView extends View{
 				}else {
 					mIsLongPressed=false;				
 					linesModel.Line_touch_up(x, y , mCanvas);	
-<<<<<<< HEAD
 				}
 				if (linesModel.Getlines.size()>=3) {					
 					linepoly.CalculatePolyFromlist(linesModel.Getlines);
@@ -478,9 +434,6 @@ public class DefineView extends View{
 					linepoly.ClearInt();					
 				}	
 								
-=======
-				}				
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -559,14 +512,15 @@ public class DefineView extends View{
 	        		
 				}
 			}
-			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
-<<<<<<< HEAD
-			DefineActivity.TYPE=Contants.DRAG;
-=======
-			if(typeListener!=null)typeListener.onTypeChange(DefineActivity.TYPE);
-			DefineActivity.TYPE=Contants.DRAG;
 			
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
+			
+			if(typeListener!=null)typeListener.onTypeChange(DefineActivity.TYPE);
+
+			
+			
+			
+			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
+			DefineActivity.TYPE=Contants.DRAG;
     	    invalidate();
             break;
         case MotionEvent.ACTION_POINTER_UP: //一只手指离开屏幕，但还有一只手指在上面会触此事件
@@ -586,7 +540,6 @@ public class DefineView extends View{
 		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
 		audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
 	}
-<<<<<<< HEAD
 	public void AddAllDataFromActivity(
 			List<LineBean> linelist,
 			List<PolygonBean> polygonlist,
@@ -604,8 +557,6 @@ public class DefineView extends View{
 		audioModel.GetAudiolist=audiolist;
 		DrawAllOnBitmap();
 	}
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	/**
 	 * 画布拖拽
 	 * @param rx
@@ -803,8 +754,13 @@ public class DefineView extends View{
 		invalidate();
 	 }	  
 
-<<<<<<< HEAD
-=======
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 
@@ -825,6 +781,5 @@ public class DefineView extends View{
 	 public void setOnTypeChangeListener(TypeChangeListener listener){
 		 this.typeListener=listener;
 	 }
-	 
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
+
 }

@@ -35,10 +35,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-<<<<<<< HEAD
-=======
-import android.view.View;
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import butterknife.Bind;
@@ -160,17 +156,4 @@ public class DataListActivity extends FragmentActivity {
 	            return list.size();
 	        }
 	    }
-<<<<<<< HEAD
-=======
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    public void onClickBack(View v){
-	    	finish();
-	    }
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 }

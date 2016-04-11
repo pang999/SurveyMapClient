@@ -195,16 +195,6 @@ public class LinesModel {
 	public boolean ExtendLine(List<LineBean> lines,float x,float y){
 		int dx=(int) x;
 		int dy=(int) y;
-<<<<<<< HEAD
-=======
-		for (int i = 0; i < lines.size(); i++) {
-        	float sx=lines.get(i).getStartX();
-        	float sy=lines.get(i).getStartY();
-        	float ex=lines.get(i).getEndX();
-        	float ey=lines.get(i).getEndY();
-        	Logger.i("起点终点", "重绘前-->L"+i+": ("+(int)sx+","+(int)sy+")  ,  ("+(int)ex+","+(int)ey+")");
-		}
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 		for (int i = 0; i < lines.size()-1; i++) {
 			for (int j = i+1; j < lines.size(); j++) {
 				int sxi=(int) lines.get(i).getStartX();
@@ -227,13 +217,7 @@ public class LinesModel {
 						sy2=lines.get(j).getEndY();
 						ex12=x;
 						ey12=y;
-<<<<<<< HEAD
 //		            	Logger.i("起点终点", "---->Li"+i+": ("+sxi+","+syi+")  ,  ("+exi+","+eyi+")");
-=======
-//						Logger.i("线段总数", "重叠 Lines="+couplePointLines.size());
-//		            	Logger.i("起点终点", "---->Li"+i+": ("+sxi+","+syi+")  ,  ("+exi+","+eyi+")");
-//		            	Logger.i("起点终点", "---->Lj"+j+": ("+sxj+","+syj+")  ,  ("+exj+","+eyj+")");
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 						lines.remove(j);
 						lines.remove(i);
 						return true;
@@ -241,10 +225,6 @@ public class LinesModel {
 				}else if ((sxi==exj)&&(syi==eyj)) {     							
 					int csx=Math.abs(dx-sxi);
 					int csy=Math.abs(dy-syi);
-<<<<<<< HEAD
-=======
-//					Logger.i("共用端点", "第 i="+i+" 的头 , 第 j="+j+" 的尾  :("+sxi+","+syi+")");
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
 						sx1=lines.get(i).getEndX();
@@ -260,10 +240,6 @@ public class LinesModel {
 				}else if ((exi==sxj)&&(eyi==syj)) {     							
 					int csx=Math.abs(dx-exi);
 					int csy=Math.abs(dy-eyi);
-<<<<<<< HEAD
-=======
-					Logger.i("共用端点", "第 i="+i+" 的尾 , 第 j="+j+" 的头  :("+exi+","+eyi+")");
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
 						sx1=lines.get(i).getStartX();
@@ -279,10 +255,6 @@ public class LinesModel {
 				}else if ((exi==exj)&&(eyi==eyj)) {     							
 					int csx=Math.abs(dx-exi);
 					int csy=Math.abs(dy-eyi);
-<<<<<<< HEAD
-=======
-//					Logger.i("共用端点", "第 i="+i+" 的尾 , 第 j="+j+" 的尾  :("+exi+","+eyi+")");
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 					if (csx<40&&csy<40) {
 						LineType=Contants.IS_TWO_LINES;
 						sx1=lines.get(i).getStartX();
@@ -481,17 +453,6 @@ public class LinesModel {
     	float sy=list.get(index).getStartY();
     	float ex=list.get(index).getEndX();
     	float ey=list.get(index).getEndY();  
-<<<<<<< HEAD
-=======
-//    	ViewContans.DrawLine(canvas, sx, sy, ex, ey, 
-//    			ViewContans.generatePaint(line.getPaintColor(), line.getPaintWidth(), line.isPaintIsFull()), point);           	
-//    	if (line.getName().length()<8&&line.getName().length()>0) {
-//    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getName(),-25);
-//		}            	
-//    	if (line.getLength()>0||line.getAngle()>0) {
-//    		ViewContans.AddTextOnLine(list.get(index), canvas,line.getLength()+"m "+line.getAngle()+"°",10);
-//		}
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     	list.remove(index);
     	AddChangeLineParams(list,
     			sx, sy, ex, ey, 

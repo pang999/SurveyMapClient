@@ -8,11 +8,7 @@
       <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-<<<<<<< HEAD
-          android:background="#1E90FF"
-=======
           android:background="@color/main_color"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
           android:padding="8dp" >
 
           <ImageView
@@ -21,11 +17,7 @@
               android:layout_height="wrap_content"
               android:layout_alignParentLeft="true"
               android:onClick="AttributeBack"
-<<<<<<< HEAD
-              android:src="@drawable/back" />
-=======
               android:src="@drawable/back_bg" />
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
           <Button
               android:id="@+id/button1"
@@ -33,11 +25,7 @@
               android:layout_height="wrap_content"
               android:layout_alignParentRight="true"
               android:layout_centerVertical="true"
-<<<<<<< HEAD
-              android:background="#1E90FF"
-=======
               android:background="@color/main_color"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
               android:onClick="EditComplete"
               android:text="完成"
               android:textColor="#FFFFFF"
@@ -61,32 +49,18 @@
         android:layout_height="wrap_content" >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="1"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="名称:" />
 
         <EditText
             android:id="@+id/editrectangleName"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
@@ -104,33 +78,19 @@
         android:layout_height="wrap_content" >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="1"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="面积:" />
 
         <EditText
             
             android:id="@+id/editrectangleArea"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
@@ -149,40 +109,23 @@
         android:layout_height="wrap_content" >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="1"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="长度:" />
 
         <EditText
             android:id="@+id/editrectangleLengh"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-<<<<<<< HEAD
-            android:layout_weight="4"
-=======
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="90" />
     </LinearLayout>
     <View 
@@ -196,40 +139,23 @@
         android:layout_height="wrap_content" >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="1"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="宽度:" />
 
         <EditText
             android:id="@+id/editrectanglewidth"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-<<<<<<< HEAD
-            android:layout_weight="4"
-=======
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="90" />
     </LinearLayout>
     <View 
@@ -245,31 +171,19 @@
          >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="颜色:" />
 
         <TextView
-<<<<<<< HEAD
-            android:paddingLeft="40dp"
-            android:id="@+id/editrectlinecolor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
 
             android:id="@+id/editrectlinecolor"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"          
             android:text="红" />
     </LinearLayout>
@@ -286,19 +200,6 @@
         >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="线段大小:" />
-
-        <TextView
-            android:paddingLeft="40dp"
-            android:id="@+id/editrectlinewidth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
@@ -312,7 +213,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"
             android:text="3" />
     </LinearLayout>
@@ -329,31 +229,19 @@
          >
 
         <TextView
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="样式:" />
 
         <TextView
-<<<<<<< HEAD
-            android:paddingLeft="40dp"
-            android:id="@+id/editrectlineStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-=======
 
             android:id="@+id/editrectlineStyle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"          
             android:text="虚线" />
     </LinearLayout>
@@ -369,30 +257,15 @@
 
         <TextView
             android:id="@+id/lineDescripte"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="描述:" />
 
         <EditText
             android:id="@+id/editlineDescripte"
-<<<<<<< HEAD
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="18sp"
-            android:background="@null"
-            android:imeOptions="actionDone"
-            android:text="描述" />
-=======
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -400,7 +273,6 @@
             android:background="@null"
             android:imeOptions="actionDone"
             android:hint="描述" />
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     </LinearLayout>
     <View 
         android:layout_width="match_parent"

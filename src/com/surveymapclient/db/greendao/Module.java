@@ -10,10 +10,7 @@ public class Module {
     private Long key;
     private String name;
     private Integer type;
-<<<<<<< HEAD
     private String imgUrl;
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
     public Module() {
     }
@@ -22,19 +19,12 @@ public class Module {
         this.id = id;
     }
 
-<<<<<<< HEAD
     public Module(Long id, Long key, String name, Integer type, String imgUrl) {
-=======
-    public Module(Long id, Long key, String name, Integer type) {
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         this.id = id;
         this.key = key;
         this.name = name;
         this.type = type;
-<<<<<<< HEAD
         this.imgUrl = imgUrl;
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     }
 
     public Long getId() {
@@ -69,7 +59,6 @@ public class Module {
         this.type = type;
     }
 
-<<<<<<< HEAD
     public String getImgUrl() {
         return imgUrl;
     }
@@ -78,6 +67,4 @@ public class Module {
         this.imgUrl = imgUrl;
     }
 
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 }

@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layoutFooter"
     android:layout_width="match_parent"
-<<<<<<< HEAD
-    android:layout_height="50dp"
-    android:background="#f5f5f5">
-=======
     android:layout_height="56dp"
      android:background="@color/main_color">
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     <!--android:background="@color/main_footer_bg"-->
 
     <View
@@ -21,10 +16,7 @@
         android:id="@+id/bottom_group"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-<<<<<<< HEAD
-=======
         android:layout_marginTop="5dp"
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:orientation="horizontal">
 
         <RadioButton
@@ -48,12 +40,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-<<<<<<< HEAD
-        android:background="@null"
-=======
 
       
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:orientation="horizontal" >
 
         <View

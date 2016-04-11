@@ -27,10 +27,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         public final static Property Key = new Property(1, Long.class, "key", false, "KEY");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
         public final static Property Type = new Property(3, Integer.class, "type", false, "TYPE");
-<<<<<<< HEAD
         public final static Property ImgUrl = new Property(4, String.class, "imgUrl", false, "IMG_URL");
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     };
 
 
@@ -49,12 +46,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'KEY' INTEGER," + // 1: key
                 "'NAME' TEXT," + // 2: name
-<<<<<<< HEAD
                 "'TYPE' INTEGER," + // 3: type
                 "'IMG_URL' TEXT);"); // 4: imgUrl
-=======
-                "'TYPE' INTEGER);"); // 3: type
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     }
 
     /** Drops the underlying database table. */
@@ -87,14 +80,11 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         if (type != null) {
             stmt.bindLong(4, type);
         }
-<<<<<<< HEAD
  
         String imgUrl = entity.getImgUrl();
         if (imgUrl != null) {
             stmt.bindString(5, imgUrl);
         }
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     }
 
     /** @inheritdoc */
@@ -110,12 +100,8 @@ public class ModuleDao extends AbstractDao<Module, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // key
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-<<<<<<< HEAD
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // type
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // imgUrl
-=======
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3) // type
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         );
         return entity;
     }
@@ -127,10 +113,7 @@ public class ModuleDao extends AbstractDao<Module, Long> {
         entity.setKey(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-<<<<<<< HEAD
         entity.setImgUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
      }
     
     /** @inheritdoc */

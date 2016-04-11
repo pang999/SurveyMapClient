@@ -5,11 +5,6 @@
         <attr name="ovalTop" format="dimension" />  
         <attr name="ovalRight" format="dimension" />  
         <attr name="ovalBottom" format="dimension" />  
-<<<<<<< HEAD
-      
-        
-=======
->>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     </declare-styleable>
      <declare-styleable name="PagerSlidingTabStrip">
         <attr name="pstsIndicatorColor" format="color" />
