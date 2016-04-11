@@ -22,7 +22,11 @@ public class Lines {
     private Integer pcolor;
     private Float pwidth;
     private Boolean isfull;
+<<<<<<< HEAD
     private long polygon_id;
+=======
+    private Long polygon_id;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -41,7 +45,11 @@ public class Lines {
         this.lines_id = lines_id;
     }
 
+<<<<<<< HEAD
     public Lines(Long lines_id, Long key, String name, Float startx, Float starty, Float endx, Float endy, Double lenght, Double angle, String desc, Integer pcolor, Float pwidth, Boolean isfull, long polygon_id) {
+=======
+    public Lines(Long lines_id, Long key, String name, Float startx, Float starty, Float endx, Float endy, Double lenght, Double angle, String desc, Integer pcolor, Float pwidth, Boolean isfull, Long polygon_id) {
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         this.lines_id = lines_id;
         this.key = key;
         this.name = name;
@@ -168,17 +176,29 @@ public class Lines {
         this.isfull = isfull;
     }
 
+<<<<<<< HEAD
     public long getPolygon_id() {
         return polygon_id;
     }
 
     public void setPolygon_id(long polygon_id) {
+=======
+    public Long getPolygon_id() {
+        return polygon_id;
+    }
+
+    public void setPolygon_id(Long polygon_id) {
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         this.polygon_id = polygon_id;
     }
 
     /** To-one relationship, resolved on first access. */
     public Polygon getPolygon() {
+<<<<<<< HEAD
         long __key = this.polygon_id;
+=======
+        Long __key = this.polygon_id;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         if (polygon__resolvedKey == null || !polygon__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -194,12 +214,18 @@ public class Lines {
     }
 
     public void setPolygon(Polygon polygon) {
+<<<<<<< HEAD
         if (polygon == null) {
             throw new DaoException("To-one property 'polygon_id' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
             this.polygon = polygon;
             polygon_id = polygon.getPolygon_id();
+=======
+        synchronized (this) {
+            this.polygon = polygon;
+            polygon_id = polygon == null ? null : polygon.getPolygon_id();
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             polygon__resolvedKey = polygon_id;
         }
     }

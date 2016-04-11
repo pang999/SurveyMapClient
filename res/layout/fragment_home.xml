@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
    android:background="#DCDCDC"
      >
 
@@ -13,26 +14,74 @@
         android:layout_below="@+id/imageView3"
         android:layout_marginLeft="47dp"
         android:layout_marginTop="53dp"
+=======
+    android:background="#DCDCDC" >
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="@color/main_color"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测量"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_txt_size" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/takephoto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/ll1"
+        android:layout_marginLeft="47dp"
+        android:layout_marginTop="50dp"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:src="@drawable/takephoto" />
 
     <ImageView
         android:id="@+id/ablum"
+<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/takephoto"
         android:layout_below="@+id/takephoto"
         android:layout_marginLeft="18dp"
+=======
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/takephoto"
+        android:layout_below="@+id/takephoto"
+        android:layout_marginLeft="16dp"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:layout_marginTop="144dp"
         android:src="@drawable/ablum" />
 
     <ImageView
         android:id="@+id/define"
+<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/takephoto"
         android:layout_marginLeft="60dp"
+=======
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/takephoto"
+        android:layout_marginRight="16dp"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@+id/ablum"
         android:src="@drawable/define" />
 
+<<<<<<< HEAD
 </RelativeLayout>
+=======
+</RelativeLayout>
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4

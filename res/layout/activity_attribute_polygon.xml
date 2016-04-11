@@ -8,7 +8,11 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+<<<<<<< HEAD
       android:background="#1E90FF"
+=======
+      android:background="@color/main_color"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
       android:padding="8dp" >
 
       <ImageView
@@ -17,7 +21,11 @@
           android:layout_height="wrap_content"
           android:layout_alignParentLeft="true"
           android:onClick="AttributeBack"
+<<<<<<< HEAD
           android:src="@drawable/back" />
+=======
+          android:src="@drawable/back_bg" />
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
       <Button
           android:id="@+id/button1"
@@ -25,7 +33,11 @@
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
+<<<<<<< HEAD
           android:background="#1E90FF"
+=======
+          android:background="@color/main_color"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
           android:onClick="EditComplete"
           android:text="完成"
           android:textColor="#FFFFFF"
@@ -50,19 +62,34 @@
         android:layout_height="wrap_content" >
 
         <TextView
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="1"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="名称:" />
 
         <EditText
             android:id="@+id/editpolygonName"
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_weight="4"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="18sp"
+            android:layout_weight="1.4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -79,19 +106,34 @@
         android:layout_height="wrap_content" >
 
         <TextView
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="1"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="面积:" />
 
         <EditText
             android:id="@+id/editpolygonArea"
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_weight="4"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="18sp"
+            android:layout_weight="1.4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -113,17 +155,31 @@
 
         <TextView
             android:id="@+id/lineColor"
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textColor="#000000"
             android:textSize="18sp"
             android:text="颜色:" />
 
         <TextView
+<<<<<<< HEAD
             android:paddingLeft="40dp"
             android:id="@+id/editpolygoneColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+=======
+
+            android:id="@+id/editpolygoneColor"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:textSize="18sp"          
             android:text="红" />
     </LinearLayout>
@@ -138,19 +194,36 @@
         android:layout_height="wrap_content" >
 
         <TextView
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18sp"
             android:layout_weight="1"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:text="描述:" />
 
         <EditText
             android:id="@+id/editpolygonDescripte"
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_weight="4"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
+            android:textSize="18sp"
+
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:background="@null"
             android:imeOptions="actionDone"
             android:text="描述" />
@@ -166,6 +239,7 @@
         android:layout_height="wrap_content" >
 
         <TextView
+<<<<<<< HEAD
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
@@ -179,6 +253,23 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_weight="4"
+=======
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:textColor="#000000"
+            android:textSize="18sp"
+
+            android:text="直线(条):" />
+
+        <EditText
+            android:id="@+id/polygonlineshow"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
+            android:textSize="18sp"
+
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
             android:background="@null"
             android:imeOptions="actionDone"
             android:text="3" />

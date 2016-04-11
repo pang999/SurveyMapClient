@@ -1,5 +1,10 @@
 package com.surveymapclient.view;
 
+<<<<<<< HEAD
+=======
+import nu.xom.Text;
+
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
 
@@ -12,6 +17,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.PopupWindow;
+<<<<<<< HEAD
+=======
+import android.widget.TextView;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
 public class NotePopupWindow extends PopupWindow{
 
@@ -34,8 +43,13 @@ public class NotePopupWindow extends PopupWindow{
         this.setOutsideTouchable(true);  
         // Ë¢ÐÂ×´Ì¬  
         this.update();  
+<<<<<<< HEAD
         Button edittext=(Button) conentView.findViewById(R.id.editetext);
         Button tape=(Button) conentView.findViewById(R.id.tape);
+=======
+        TextView edittext=(TextView) conentView.findViewById(R.id.editetext);
+        TextView tape=(TextView) conentView.findViewById(R.id.tape);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         final DefineActivity defineActivity=(DefineActivity) context;
         edittext.setOnClickListener(new OnClickListener() {
 			

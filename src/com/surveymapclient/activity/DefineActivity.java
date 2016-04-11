@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+<<<<<<< HEAD
 import com.surveymapclient.Dialog.EditTextDialog;
 import com.surveymapclient.Dialog.EditeAndDelDialog;
 import com.surveymapclient.Dialog.ExitSaveSketchDialog;
 import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
@@ -31,12 +34,24 @@ import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.pdf.PDFCreater;
 import com.surveymapclient.view.DefineView;
+<<<<<<< HEAD
 import com.surveymapclient.view.MovePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
 import com.tencent.a.a.a.a.h;
 
+=======
+
+import com.surveymapclient.view.DefineView.TypeChangeListener;
+import com.surveymapclient.view.MovePopupWindow;
+
+import com.surveymapclient.view.LocationView;
+import com.surveymapclient.view.MagnifyView;
+import com.surveymapclient.view.NotePopupWindow;
+import com.surveymapclient.view.fragment.EditTextDialog;
+import com.surveymapclient.view.fragment.EditeAndDelDialog;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -52,11 +67,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Vibrator;
+<<<<<<< HEAD
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+=======
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -72,7 +93,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 public class DefineActivity extends Activity implements DialogCallBack,VibratorCallBack,OnClickListener,DialogFragmentClickImpl{
+=======
+public class DefineActivity extends Activity implements TypeChangeListener, DialogCallBack,VibratorCallBack,OnClickListener{
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
 	//控件
 	private static MagnifyView magnifyview;
@@ -83,7 +108,10 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 	
 	private static LocationView locationview;
 	private RelativeLayout topLinearlaout;
+<<<<<<< HEAD
 	DialogFragmentClickImpl impl;
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     Bitmap bitmap;
 	boolean isdrag=true;
 	private Context mContext = null;
@@ -117,6 +145,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
         mContext=this;
         TopHeaght=100;
 //        initData();
+<<<<<<< HEAD
         Bundle bundle=this.getIntent().getExtras();
         if (bundle.getInt("TYPE")==0) {
         	long key=bundle.getLong("KEY");
@@ -144,6 +173,9 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 			OperateData.deleteAudio(helper.searchDataAudio(key), helper);
 		}
         
+=======
+		
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	}
 	
 	private void initView(){
@@ -174,7 +206,11 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
 		
+<<<<<<< HEAD
 
+=======
+		defineview.setOnTypeChangeListener(this);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	}
 	//重置中心点
 	public void LocationSketch(View v){
@@ -193,6 +229,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 //				defineview.BackAnglelist(), 
 //				defineview.BackTextlist(), 
 //				defineview.BackAudiolist());
+<<<<<<< HEAD
 		long key=System.currentTimeMillis();
 		OperateData.insertPolygon(key, defineview.BackPolylist(), helper);
 		for (int i = 0; i < helper.searchDataPolygon(key).size(); i++) {
@@ -205,6 +242,8 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 //		for (int j = 0; j < helper.getLines(key).size(); j++) {
 //			Logger.i("数据库数据", "多边形直线="+helper.getLines(key).get(j).getName());				
 //		}
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 		
 	}
 	public void onDatalist(){
@@ -257,7 +296,10 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		// TODO Auto-generated method stub
 		super.onResume();
 		initData();
+<<<<<<< HEAD
 		Logger.i("activity生命周期", "onResume");
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	}
 	private void initData(){
 		if (AttributeLineActivity.BACKLINE==Contants.LINEATTRIBUTEBACK) {	
@@ -342,26 +384,86 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		case R.id.type_single:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.SINGLE;
+<<<<<<< HEAD
+=======
+			btnsingle.setSelected(true);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
+			
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			break;
 		case R.id.type_continuous:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.CONTINU;
+<<<<<<< HEAD
+=======
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(true);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			break;
 		case R.id.type_rectangle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.RECTANGLE;
+<<<<<<< HEAD
+=======
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(true);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(false);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			break;
 		case R.id.type_coordinate:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.COORDINATE;
+<<<<<<< HEAD
+=======
+			
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(true);
+			btnangle.setSelected(false);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			break;
 		case R.id.type_angle:
 			defineview.ZoomCanvas(1);
 			TYPE=Contants.ANGLE;
+<<<<<<< HEAD
 			break;
 		case R.id.defineBack:
 //			IToast.show(this, "保存图片成功");
 			showAlertDialog();
+=======
+			
+			btnsingle.setSelected(false);
+			btncontinuous.setSelected(false);
+			btnrectangle.setSelected(false);
+			
+			btncoordinate.setSelected(false);
+			btnangle.setSelected(true);
+			break;
+		case R.id.defineBack:
+//			IToast.show(this, "保存图片成功");
+			long key=121212;
+			OperateData.insertLine(key, defineview.BackLinelist(), helper);
+			OperateData.insertRectangle(key, defineview.BackRectlist(), helper);
+			OperateData.insertCoordinate(key, defineview.BackCoorlist(), helper);
+			OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
+			OperateData.insertText(key, defineview.BackTextlist(), helper);
+			OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
+			OperateData.insertModule(key, "Sketch1", 0, helper);
+			finish();
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			break;
 		case R.id.annotation:
 			NotePopupWindow notePopupWindow=new NotePopupWindow(DefineActivity.this);
@@ -518,6 +620,21 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		EditeAndDelDialog eadd=EditeAndDelDialog.newIntance(4);
 		FragmentTransaction ft=getFragmentManager().beginTransaction();
 		eadd.show(ft, "");
+<<<<<<< HEAD
+=======
+		
+		
+	}
+	@Override
+	public void onTypeChange(int type) {
+		// TODO Auto-generated method stub
+		btnsingle.setSelected(false);
+		btncontinuous.setSelected(false);
+		btnrectangle.setSelected(false);
+		
+		btncoordinate.setSelected(false);
+		btnangle.setSelected(false);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	}
 	@Override
 	public void onDialogCallBack(TextBean textBean, int i) {
@@ -539,6 +656,7 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		Logger.i("录音", "onDialogCallBack");
 		startActivityForResult(intent, Contants.AUDIOATTRIBUTEBACK);
 	}
+<<<<<<< HEAD
 
 	 @Override
 	protected void onRestart() {
@@ -587,4 +705,6 @@ public class DefineActivity extends Activity implements DialogCallBack,VibratorC
 		}
 		return false;
 	}
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 }

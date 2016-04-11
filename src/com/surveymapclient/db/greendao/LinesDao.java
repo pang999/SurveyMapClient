@@ -41,7 +41,11 @@ public class LinesDao extends AbstractDao<Lines, Long> {
         public final static Property Pcolor = new Property(10, Integer.class, "pcolor", false, "PCOLOR");
         public final static Property Pwidth = new Property(11, Float.class, "pwidth", false, "PWIDTH");
         public final static Property Isfull = new Property(12, Boolean.class, "isfull", false, "ISFULL");
+<<<<<<< HEAD
         public final static Property Polygon_id = new Property(13, long.class, "polygon_id", false, "POLYGON_ID");
+=======
+        public final static Property Polygon_id = new Property(13, Long.class, "polygon_id", false, "POLYGON_ID");
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     };
 
     private DaoSession daoSession;
@@ -74,7 +78,11 @@ public class LinesDao extends AbstractDao<Lines, Long> {
                 "'PCOLOR' INTEGER," + // 10: pcolor
                 "'PWIDTH' REAL," + // 11: pwidth
                 "'ISFULL' INTEGER," + // 12: isfull
+<<<<<<< HEAD
                 "'POLYGON_ID' INTEGER NOT NULL );"); // 13: polygon_id
+=======
+                "'POLYGON_ID' INTEGER);"); // 13: polygon_id
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     }
 
     /** Drops the underlying database table. */
@@ -152,7 +160,15 @@ public class LinesDao extends AbstractDao<Lines, Long> {
         if (isfull != null) {
             stmt.bindLong(13, isfull ? 1l: 0l);
         }
+<<<<<<< HEAD
         stmt.bindLong(14, entity.getPolygon_id());
+=======
+ 
+        Long polygon_id = entity.getPolygon_id();
+        if (polygon_id != null) {
+            stmt.bindLong(14, polygon_id);
+        }
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     }
 
     @Override
@@ -184,7 +200,11 @@ public class LinesDao extends AbstractDao<Lines, Long> {
             cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // pcolor
             cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11), // pwidth
             cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isfull
+<<<<<<< HEAD
             cursor.getLong(offset + 13) // polygon_id
+=======
+            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // polygon_id
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         );
         return entity;
     }
@@ -205,7 +225,11 @@ public class LinesDao extends AbstractDao<Lines, Long> {
         entity.setPcolor(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
         entity.setPwidth(cursor.isNull(offset + 11) ? null : cursor.getFloat(offset + 11));
         entity.setIsfull(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
+<<<<<<< HEAD
         entity.setPolygon_id(cursor.getLong(offset + 13));
+=======
+        entity.setPolygon_id(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
      }
     
     /** @inheritdoc */
@@ -232,7 +256,11 @@ public class LinesDao extends AbstractDao<Lines, Long> {
     }
     
     /** Internal query to resolve the "lines" to-many relationship of Polygon. */
+<<<<<<< HEAD
     public List<Lines> _queryPolygon_Lines(long polygon_id) {
+=======
+    public List<Lines> _queryPolygon_Lines(Long polygon_id) {
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         synchronized (this) {
             if (polygon_LinesQuery == null) {
                 QueryBuilder<Lines> queryBuilder = queryBuilder();
@@ -266,9 +294,13 @@ public class LinesDao extends AbstractDao<Lines, Long> {
         int offset = getAllColumns().length;
 
         Polygon polygon = loadCurrentOther(daoSession.getPolygonDao(), cursor, offset);
+<<<<<<< HEAD
          if(polygon != null) {
             entity.setPolygon(polygon);
         }
+=======
+        entity.setPolygon(polygon);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
         return entity;    
     }

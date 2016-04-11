@@ -7,7 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+<<<<<<< HEAD
 import com.surveymapclient.common.IToast;
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.LineBean;
@@ -33,7 +36,11 @@ public class PolygonModel {
     private float mX, mY;// 临时点坐标
     private static final float TOUCH_TOLERANCE = 4;
     public List<PolygonBean> GetpolyList=new ArrayList<PolygonBean>();
+<<<<<<< HEAD
 //    private PolygonBean drawpolygon=new PolygonBean();
+=======
+    private PolygonBean drawpolygon=new PolygonBean();
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     //每隔10像素取点
   	private static int space=10;
   	private PointF movePoint=new PointF();
@@ -49,7 +56,10 @@ public class PolygonModel {
 	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10,true);
 	//画阴影
     Path mshadowpath; 
+<<<<<<< HEAD
     List<LineBean> movelineslist;
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     
     private Paint generatePaint(int color){
 		Paint p = new Paint();
@@ -178,6 +188,7 @@ public class PolygonModel {
 		
 	}
 	List<LineBean> lineBeans=new ArrayList<LineBean>();
+<<<<<<< HEAD
 	public void MovePolygon_down(List<PolygonBean> polylist,int i,float rx,float ry){		
 		Logger.i("多边形移动", "down--按下--polylist="+polylist.size());
 		movelineslist=polylist.get(i).getPolyLine();
@@ -196,10 +207,48 @@ public class PolygonModel {
 				float sy=movelineslist.get(i).getStartY()+dy;
 				float ex=movelineslist.get(i).getEndX()+dx;
 				float ey=movelineslist.get(i).getEndY()+dy;						
+=======
+	public void MovePolygon_down(List<PolygonBean> polylist,int i,float x,float y){		
+		Logger.i("多边形移动", "down--按下--polylist="+polylist.size());
+		lineBeans.clear();
+		for (int j = 0; j < polylist.get(i).getPolyLine().size(); j++) {
+			LineBean lineBean=new LineBean();
+			float sx=polylist.get(i).getPolyLine().get(j).getStartX();
+			float sy=polylist.get(i).getPolyLine().get(j).getStartY();
+			float ex=polylist.get(i).getPolyLine().get(j).getEndX();
+			float ey=polylist.get(i).getPolyLine().get(j).getEndY();			
+			lineBean.setStartX(sx);
+			lineBean.setStartY(sy);
+			lineBean.setEndX(ex);
+			lineBean.setEndY(ey);
+			lineBeans.add(lineBean);
+		}
+		drawpolygon.setPolyLine(lineBeans);
+		movePoint.set(x, y);
+		Logger.i("多边形移动", "down--按下--lines="+lineBeans.size());		
+		polylist.remove(i);
+	}
+	List<LineBean> list=new ArrayList<LineBean>();
+	LineBean lineBean=new LineBean();
+	public void MovePolygon_move(float rx,float ry){
+		
+		list.clear();
+		float dx=rx-movePoint.x;
+	    float dy=ry-movePoint.y;	
+	    Logger.i("多边形移动", "move---->"+drawpolygon.getPolyLine().size());
+	    if (Math.sqrt(dx*dx+dy*dy)>5f) {	    	
+	    	movePoint.set(rx, ry);
+	    	for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+	    		float sx=drawpolygon.getPolyLine().get(i).getStartX()+dx;
+				float sy=drawpolygon.getPolyLine().get(i).getStartY()+dy;
+				float ex=drawpolygon.getPolyLine().get(i).getEndX()+dx;
+				float ey=drawpolygon.getPolyLine().get(i).getEndY()+dy;			
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 				lineBean.setStartX(sx);
 				lineBean.setStartY(sy);
 				lineBean.setEndX(ex);
 				lineBean.setEndY(ey);
+<<<<<<< HEAD
 				movelineslist.set(i, lineBean);
 			}	
 	    }
@@ -211,6 +260,23 @@ public class PolygonModel {
 			float sy=movelineslist.get(i).getStartY();
 			float ex=movelineslist.get(i).getEndX();
 			float ey=movelineslist.get(i).getEndY();
+=======
+				list.add(lineBean);
+			}	
+	    	drawpolygon.setPolyLine(list);	    	
+	    }
+	    Logger.i("多边形移动", "move---->"+drawpolygon.getPolyLine().size());
+	}
+	public void MovePolygon_up(Canvas canvas){
+	    Logger.i("多边形移动", "up---->"+drawpolygon.getPolyLine().size());
+
+		list.clear();
+		for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+    		float sx=drawpolygon.getPolyLine().get(i).getStartX();
+			float sy=drawpolygon.getPolyLine().get(i).getStartY();
+			float ex=drawpolygon.getPolyLine().get(i).getEndX();
+			float ey=drawpolygon.getPolyLine().get(i).getEndY();
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			sx= ViewContans.AdsorbPoint((int)Math.floor(sx));
 			sy= ViewContans.AdsorbPoint((int)Math.floor(sy));
 			ex= ViewContans.AdsorbPoint((int)Math.floor(ex));
@@ -219,6 +285,7 @@ public class PolygonModel {
 			lineBean.setStartY(sy);
 			lineBean.setEndX(ex);
 			lineBean.setEndY(ey);
+<<<<<<< HEAD
 			movelineslist.set(i, lineBean);
 		}
 		AddPolygonParams(GetpolyList, movelineslist);
@@ -234,10 +301,28 @@ public class PolygonModel {
 			float sy=movelineslist.get(i).getStartY();
 			float ex=movelineslist.get(i).getEndX();
 			float ey=movelineslist.get(i).getEndY();
+=======
+			list.add(lineBean);
+		}
+    	drawpolygon.setPolyLine(list);
+    	GetpolyList.add(drawpolygon);
+    	DrawPolygonOnBitmap(canvas);
+	}
+	public void MoveDrawPolygon(Canvas canvas){	
+		mshadowpath=new Path();
+		Logger.i("多边形移动", "down---->lines="+drawpolygon.getPolyLine().size());		
+		for (int i = 0; i < drawpolygon.getPolyLine().size(); i++) {
+			Logger.i("多边形移动", "i="+i);
+			float sx=drawpolygon.getPolyLine().get(i).getStartX();
+			float sy=drawpolygon.getPolyLine().get(i).getStartY();
+			float ex=drawpolygon.getPolyLine().get(i).getEndX();
+			float ey=drawpolygon.getPolyLine().get(i).getEndY();
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			canvas.drawLine(sx, sy, ex, ey, checkpaint);
 			canvas.drawPoint(sx, sy, point);
 			canvas.drawPoint(ex, ey, point);
 			if (i==0) {
+<<<<<<< HEAD
 				mshadowpath.moveTo(movelineslist.get(0).getStartX(),movelineslist.get(0).getStartY());
 			}else {
 				mshadowpath.quadTo(movelineslist.get(i-1).getEndX(), movelineslist.get(i-1).getEndY(),
@@ -264,6 +349,12 @@ public class PolygonModel {
 			}else {
 				mshadowpath.quadTo(movelineslist.get(i-1).getEndX(), movelineslist.get(i-1).getEndY(),
 						movelineslist.get(i).getStartX(), movelineslist.get(i).getStartY());
+=======
+				mshadowpath.moveTo(drawpolygon.getPolyLine().get(0).getStartX(), drawpolygon.getPolyLine().get(0).getStartY());
+			}else {
+				mshadowpath.quadTo(drawpolygon.getPolyLine().get(i-1).getEndX(), drawpolygon.getPolyLine().get(i-1).getEndY(),
+						drawpolygon.getPolyLine().get(i).getStartX(), drawpolygon.getPolyLine().get(i).getStartY());
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			}
 		}
 		canvas.drawPath(mshadowpath, generatePaint(Color.BLUE));
@@ -299,7 +390,12 @@ public class PolygonModel {
         mPath = null;// 重新置空	
 		
 	}
+<<<<<<< HEAD
 	private List<PointF> points=new ArrayList<PointF>();	
+=======
+	private List<PointF> points=new ArrayList<PointF>();
+	
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	public int PitchOnPolygon(List<PolygonBean> list,float x,float y){		
 	    int dx=(int) x;
 	    int dy=(int) y;
@@ -324,6 +420,7 @@ public class PolygonModel {
 		}
 	    return -1;
 	}
+<<<<<<< HEAD
 	public int PitchOnPolygonLine(List<PolygonBean> list,float x,float y){
 		 int dx=(int) x;
 		    int dy=(int) y;
@@ -447,6 +544,8 @@ public class PolygonModel {
 		}
 		return false;
 	}
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	private void drawpolygon(int i,int j){		
 		List<PointF> currePoint=new ArrayList<PointF>();
 		try {
@@ -475,10 +574,17 @@ public class PolygonModel {
 		line.setAngle(0.00);
 		line.setPaintColor(Color.BLACK);
 		line.setLength(0);
+<<<<<<< HEAD
 		line.setName("polylineName");
 		line.setPaintIsFull(false);
 		line.setPaintWidth(4);
 		line.setDescripte("描述");
+=======
+		line.setName("polylineName-"+lists.size());
+		line.setPaintIsFull(false);
+		line.setPaintWidth(4);
+		line.setDescripte("描述"+lists.size());
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 		lists.add(line);
 	}
 	public void AddPolygonParams(List<PolygonBean> polylist,List<LineBean> linelist){
@@ -486,12 +592,18 @@ public class PolygonModel {
 		List<LineBean> lineslist=new ArrayList<LineBean>();
 		for (int i = 0; i <linelist.size(); i++) {
 			LineBean lineBean=new LineBean();
+<<<<<<< HEAD
 			lineBean.setName("lines-"+i);
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			lineBean.setStartX(linelist.get(i).getStartX());
 			lineBean.setStartY(linelist.get(i).getStartY());
 			lineBean.setEndX(linelist.get(i).getEndX());
 			lineBean.setEndY(linelist.get(i).getEndY());
+<<<<<<< HEAD
 			lineBean.setDescripte("描述-"+i);
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 			lineslist.add(lineBean);			
 		}
 		poly.setPolyName("polyName-"+polylist.size());

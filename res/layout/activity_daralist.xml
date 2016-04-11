@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     android:orientation="vertical" 
     android:background="#FFFFFF"
     >
@@ -18,17 +19,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"          
             android:src="@drawable/back" />
+=======
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/main_color"
+        android:padding="4dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center|left" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:onClick="onClickBack"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:src="@drawable/back_bg" />
+        </LinearLayout>
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+<<<<<<< HEAD
             android:textColor="#000000"
             android:text="数据清单" />
         
     </RelativeLayout>
 	<LinearLayout
+=======
+            android:text="数据清单"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+    <LinearLayout
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -44,5 +80,11 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:layout_height="match_parent" />	
 </LinearLayout>
+=======
+        android:layout_height="match_parent" />
+
+</LinearLayout>
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4

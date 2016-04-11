@@ -6,7 +6,10 @@ import java.util.Arrays;
 import com.surveymapclient.activity.fragment.HistoryFragment;
 import com.surveymapclient.activity.fragment.HomeFragment;
 import com.surveymapclient.activity.fragment.SettingFragment;
+<<<<<<< HEAD
 import com.surveymapclient.common.Logger;
+=======
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 import com.surveymapclient.db.DBHelper;
 import com.tencent.a.a.a.a.h;
 
@@ -29,12 +32,20 @@ public class HomeActivity extends FragmentActivity {
     private static int currIndex = 0;
 	private ArrayList<String> fragmentTags;
     private FragmentManager fragmentManager;
+<<<<<<< HEAD
+=======
+    private DBHelper helper;
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     RadioGroup group;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+<<<<<<< HEAD
 		
+=======
+		helper=DBHelper.getInstance(this);
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 		fragmentManager = getSupportFragmentManager();
 		if (savedInstanceState == null) {
             initData();
@@ -70,9 +81,19 @@ public class HomeActivity extends FragmentActivity {
         showFragment();
     }
     private void showFragment() {
+<<<<<<< HEAD
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
+=======
+    	  Fragment fragment=null;
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+      try{
+        if( fragmentManager!=null)fragment = fragmentManager.findFragmentByTag(fragmentTags.get(currIndex));
+      }catch(Exception e){
+    	  return;
+      }
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
         if (fragment == null) {
             fragment = instantFragment(currIndex);
         }
@@ -97,8 +118,12 @@ public class HomeActivity extends FragmentActivity {
                 fragment = new HomeFragment();
                 break;
             case 1:
+<<<<<<< HEAD
             	
                 fragment = new HistoryFragment(this);
+=======
+                fragment = new HistoryFragment(this,helper.searchDataModule());
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
                 break;
             case 2:
                 fragment = new SettingFragment();
@@ -106,6 +131,7 @@ public class HomeActivity extends FragmentActivity {
         }
         return fragment;
     }
+<<<<<<< HEAD
     
 //	 @Override
 //	protected void onResume() {
@@ -125,6 +151,13 @@ public class HomeActivity extends FragmentActivity {
 //		super.onStart();
 //		Logger.i("activityÉúÃüÖÜÆÚ", "onStart");
 //	}
+=======
+	 @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

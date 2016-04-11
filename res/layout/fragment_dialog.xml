@@ -3,22 +3,45 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#000000"
+<<<<<<< HEAD
+=======
+
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
     android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/dialogedit"
+<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/edit" />
+=======
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	        android:padding="10dp"
+
+        android:src="@drawable/annotation_bg" />
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 	<View 
 	    android:layout_width="match_parent"
 	    android:layout_height="1dp"
 	    android:background="#FFFFFF"
+<<<<<<< HEAD
 	    />
     <ImageView
         android:id="@+id/dialogdelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/delete" />
+=======
+	    android:layout_marginBottom="5dp"
+	    />
+    <ImageView
+        android:id="@+id/dialogdelete"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	        android:padding="10dp"
+        android:src="@drawable/delete_bg" />
+>>>>>>> fa4a202c7816980a0c716bb84e647853e5a4f4f4
 
 </LinearLayout>
