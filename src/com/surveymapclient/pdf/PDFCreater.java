@@ -50,7 +50,7 @@ public class PDFCreater {
 		}
 	}
 
-	// äº§ç”ŸPDFå­—ä½“
+	// ²úÉúPDF×ÖÌå
 	private Font getChineseFont() {
 		BaseFont bf = null;
 		Font fontChinese = null;
@@ -76,42 +76,42 @@ public class PDFCreater {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(PDFfile));
-			// æ–‡æ¡£å±æ€§
+			// ÎÄµµÊôĞÔ
 			document.addTitle("Title@sample");
 			document.addAuthor("Author@aa");
 			document.addSubject("Subject@iText sample");
 			document.addKeywords("Keywords@iText");
 			document.addCreator("Creator@iText");
-			// Step 3â€”Open the Document.
+			// Step 3¡ªOpen the Document.
 			document.open();
-			// Step 4â€”Add content.
+			// Step 4¡ªAdd content.
 			Image image = Image.getInstance(picPath);
 			// float width = document.getPageSize().getWidth();
 			// width = width / 2 - image.getWidth() / 2;
 //			image.setAbsolutePosition(0, 0);
 //			image.setAlignment(Image.ALIGN_RIGHT);
-			image.scalePercent(20);//ä¾ç…§æ¯”ä¾‹ç¼©æ”¾
+			image.scalePercent(20);//ÒÀÕÕ±ÈÀıËõ·Å
 			document.add(image);
 			document.newPage();
 
-			// ç›´çº¿
+			// Ö±Ïß
 			Paragraph p1 = new Paragraph();
 			p1.add(new Chunk(new LineSeparator()));
 			document.add(p1);
-			document.add(new Paragraph("æ•°æ®æ¸…å•"));
-			document.add(setTilie("ç›´çº¿"));
+			document.add(new Paragraph("Êı¾İÇåµ¥"));
+			document.add(setTilie("Ö±Ïß"));
 			document.add(createLineTable(linelist));
-			document.add(setTilie("å¤šè¾¹å½¢"));
+			document.add(setTilie("¶à±ßĞÎ"));
 			document.add(createPolygonTable(polylist));
-			document.add(setTilie("çŸ©å½¢"));
+			document.add(setTilie("¾ØĞÎ"));
 			document.add(createRectangleTable(rectlist));
-			document.add(setTilie("åæ ‡"));
+			document.add(setTilie("×ø±ê"));
 			document.add(createCoordinateTable(coorlist));
-			document.add(setTilie("è§’åº¦"));
+			document.add(setTilie("½Ç¶È"));
 			document.add(createAngleTable(anglelist));
-			document.add(setTilie("æ–‡æœ¬æ³¨é‡Š"));
+			document.add(setTilie("ÎÄ±¾×¢ÊÍ"));
 			document.add(createTextTable(textlist));
-			document.add(setTilie("è¯­éŸ³æ³¨é‡Š"));
+			document.add(setTilie("ÓïÒô×¢ÊÍ"));
 			document.add(createAudioTable(audiolist));
 			document.close();
 			return true;
@@ -124,12 +124,12 @@ public class PDFCreater {
 	}
 
 	private PdfPCell settabCell(String str) {
-		// è®¾ç½®å­—ä½“
+		// ÉèÖÃ×ÖÌå
 		BaseFont bfChinese;
 		PdfPCell cell = null;
 		try {
 			bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-			Font fontChinese = new Font(bfChinese, 8, Font.NORMAL);// åˆ›å»ºå­—ä½“ï¼Œè®¾ç½®familyï¼Œsizeï¼Œstyle,è¿˜å¯ä»¥è®¾ç½®color
+			Font fontChinese = new Font(bfChinese, 8, Font.NORMAL);// ´´½¨×ÖÌå£¬ÉèÖÃfamily£¬size£¬style,»¹¿ÉÒÔÉèÖÃcolor
 			cell = new PdfPCell(new Paragraph(str, fontChinese));//
 			cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -146,12 +146,12 @@ public class PDFCreater {
 	}
 
 	private PdfPCell setCell(String str) {
-		// è®¾ç½®å­—ä½“
+		// ÉèÖÃ×ÖÌå
 		BaseFont bfChinese;
 		PdfPCell cell = null;
 		try {
 			bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-			Font fontChinese = new Font(bfChinese, 8, Font.NORMAL);// åˆ›å»ºå­—ä½“ï¼Œè®¾ç½®familyï¼Œsizeï¼Œstyle,è¿˜å¯ä»¥è®¾ç½®color
+			Font fontChinese = new Font(bfChinese, 8, Font.NORMAL);// ´´½¨×ÖÌå£¬ÉèÖÃfamily£¬size£¬style,»¹¿ÉÒÔÉèÖÃcolor
 			cell = new PdfPCell(new Paragraph(str, fontChinese));//
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell.setVerticalAlignment(Element.ALIGN_CENTER);
@@ -168,9 +168,9 @@ public class PDFCreater {
 
 	private PdfPTable createLineTable(List<LineBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(7);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 2, 1, 1, 1, 1, 1, 3 });
-		String[] tttile = { "åç§°", "é•¿åº¦", "è§’åº¦", "é¢œè‰²", "å®½åº¦", "è™šå®", "æè¿°" };
+		String[] tttile = { "Ãû³Æ", "³¤¶È", "½Ç¶È", "ÑÕÉ«", "¿í¶È", "ĞéÊµ", "ÃèÊö" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
@@ -178,7 +178,7 @@ public class PDFCreater {
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getName()));
 			table.addCell(list.get(i).getLength() + "m");
-			table.addCell(list.get(i).getAngle() + "Â°");
+			table.addCell(list.get(i).getAngle() + "¡ã");
 			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPaintColor())));
 			table.addCell(list.get(i).getPaintWidth() + "");
 			table.addCell(setCell(SurveyUtils.getStyle(list.get(i).isPaintIsFull())));
@@ -189,27 +189,27 @@ public class PDFCreater {
 
 	private PdfPTable createPolygonTable(List<PolygonBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(5);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 1, 1, 1, 9, 1 });
-		String[] tttile = { "åç§°", "é¢ç§¯", "é¢œè‰²", "ç›´çº¿", "æè¿°" };
+		String[] tttile = { "Ãû³Æ", "Ãæ»ı", "ÑÕÉ«", "Ö±Ïß", "ÃèÊö" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getPolyName()));
-			table.addCell(list.get(i).getPolyArea() + "ã¡");
+			table.addCell(list.get(i).getPolyArea() + "©O");
 			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPolyColor())));
 			PdfPTable table2 = new PdfPTable(7);
-			table2.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+			table2.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 			table2.setWidths(new int[] { 2, 1, 1, 1, 1, 1, 3 });
-			String[] tttile1 = { "åç§°", "é•¿åº¦", "è§’åº¦", "é¢œè‰²", "å®½åº¦", "è™šå®", "æè¿°" };
+			String[] tttile1 = { "Ãû³Æ", "³¤¶È", "½Ç¶È", "ÑÕÉ«", "¿í¶È", "ĞéÊµ", "ÃèÊö" };
 			for (int j = 0; j < tttile1.length; j++) {
 				table2.addCell(settabCell(tttile1[j]));
 			}
 			for (int j = 0; j < list.get(i).getPolyLine().size(); j++) {
 				table2.addCell(setCell(list.get(i).getPolyLine().get(j).getName()));
 				table2.addCell(list.get(i).getPolyLine().get(j).getLength() + "m");
-				table2.addCell(list.get(i).getPolyLine().get(j).getAngle() + "Â°");
+				table2.addCell(list.get(i).getPolyLine().get(j).getAngle() + "¡ã");
 				table2.addCell(setCell(SurveyUtils.getColor(list.get(i).getPolyLine().get(j).getPaintColor())));
 				table2.addCell(list.get(i).getPolyLine().get(j).getPaintWidth() + "");
 				table2.addCell(setCell(SurveyUtils.getStyle(list.get(i).getPolyLine().get(j).isPaintIsFull())));
@@ -223,15 +223,15 @@ public class PDFCreater {
 
 	private PdfPTable createRectangleTable(List<RectangleBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(8);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 2, 1, 1, 1, 1, 1, 1, 3 });
-		String[] tttile = { "åç§°", "é¢ç§¯", "é•¿åº¦", "å®½åº¦", "é¢œè‰²", "çº¿å¤§å°", "è™šå®", "æè¿°" };
+		String[] tttile = { "Ãû³Æ", "Ãæ»ı", "³¤¶È", "¿í¶È", "ÑÕÉ«", "Ïß´óĞ¡", "ĞéÊµ", "ÃèÊö" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getRectName()));
-			table.addCell(list.get(i).getRectArea() + "mÂ²");
+			table.addCell(list.get(i).getRectArea() + "m2");
 			table.addCell(list.get(i).getRectLenght() + "m");
 			table.addCell(list.get(i).getRectWidth() + "m");
 			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPaintColor())));
@@ -244,15 +244,15 @@ public class PDFCreater {
 
 	private PdfPTable createCoordinateTable(List<CoordinateBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(9);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 2, 1, 1, 1, 1, 1, 1, 1, 3 });
-		String[] tttile = { "åç§°", "ä½“ç§¯", "é•¿åº¦", "å®½åº¦", "é«˜åº¦", "é¢œè‰²", "çº¿å¤§å°", "è™šå®", "æè¿°" };
+		String[] tttile = { "Ãû³Æ", "Ìå»ı", "³¤¶È", "¿í¶È", "¸ß¶È", "ÑÕÉ«", "Ïß´óĞ¡", "ĞéÊµ", "ÃèÊö" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getName()));
-			table.addCell(list.get(i).getVolum() + "mÂ³");
+			table.addCell(list.get(i).getVolum() + "m3");
 			table.addCell(list.get(i).getLenght() + "m");
 			table.addCell(list.get(i).getWidth() + "m");
 			table.addCell(list.get(i).getHeight() + "m");
@@ -266,15 +266,15 @@ public class PDFCreater {
 
 	private PdfPTable createAngleTable(List<AngleBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(6);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 2, 1, 1, 1, 1, 3 });
-		String[] tttile = { "åç§°", "è§’åº¦", "é¢œè‰²", "å®½åº¦", "è™šå®", "æè¿°" };
+		String[] tttile = { "Ãû³Æ", "½Ç¶È", "ÑÕÉ«", "¿í¶È", "ĞéÊµ", "ÃèÊö" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getName()));
-			table.addCell(list.get(i).getAngle() + "Â°");
+			table.addCell(list.get(i).getAngle() + "¡ã");
 			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPaintColor())));
 			table.addCell(list.get(i).getPaintWidth() + "");
 			table.addCell(setCell(SurveyUtils.getStyle(list.get(i).isPaintIsFull())));
@@ -285,9 +285,9 @@ public class PDFCreater {
 
 	private PdfPTable createTextTable(List<TextBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(2);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 1, 9 });
-		String[] tttile = { "åºå·", "å†…å®¹" };
+		String[] tttile = { "ĞòºÅ", "ÄÚÈİ" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}
@@ -300,9 +300,9 @@ public class PDFCreater {
 
 	private PdfPTable createAudioTable(List<AudioBean> list) throws DocumentException {
 		PdfPTable table = new PdfPTable(3);
-		table.setWidthPercentage(100);// è®¾ç½®è¡¨æ ¼å®½åº¦ä¸º100%
+		table.setWidthPercentage(100);// ÉèÖÃ±í¸ñ¿í¶ÈÎª100%
 		table.setWidths(new int[] { 1, 2, 7 });
-		String[] tttile = { "åºå·", "æ—¶é•¿", "è·¯å¾„" };
+		String[] tttile = { "ĞòºÅ", "Ê±³¤", "Â·¾¶" };
 		for (int i = 0; i < tttile.length; i++) {
 			table.addCell(settabCell(tttile[i]));
 		}

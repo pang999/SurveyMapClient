@@ -28,9 +28,9 @@ import android.view.MotionEvent;
 
 public class ViewContans {
 
-	//ç”»ç¬”
+	//»­±Ê
 	private static Paint paint;
-	//ç”»ç‚¹
+	//»­µã
 	private static Paint point=generatePaint(Color.RED, 20,true);
 	private static Paint huabu=generatePaint(Color.GRAY, (float)0.5,true);
 	
@@ -48,7 +48,7 @@ public class ViewContans {
 		paint.setTextSize(30);
 	    return paint;
 	}
-	//æ˜¾ç¤ºæ•ˆæžœ
+	//ÏÔÊ¾Ð§¹û
 	public static Paint generatePaint(int color,float width,boolean isFull){
 		paint=new Paint();
 		paint.setColor(color);
@@ -64,9 +64,9 @@ public class ViewContans {
 	    return paint;
 	}
 	public static String saveBitmap(Bitmap mBitmap){
-        //èŽ·å¾—ç³»ç»Ÿå½“å‰æ—¶é—´ï¼Œå¹¶ä»¥è¯¥æ—¶é—´ä½œä¸ºæ–‡ä»¶å
+        //»ñµÃÏµÍ³µ±Ç°Ê±¼ä£¬²¢ÒÔ¸ÃÊ±¼ä×÷ÎªÎÄ¼þÃû
         SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyyMMddHHmmss");  
-        Date   curDate   =   new   Date(System.currentTimeMillis());//èŽ·å–å½“å‰æ—¶é—´ 
+        Date   curDate   =   new   Date(System.currentTimeMillis());//»ñÈ¡µ±Ç°Ê±¼ä 
         String   str   =   formatter.format(curDate);  
         String paintPath = "";
         str = str + "paint.png";
@@ -86,7 +86,7 @@ public class ViewContans {
             mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); 
             out.flush(); 
             out.close(); 
-            //ä¿å­˜ç»˜å›¾æ–‡ä»¶è·¯å¾„
+            //±£´æ»æÍ¼ÎÄ¼þÂ·¾¶
             paintPath = "/sdcard/surveymap/png/" + str;
              
      
@@ -100,22 +100,22 @@ public class ViewContans {
          
         return paintPath;
     }
-	/**è®¡ç®—ä¸¤ç‚¹ä¹‹é—´çš„è·ç¦»åƒç´ **/
+	/**¼ÆËãÁ½µãÖ®¼äµÄ¾àÀëÏñËØ**/
 	public static float distance(MotionEvent event) {
 		// TODO Auto-generated method stub
-		float eX = event.getX(1) - event.getX(0);  //åŽé¢çš„ç‚¹åæ ‡ - å‰é¢ç‚¹çš„åæ ‡ 
+		float eX = event.getX(1) - event.getX(0);  //ºóÃæµÄµã×ø±ê - Ç°ÃæµãµÄ×ø±ê 
 		float eY = event.getY(1) - event.getY(0);
 		return (float) Math.sqrt(eX * eX + eY * eY);
 	}
 	/** 
-	 * åˆ¤æ–­æ˜¯å¦æœ‰é•¿æŒ‰åŠ¨ä½œå‘ç”Ÿ 
-	 * @param lastX æŒ‰ä¸‹æ—¶Xåæ ‡ 
-	 * @param lastY æŒ‰ä¸‹æ—¶Yåæ ‡ 
-	 * @param thisX ç§»åŠ¨æ—¶Xåæ ‡ 
-	 * @param thisY ç§»åŠ¨æ—¶Yåæ ‡ 
-	 * @param lastDownTime æŒ‰ä¸‹æ—¶é—´ 
-	 * @param thisEventTime ç§»åŠ¨æ—¶é—´ 
-	 * @param longPressTime åˆ¤æ–­é•¿æŒ‰æ—¶é—´çš„é˜€å€¼ 
+	 * ÅÐ¶ÏÊÇ·ñÓÐ³¤°´¶¯×÷·¢Éú 
+	 * @param lastX °´ÏÂÊ±X×ø±ê 
+	 * @param lastY °´ÏÂÊ±Y×ø±ê 
+	 * @param thisX ÒÆ¶¯Ê±X×ø±ê 
+	 * @param thisY ÒÆ¶¯Ê±Y×ø±ê 
+	 * @param lastDownTime °´ÏÂÊ±¼ä 
+	 * @param thisEventTime ÒÆ¶¯Ê±¼ä 
+	 * @param longPressTime ÅÐ¶Ï³¤°´Ê±¼äµÄ·§Öµ 
 	 */ 
 	 public static boolean isLongPressed(float lastX,float lastY, float thisX,float thisY,
 			 long lastDownTime,long thisEventTime,long longPressTime){ 
@@ -123,7 +123,7 @@ public class ViewContans {
 		 float offsetX = Math.abs(thisX - lastX); 
 		 float offsetY = Math.abs(thisY - lastY); 
 		 long intervalTime = thisEventTime - lastDownTime; 
-		 Logger.i("é•¿æŒ‰å€¼", "xå·®å€¼="+offsetX+"->"+lastX+"->"+thisX+"ï¼Œyå·®å€¼="+offsetY+"ï¼Œæ—¶é—´å·®å€¼="+intervalTime);
+		 Logger.i("³¤°´Öµ", "x²îÖµ="+offsetX+"->"+lastX+"->"+thisX+"£¬y²îÖµ="+offsetY+"£¬Ê±¼ä²îÖµ="+intervalTime);
 		 if(offsetX <=10 && offsetY<=10 && intervalTime >= longPressTime){ 
 			 return true; 
 		 } 
@@ -135,13 +135,13 @@ public class ViewContans {
 		 float offsetX = Math.abs(thisX - lastX); 
 		 float offsetY = Math.abs(thisY - lastY); 
 		 long intervalTime = thisEventTime - lastDownTime; 
-		 Logger.i("çŸ­æŒ‰å€¼", "xå·®å€¼="+offsetX+"->"+lastX+"->"+thisX+"ï¼Œyå·®å€¼="+offsetY+"ï¼Œæ—¶é—´å·®å€¼="+intervalTime);
+		 Logger.i("¶Ì°´Öµ", "x²îÖµ="+offsetX+"->"+lastX+"->"+thisX+"£¬y²îÖµ="+offsetY+"£¬Ê±¼ä²îÖµ="+intervalTime);
 		 if(offsetX <=10 && offsetY<=10 && intervalTime <= longPressTime){ 
 			 return true; 
 		 } 
 		 return false; 
 	 }
-	 //ç”»ä¸€æ¡çº¿
+	 //»­Ò»ÌõÏß
 	 public static void DrawLine(Canvas canvas,float startX,float startY,float stopX,float stopY,Paint line,Paint point){
 		 canvas.drawLine(startX, startY, stopX, stopY, line);
 		 canvas.drawPoint(startX, startY, point);
@@ -158,9 +158,9 @@ public class ViewContans {
          if(angle != 0){
              canvas.rotate(angle, x, y); 
          }
- 		Logger.i("é•¿åº¦è§’åº¦", "é•¿åº¦=drawText");
+ 		Logger.i("³¤¶È½Ç¶È", "³¤¶È=drawText");
 
-         paint.setColor(Color.RED);                      //è®¾ç½®ç”»ç¬”é¢œè‰²  
+         paint.setColor(Color.RED);                      //ÉèÖÃ»­±ÊÑÕÉ«  
          paint.setAlpha(50);
          canvas.drawText(text, x, y, paint);
          canvas.drawRect(x-5, y+8, x+lenght+5, y-28, paint);
@@ -168,11 +168,11 @@ public class ViewContans {
              canvas.rotate(-angle, x, y); 
          }
      }
-	 //æ•´é™¤èŽ·å¾—å¸é™„
+	 //Õû³ý»ñµÃÎü¸½
 	 public static float AdsorbPoint(int x){
 			int n=x/20;
 			int dx=x%20;
-			Logger.i("æ±‚æ•´æ•°", "é™¤æ•´="+n+"ï¼Œé™¤ä½™="+dx);
+			Logger.i("ÇóÕûÊý", "³ýÕû="+n+"£¬³ýÓà="+dx);
 			int m=0;
 			if (dx==0) {
 				m=n;
@@ -185,15 +185,15 @@ public class ViewContans {
 	}
 	public static void initCanvasHuabu(Canvas canvas,Bitmap mBitmap,float scale){
 		canvas.drawColor(Color.WHITE);
-		final int space = 20;   //é•¿å®½é—´éš”  
+		final int space = 20;   //³¤¿í¼ä¸ô  
 	    int vertz = 0;  
 	    int hortz = 0;  
 	    int xcount=height/10;
 	    int ycount=width/10;
 		canvas.scale(scale, scale,width/2,height/2);
-		// å°†å‰é¢å·²ç»ç”»è¿‡å¾—æ˜¾ç¤ºå‡ºæ¥
-	    canvas.drawBitmap(mBitmap, 0, 0, null);     //æ˜¾ç¤ºæ—§çš„ç”»å¸ƒ       
-	    Logger.i("mBitmapå¤§å°", mBitmap.toString());
+		// ½«Ç°ÃæÒÑ¾­»­¹ýµÃÏÔÊ¾³öÀ´
+	    canvas.drawBitmap(mBitmap, 0, 0, null);     //ÏÔÊ¾¾ÉµÄ»­²¼       
+	    Logger.i("mBitmap´óÐ¡", mBitmap.toString());
 	    
 	    for(int i=0;i<xcount/2+1;i++){  
 	       canvas.drawLine(0,  vertz,  width, vertz, huabu);  
@@ -222,21 +222,21 @@ public class ViewContans {
 		area = area / 2.00;
 		return area;
 	}
-	// åˆ¤æ–­ç‚¹posæ˜¯å¦åœ¨æŒ‡å®šçš„ä¸‰è§’å½¢å†…ã€‚
+	// ÅÐ¶ÏµãposÊÇ·ñÔÚÖ¸¶¨µÄÈý½ÇÐÎÄÚ¡£
 	public static boolean inTriangle(PointF pos, PointF posA, PointF posB,
 			PointF posC) {
 	    double triangleArea = triangleArea(posA, posB, posC);
 	    double area = triangleArea(pos, posA, posB);
 	    area += triangleArea(pos, posA, posC);
 	    area += triangleArea(pos, posB, posC);
-	    double epsilon = 2;  // ç”±äºŽæµ®ç‚¹æ•°çš„è®¡ç®—å­˜åœ¨ç€è¯¯å·®ï¼Œæ•…æŒ‡å®šä¸€ä¸ªè¶³å¤Ÿå°çš„æ•°ï¼Œç”¨äºŽåˆ¤å®šä¸¤ä¸ªé¢ç§¯æ˜¯å¦(è¿‘ä¼¼)ç›¸ç­‰ã€‚
+	    double epsilon = 2;  // ÓÉÓÚ¸¡µãÊýµÄ¼ÆËã´æÔÚ×ÅÎó²î£¬¹ÊÖ¸¶¨Ò»¸ö×ã¹»Ð¡µÄÊý£¬ÓÃÓÚÅÐ¶¨Á½¸öÃæ»ýÊÇ·ñ(½üËÆ)ÏàµÈ¡£
 	    if (Math.abs(triangleArea - area) < epsilon) {
 	        return true;
 	    }
 	    return false;
 	}
-	// ç”±ç»™å®šçš„ä¸‰ä¸ªé¡¶ç‚¹çš„åæ ‡ï¼Œè®¡ç®—ä¸‰è§’å½¢é¢ç§¯ã€‚
-	// Point(java.awt.Point)ä»£è¡¨ç‚¹çš„åæ ‡ã€‚
+	// ÓÉ¸ø¶¨µÄÈý¸ö¶¥µãµÄ×ø±ê£¬¼ÆËãÈý½ÇÐÎÃæ»ý¡£
+	// Point(java.awt.Point)´ú±íµãµÄ×ø±ê¡£
 	public static double triangleArea(PointF pos1, PointF pos2, PointF pos3) {
 	    double area = Math.abs((pos1.x * pos2.y + pos2.x * pos3.y + pos3.x * pos1.y
 	            - pos2.x * pos1.y - pos3.x * pos2.y - pos1.x * pos3.y) / 2.0D);
@@ -266,7 +266,7 @@ public class ViewContans {
 		}else {
 			double val=((double)k_fz)/k_fm;
     		BigDecimal bd =new BigDecimal(val);
-    		//ä¿ç•™2ä½å°æ•°
+    		//±£Áô2Î»Ð¡Êý
     		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 		    		
     			if (k>0) {
 					xl_k=1;
@@ -274,12 +274,12 @@ public class ViewContans {
 					xl_k=-1;
 				}    		
 		}
-    	Logger.i("é•¿åº¦è§’åº¦", "---->L"+": ("+line.getStartX()+","+line.getStartY()+")  ,  ("+line.getEndX()+","+line.getEndY()+")");
+    	Logger.i("³¤¶È½Ç¶È", "---->L"+": ("+line.getStartX()+","+line.getStartY()+")  ,  ("+line.getEndX()+","+line.getEndY()+")");
 		float A=(float) PolygonModel.Angle(pointFs);
 		float len=getTextWidth(textpaint, text+"m");
 		float tx=sx/2+ex/2;
 		float ty=sy/2+ey/2;	
-		Logger.i("æ–‡å­—çš„è§’åº¦", ""+A);
+		Logger.i("ÎÄ×ÖµÄ½Ç¶È", ""+A);
 		if (xl_k==0) {
 			drawText(canvas, text, tx-place , ty-place, textpaint, -A,len);
 		}else if (xl_k==2) {

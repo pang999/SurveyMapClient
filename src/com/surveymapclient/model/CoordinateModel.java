@@ -16,7 +16,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 
 public class CoordinateModel {
-	//ç”»åœ¨Bitmapçš„çº¿ç¬”
+	//»­ÔÚBitmapµÄÏß±Ê
 	private Paint mPaint=ViewContans.generatePaint(Color.RED, 4, true);
 	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10, true);
 	
@@ -50,7 +50,7 @@ public class CoordinateModel {
 			canvas.drawLine(cx, cy, zx, zy, paint);
 			if (list.get(i).getLenght()>0&&list.get(i).getWidth()>0&&list.get(i).getHeight()>0) {
 				ViewContans.AddTextOnCoordinate(list.get(i), canvas,
-						list.get(i).getVolum()+"mÂ³", list.get(i).getLenght()+"m",
+						list.get(i).getVolum()+"m3", list.get(i).getLenght()+"m",
 						list.get(i).getWidth()+"m", list.get(i).getHeight()+"m");
 			}
 		}
@@ -147,7 +147,7 @@ public class CoordinateModel {
 		coordinate.setZaxisY(zto_my);
 		if (coordinate.getLenght()>0&&coordinate.getWidth()>0&&coordinate.getHeight()>0) {
 			ViewContans.AddTextOnCoordinate(coordinate, canvas,
-					coordinate.getVolum()+"mÂ³", coordinate.getLenght()+"m",
+					coordinate.getVolum()+"m3", coordinate.getLenght()+"m",
 					coordinate.getWidth()+"m", coordinate.getHeight()+"m");
 		}
 		AddChangeCoordinateParams(GetCoordlist, coordinate);
@@ -180,7 +180,7 @@ public class CoordinateModel {
 			boolean y_axis=((yx-30<dx)&&(yx+30>dx))&&((yy-30<dy)&&(yy+30>dy));
 			boolean z_axis=((zx-30<dx)&&(zx+30>dx))&&((zy-30<dy)&&(zy+30>dy));
 			if (x_axis) {
-				Logger.i("é€‰ä¸­åæ ‡è½´", i+"=Xè½´");
+				Logger.i("Ñ¡ÖĞ×ø±êÖá", i+"=XÖá");
 				center_x=lines.get(i).getCenterX();
 				center_y=lines.get(i).getCenterY();
 				zto_x=(float)zx;
@@ -194,7 +194,7 @@ public class CoordinateModel {
 				lines.remove(i);
 				return true;
 			}else if (y_axis) {
-				Logger.i("é€‰ä¸­åæ ‡è½´", i+"=Yè½´");
+				Logger.i("Ñ¡ÖĞ×ø±êÖá", i+"=YÖá");
 				center_x=lines.get(i).getCenterX();
 				center_y=lines.get(i).getCenterY();
 				xto_x=(float)xx;
@@ -208,7 +208,7 @@ public class CoordinateModel {
 				lines.remove(i);
 				return true;
 			}else if (z_axis) {
-				Logger.i("é€‰ä¸­åæ ‡è½´", i+"=Zè½´");
+				Logger.i("Ñ¡ÖĞ×ø±êÖá", i+"=ZÖá");
 				center_x=lines.get(i).getCenterX();
 				center_y=lines.get(i).getCenterY();
 				xto_x=(float)xx;
@@ -242,7 +242,7 @@ public class CoordinateModel {
 		coor.setPaintIsFull(true);
 		coor.setVolum(0);
 		coor.setName("Coordinate-"+list.size());
-		coor.setDescripte("æè¿°");
+		coor.setDescripte("ÃèÊö");
 		list.add(coor);
 	}
 	public void AddChangeCoordinateParams(List<CoordinateBean> list,CoordinateBean coordinate){
@@ -260,7 +260,7 @@ public class CoordinateModel {
 //		coor.setPaintIsFull(true);
 //		coor.setVolum(0);
 //		coor.setName("Coordinate");
-//		coor.setDescripte("æè¿°");
+//		coor.setDescripte("ÃèÊö");
 		list.add(coordinate);
 	}
 	public void ChangeCoorAttributeAtIndex(List<CoordinateBean> list,
@@ -287,7 +287,7 @@ public class CoordinateModel {
 		canvas.drawLine(cx, cy, zx, zy,paint);
 		if (coor.getLenght()>0&&coor.getWidth()>0&&coor.getHeight()>0) {
 			ViewContans.AddTextOnCoordinate(list.get(i), canvas,
-					coor.getVolum()+"mÂ³", coor.getLenght()+"m",
+					coor.getVolum()+"m3", coor.getLenght()+"m",
 					coor.getWidth()+"m", coor.getHeight()+"m");
 		}
 		list.remove(i);		
@@ -310,7 +310,7 @@ public class CoordinateModel {
 			canvas.drawLine(cx, cy, zx, zy, paint);
 			if (list.get(i).getLenght()>0&&list.get(i).getWidth()>0&&list.get(i).getHeight()>0) {
 				ViewContans.AddTextOnCoordinate(list.get(i), canvas,
-						list.get(i).getVolum()+"mÂ³", list.get(i).getLenght()+"m",
+						list.get(i).getVolum()+"m3", list.get(i).getLenght()+"m",
 						list.get(i).getWidth()+"m", list.get(i).getHeight()+"m");
 			}
 		}
