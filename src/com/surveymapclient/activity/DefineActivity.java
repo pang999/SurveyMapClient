@@ -380,9 +380,17 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 //			btncoordinate.setSelected(true);
 			btnsingle.setSelected(false);
 			btncontinuous.setSelected(false);
+/*<<<<<<< HEAD
+
+			btnrectangle.setSelected(false);
+
+			btncoordinate.setSelected(true);
+			btnangle.setSelected(false);
+=======*/
 			btnrectangle.setSelected(false);			
 			btnangle.setSelected(false);
 			
+
 			break;
 		case R.id.type_angle:
 			defineview.ZoomCanvas(1);

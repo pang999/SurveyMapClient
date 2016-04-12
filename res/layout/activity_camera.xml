@@ -2,58 +2,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="0dp"
     android:layout_margin="0dp"
-    android:orientation="vertical" >
- 
-    <com.surveymapclient.view.CameraBitMapView
+    android:orientation="vertical"
+    android:padding="0dp" >
+
+    
+     <com.surveymapclient.view.CameraBitMapView
         android:id="@+id/CameraBitMapView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"    
          />
-     <RelativeLayout
+    
+    
+    <RelativeLayout
         android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"     
+        android:layout_height="50dp"
         android:layout_gravity="top"
-        android:background="#000000"
-         >
-        <EditText 
+        android:background="@color/main_color" >
+
+        <EditText
             android:id="@+id/editTitle"
             android:layout_width="200dp"
-        	android:layout_height="wrap_content"  
-        	android:layout_centerInParent="true"
-        	android:gravity="center"
-        	android:background="@null"
-        	android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:gravity="center"
             android:imeOptions="actionDone"
-        	android:text="Sketch1"
-            />
-	      <com.surveymapclient.view.LocationView 
-	     	android:id="@+id/locationview"
-	        android:layout_width="wrap_content"
-	      	android:layout_height="wrap_content" 
-	      	android:onClick="LocationSketch"		
-	            />
+            android:singleLine="true"
+            android:text="Sketch1"
+            android:textColor="@color/white" />
 
-	      <ImageView
-	          android:id="@+id/defineBack"
-	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
-	          android:layout_alignParentLeft="true"
-	          android:layout_centerVertical="true"
-	          android:src="@drawable/backl" />
+        <com.surveymapclient.view.LocationView
+            android:id="@+id/locationview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="LocationSketch" />
 
-	      <ImageView
-	          android:id="@+id/tolistlines"
-	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
-	          android:layout_alignParentRight="true"
-	          android:layout_centerVertical="true"
-	          android:onClick="onListLines"
-	          android:src="@drawable/btnlines" />
+        <ImageView
+            android:id="@+id/defineBack"
+	          android:layout_width="@dimen/bottom_img_w_h"
+	          android:layout_height="@dimen/bottom_img_w_h"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+             android:layout_marginLeft="5dp"
+            android:src="@drawable/defineback_bg" />
 
-	      <ImageView
+        <ImageView
+            android:id="@+id/tolistlines"
+	          android:layout_width="@dimen/bottom_img_w_h"
+	          android:layout_height="@dimen/bottom_img_w_h"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:onClick="onListLines"
+            android:src="@drawable/tolistlines_bg" />
+
+        <!--
+               <ImageView
 	          android:id="@+id/tohistory"
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
@@ -61,88 +67,132 @@
 	          android:layout_toRightOf="@+id/defineBack"
 	          android:onClick="onHistory"
 	          android:src="@drawable/histories" />
+        -->
 
     </RelativeLayout>
 
-     <LinearLayout
+    <LinearLayout
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#000000"
-        android:orientation="horizontal"
+        android:background="@color/main_color"
         android:gravity="center_vertical"
-         >               
+        android:orientation="horizontal" >
 
-            <ImageView 
-	             android:id="@+id/camera_type_single"
-	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
-	             android:src="@drawable/danlianxian"
-	             android:layout_weight="1"
-             />
+       <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
             <ImageView
-	             android:id="@+id/camera_type_continuous"
-	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
-	             android:layout_weight="1"
-	             android:src="@drawable/duolianxian" />
+                android:id="@+id/camera_type_single"
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:src="@drawable/type_single_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/camera_type_continuous"
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:src="@drawable/type_continuous_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/camera_type_rectangle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/rectangle" />
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:src="@drawable/type_rectangle_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/camera_type_coordinate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/coordinate" />
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:src="@drawable/type_coordinate_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/camera_type_angle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/angle" />
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:src="@drawable/type_angle_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <ImageView
-	            android:id="@+id/camera_recall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:onClick="onRecall"
-	            android:layout_weight="1"
-	            android:src="@drawable/chehui" />
-            <ImageView
-	             android:id="@+id/camera_annotation"
-	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
-	             android:onClick="onAnnotation"
-	             android:layout_weight="1"
-	             android:src="@drawable/zhusi" />
+                android:id="@+id/camera_recall"
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:onClick="onRecall"
+                android:src="@drawable/recall_bg" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/camera_annotation"
+                android:layout_width="@dimen/bottom_img_w_h"
+                android:layout_height="@dimen/bottom_img_w_h"
+                android:onClick="onAnnotation"
+                android:src="@drawable/annotation_bg" />
+        </LinearLayout>
     </LinearLayout>
- 	<Button
-             android:id="@+id/camera_data_move"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentBottom="true"
-             android:layout_centerHorizontal="true"
-             android:text="2.289m" />
- 	<Button
-             android:id="@+id/camera_center_move"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerInParent="true"
-             android:textSize="18sp"
-             android:textColor="#000000"
-             android:background="#DCDCDCFA"
-             android:visibility="invisible"
-             android:paddingRight="10dp"
-             android:paddingLeft="10dp"
-             android:text="text" />
-    
+
+    <Button
+        android:id="@+id/camera_data_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="2.289m" />
+
+    <Button
+        android:id="@+id/camera_center_move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#DCDCDCFA"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="text"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
 </RelativeLayout>

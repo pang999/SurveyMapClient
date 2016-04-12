@@ -36,8 +36,10 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -161,6 +163,15 @@ public class DataListActivity extends FragmentActivity implements OnClickListene
 	            return list.size();
 	        }
 	    }
+
+	    
+	    
+	    
+	    
+	 public void   onClickBack(View v){
+		 finish();
+	 }
+
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
@@ -173,4 +184,5 @@ public class DataListActivity extends FragmentActivity implements OnClickListene
 				break;
 			}
 		}
+
 }

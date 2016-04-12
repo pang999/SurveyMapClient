@@ -36,7 +36,11 @@ public class MovePopupWindow extends PopupWindow implements OnClickListener{
         // 设置SelectPicPopupWindow的View  
         this.setContentView(conentView);  
         // 设置SelectPicPopupWindow弹出窗体的宽  
+//<<<<<<< HEAD
+        this.setWidth(LayoutParams.WRAP_CONTENT);  
+/*=======
         this.setWidth(w /3 + 50);  
+>>>>>>> 5f0e3822ab87cb2fc0682396807aa3879550ccdc*/
         // 设置SelectPicPopupWindow弹出窗体的高  
         this.setHeight(LayoutParams.WRAP_CONTENT);  
         // 设置SelectPicPopupWindow弹出窗体可点击  

@@ -152,11 +152,13 @@
                 android:src="@drawable/recall_bg" />
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center" >
+
 
             <ImageView
                 android:id="@+id/annotation"
@@ -171,7 +173,9 @@
         android:id="@+id/data_move"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_above="@+id/button1"
+
         android:layout_centerHorizontal="true"
         android:text="2.289m" />
 
