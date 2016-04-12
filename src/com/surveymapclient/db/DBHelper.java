@@ -27,8 +27,6 @@ import com.surveymapclient.db.greendao.RectangleDao;
 import com.surveymapclient.db.greendao.TextNote;
 import com.surveymapclient.db.greendao.TextNoteDao;
 import com.surveymapclient.entity.LineBean;
-import com.tencent.a.a.a.a.c;
-
 import android.content.Context;
 import android.util.Log;
 import de.greenrobot.dao.query.QueryBuilder;

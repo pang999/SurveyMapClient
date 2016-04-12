@@ -20,9 +20,6 @@ import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.entity.TextBean;
-import com.tencent.a.a.a.a.c;
-
-import android.R.integer;
 
 public class OperateData {
 	

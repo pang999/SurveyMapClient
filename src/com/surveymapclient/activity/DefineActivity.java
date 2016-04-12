@@ -34,8 +34,6 @@ import com.surveymapclient.view.MovePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
-import com.tencent.a.a.a.a.h;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -131,24 +129,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 					OperateData.searchCoordinate(key, helper),
 					OperateData.searchText(key, helper),
 					OperateData.searchAudio(key, helper));
-			for (int i = 0; i < OperateData.searchPolygon(key, helper).size(); i++) {
-				Logger.i("数据库数据",
-						"多边形="
-								+ OperateData.searchPolygon(key, helper).get(i)
-										.getPolyName());
-				Logger.i("数据库数据",
-						"多边形直线总数="
-								+ OperateData.searchPolygon(key, helper).get(i)
-										.getPolyLine().size());
-				for (int j = 0; j < helper.searchDataPolygon(key).get(i)
-						.getLines().size(); j++) {
-					Logger.i("数据库数据",
-							"多边形直线="
-									+ OperateData.searchPolygon(key, helper)
-											.get(i).getPolyLine().get(j)
-											.getName());
-				}
-			}
 			OperateData.dedeleLine(helper.searchDataLine(key), helper);
 			OperateData.deletePolygon(helper.searchDataPolygon(key), helper);
 			OperateData
@@ -212,24 +192,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		// defineview.BackAnglelist(),
 		// defineview.BackTextlist(),
 		// defineview.BackAudiolist());
-		long key = System.currentTimeMillis();
-		OperateData.insertPolygon(key, defineview.BackPolylist(), helper);
-		for (int i = 0; i < helper.searchDataPolygon(key).size(); i++) {
-			Logger.i("数据库数据", "多边形="
-					+ helper.searchDataPolygon(key).get(i).getName());
-			Logger.i("数据库数据", "多边形直线总数="
-					+ helper.searchDataPolygon(key).get(i).getLines().size());
-			for (int j = 0; j < helper.searchDataPolygon(key).get(i).getLines()
-					.size(); j++) {
-				Logger.i("数据库数据",
-						"多边形直线="
-								+ helper.searchDataPolygon(key).get(i)
-										.getLines().get(j).getName());
-			}
-		}
-		// for (int j = 0; j < helper.getLines(key).size(); j++) {
-		// Logger.i("数据库数据", "多边形直线="+helper.getLines(key).get(j).getName());
-		// }
 
 	}
 
@@ -283,24 +245,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		// 下边是可以使震动有规律的震动 -1：表示不重复 0：循环的震动
 		long[] pattern = { 10, 50 };
 		vibrator.vibrate(pattern, -1);
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		initData();
-		Logger.i("activity生命周期", "onResume");
-	}
-
-	private void initData() {
-		if (AttributeLineActivity.BACKLINE == Contants.LINEATTRIBUTEBACK) {
-			Bundle bundle = this.getIntent().getExtras();
-			LineBean lineBeans = (LineBean) bundle.getSerializable("BackLine");
-			Logger.i("Activity返回", "position=" + bundle.getInt("Index"));
-			Logger.i("Activity返回", "getLength=" + lineBeans.getLength());
-			defineview.ChangeLineAttribute(bundle.getInt("Index"), lineBeans);
-		}
 	}
 
 	@Override
@@ -433,28 +377,31 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 			break;
 		case R.id.type_coordinate:
 			defineview.ZoomCanvas(1);
-			TYPE = Contants.COORDINATE;
-
+			TYPE = Contants.COORDINATE;	
+//			btncoordinate.setSelected(true);
 			btnsingle.setSelected(false);
-
 			btncontinuous.setSelected(false);
+/*<<<<<<< HEAD
 
 			btnrectangle.setSelected(false);
 
 			btncoordinate.setSelected(true);
 			btnangle.setSelected(false);
+=======*/
+			btnrectangle.setSelected(false);			
+			btnangle.setSelected(false);
+			
+
 			break;
 		case R.id.type_angle:
 			defineview.ZoomCanvas(1);
-			TYPE = Contants.ANGLE;
-			btnsingle.setSelected(false);
+			TYPE = Contants.ANGLE;	
+//			btnangle.setSelected(true);
+			btnsingle.setSelected(false);			
 			btncontinuous.setSelected(false);
 			btnrectangle.setSelected(false);
-
 			btncoordinate.setSelected(false);
-
-			btnangle.setSelected(true);
-
+	
 			break;
 		case R.id.defineBack:
 			// IToast.show(this, "保存图片成功");
@@ -464,6 +411,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 			NotePopupWindow notePopupWindow = new NotePopupWindow(
 					DefineActivity.this);
 			notePopupWindow.showPopupWindow(btneditNote);
+			IToast.show(this, "NotePopupWindow");
 			break;
 		}
 	}
@@ -705,16 +653,13 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	}
 
 	@Override
-	public void onTypeChange(int type) {
-		Logger.e("type", type + "");
+	public void onTypeChange() {
+//		Logger.e("type", type + "");
 		// TODO Auto-generated method stub
 		btnsingle.setSelected(false);
-
 		btncontinuous.setSelected(false);
-
 		btnrectangle.setSelected(false);
 		btncoordinate.setSelected(false);
-
 		btnangle.setSelected(false);
 
 		/*

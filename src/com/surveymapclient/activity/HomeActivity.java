@@ -8,8 +8,6 @@ import com.surveymapclient.activity.fragment.HomeFragment;
 import com.surveymapclient.activity.fragment.SettingFragment;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.db.DBHelper;
-import com.tencent.a.a.a.a.h;
-
 import android.app.Activity;
 
 import android.content.res.Configuration;

@@ -18,8 +18,8 @@ public class LocationView extends View {
 	public LocationView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
-		paint=ViewContans.generatePaint(Color.RED, 1,true);
-		point=ViewContans.generatePaint(Color.RED, 10,true);
+		paint=ViewContans.generatePaint(Color.WHITE, 1,true);
+		point=ViewContans.generatePaint(Color.WHITE, 10,true);
 	}
 
 	@Override

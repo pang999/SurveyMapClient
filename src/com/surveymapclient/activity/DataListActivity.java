@@ -36,13 +36,17 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class DataListActivity extends FragmentActivity {
 
+public class DataListActivity extends FragmentActivity implements OnClickListener {
+
+	ImageView btnback;
     PagerSlidingTabStrip pagerSlidingTabStrip;
     ViewPager pager;   
     private DisplayMetrics dm;
@@ -64,6 +68,8 @@ public class DataListActivity extends FragmentActivity {
 		setContentView(R.layout.activity_daralist);
 		pagerSlidingTabStrip=(PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager=(ViewPager) findViewById(R.id.pager);
+		btnback=(ImageView) findViewById(R.id.btnback);
+		btnback.setOnClickListener(this);
 		notelist=new ArrayList<NoteBean>();
 		textlist=new ArrayList<TextBean>();
 		audiolist=new ArrayList<AudioBean>();
@@ -157,8 +163,7 @@ public class DataListActivity extends FragmentActivity {
 	            return list.size();
 	        }
 	    }
-	    
-	    
+
 	    
 	    
 	    
@@ -166,4 +171,18 @@ public class DataListActivity extends FragmentActivity {
 	 public void   onClickBack(View v){
 		 finish();
 	 }
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.btnback:
+				     finish();
+				break;
+
+			default:
+				break;
+			}
+		}
+
 }

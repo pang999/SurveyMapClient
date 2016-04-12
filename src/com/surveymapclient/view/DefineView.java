@@ -511,15 +511,9 @@ public class DefineView extends View{
 					}	
 	        		
 				}
-			}
-			
-			
-			if(typeListener!=null)typeListener.onTypeChange(DefineActivity.TYPE);
-
-			
-			
-			
-			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
+			}			
+			typeListener.onTypeChange();
+//			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
 			DefineActivity.TYPE=Contants.DRAG;
     	    invalidate();
             break;
@@ -774,7 +768,7 @@ public class DefineView extends View{
 	  * @version(版本): V1.0
 	  */
 	 public interface TypeChangeListener{
-		 public void onTypeChange(int type);
+		 public void onTypeChange();
 	 }
 	 
 	 private TypeChangeListener typeListener;
