@@ -36,7 +36,7 @@ public class MovePopupWindow extends PopupWindow implements OnClickListener{
         // 设置SelectPicPopupWindow的View  
         this.setContentView(conentView);  
         // 设置SelectPicPopupWindow弹出窗体的宽  
-        this.setWidth(w / 2 + 50);  
+        this.setWidth(w /3 + 50);  
         // 设置SelectPicPopupWindow弹出窗体的高  
         this.setHeight(LayoutParams.WRAP_CONTENT);  
         // 设置SelectPicPopupWindow弹出窗体可点击  
@@ -72,13 +72,16 @@ public class MovePopupWindow extends PopupWindow implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.datalist:
 			defineActivity.onDatalist();
+			dismiss();
 			break;
 
 		case R.id.datashare:
 			defineActivity.ShareData();
+			dismiss();
 			break;
 		case R.id.datahistory:
 			defineActivity.HistoryData();
+			dismiss();
 		break;
 		}
 	} 

@@ -110,12 +110,7 @@
             android:theme="@style/MyActivityDialogStyle"
              > 
         </activity>
-        <activity 
-            android:name="com.surveymapclient.activity.ShareActivity"
-            android:theme="@style/MyActivityDialogStyle"
-			android:excludeFromRecents="true"
-             > 
-        </activity>
+
         <activity 
             android:name="com.surveymapclient.activity.HistoryActivity">
         </activity>

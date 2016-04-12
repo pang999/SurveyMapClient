@@ -27,7 +27,7 @@ public class NotePopupWindow extends PopupWindow{
         // 设置SelectPicPopupWindow的View  
         this.setContentView(conentView);  
         // 设置SelectPicPopupWindow弹出窗体的宽  
-        this.setWidth(w / 3);  
+        this.setWidth(w / 4);  
         // 设置SelectPicPopupWindow弹出窗体的高  
         this.setHeight(LayoutParams.WRAP_CONTENT);  
         // 设置SelectPicPopupWindow弹出窗体可点击  
@@ -35,8 +35,8 @@ public class NotePopupWindow extends PopupWindow{
         this.setOutsideTouchable(true);  
         // 刷新状态  
         this.update();  
-        TextView edittext=(Button) conentView.findViewById(R.id.editetext);
-        TextView tape=(Button) conentView.findViewById(R.id.tape);
+        TextView edittext=(TextView) conentView.findViewById(R.id.editetext);
+        TextView tape=(TextView) conentView.findViewById(R.id.tape);
         final DefineActivity defineActivity=(DefineActivity) context;
         edittext.setOnClickListener(new OnClickListener() {
 			

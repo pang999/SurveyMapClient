@@ -8,8 +8,6 @@ import com.surveymapclient.db.DBHelper;
 import com.surveymapclient.db.OperateData;
 
 import com.surveymapclient.db.greendao.Module;
-import com.tencent.a.a.a.a.h;
-
 import android.app.Activity;
 
 import android.content.Intent;
