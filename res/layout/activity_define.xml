@@ -17,7 +17,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="60dp" />
-
+	
     <RelativeLayout
         android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
@@ -25,16 +25,7 @@
         android:layout_gravity="top"
         android:background="@color/main_color" >
 
-        <EditText
-            android:id="@+id/editTitle"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@null"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="Sketch1"
-            android:textColor="@color/white" />
+        
 
         <com.surveymapclient.view.LocationView
             android:id="@+id/locationview"
@@ -61,7 +52,18 @@
             android:onClick="onMoreOperator"
             android:src="@drawable/tolistlines_bg" />
     </RelativeLayout>
-
+	<EditText
+            android:id="@+id/editTitle"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Sketch1"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white" />
     <LinearLayout
         android:id="@+id/button1"
         android:layout_width="match_parent"

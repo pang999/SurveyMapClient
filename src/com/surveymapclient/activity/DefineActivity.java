@@ -169,7 +169,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		btncoordinate.setOnClickListener(this);
 		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
-
 		defineview.setOnTypeChangeListener(this);
 
 	}
