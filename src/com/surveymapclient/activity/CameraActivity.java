@@ -58,7 +58,7 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 	//¿Ø¼þ
 	private Button textView;
 	private EditText edittitle;
-	private ImageView btndefineback,btneditNote,btnhistoryItem,btnrectangle,
+	private ImageView btndefineback,btneditNote,btnrectangle,
 			btncoordinate,btnangle,btnsingle,btncontinuous;
 	private static LocationView locationview;
 	private RelativeLayout topLinearlaout;
@@ -114,7 +114,7 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		mContext=this;
 		//top		
 		btndefineback=(ImageView) findViewById(R.id.defineBack);
-		btnhistoryItem=(ImageView) findViewById(R.id.tohistory);
+		//btnhistoryItem=(ImageView) findViewById(R.id.tohistory);
 		edittitle=(EditText) findViewById(R.id.editTitle);
 		topLinearlaout=(RelativeLayout) findViewById(R.id.topLinearlayout);
 		locationview=(LocationView) findViewById(R.id.locationview);
@@ -158,8 +158,8 @@ public class CameraActivity extends Activity implements DialogCallBack,VibratorC
 		startActivity(intent);
 	}
 	public void onHistory(View v){
-		MovePopupWindow histPopupWindow=new MovePopupWindow(CameraActivity.this);
-		histPopupWindow.showPopupWindow(btnhistoryItem);
+		/*MovePopupWindow histPopupWindow=new MovePopupWindow(CameraActivity.this);
+		histPopupWindow.showPopupWindow(btnhistoryItem);*/
 	}
 	public static void LocationXY(int x,int y){
 		locationview.LocationSketch(x, y);

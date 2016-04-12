@@ -35,8 +35,8 @@ public class NotePopupWindow extends PopupWindow{
         this.setOutsideTouchable(true);  
         // Ë¢ÐÂ×´Ì¬  
         this.update();  
-        TextView edittext=(Button) conentView.findViewById(R.id.editetext);
-        TextView tape=(Button) conentView.findViewById(R.id.tape);
+        TextView edittext=(TextView) conentView.findViewById(R.id.editetext);
+        TextView tape=(TextView) conentView.findViewById(R.id.tape);
         final DefineActivity defineActivity=(DefineActivity) context;
         edittext.setOnClickListener(new OnClickListener() {
 			

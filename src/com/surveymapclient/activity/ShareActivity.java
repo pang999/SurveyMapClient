@@ -3,6 +3,9 @@ package com.surveymapclient.activity;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.handler.EmailHandler;
+import com.umeng.socialize.media.UMImage;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +23,21 @@ public class ShareActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_share);
 		email=(ImageView) findViewById(R.id.share_email);
 		weixin=(ImageView) findViewById(R.id.share_weixin);
+		email.setOnClickListener(this);
+		weixin.setOnClickListener(this);
 	}
 	@Override
 	public void onClick(View v) {
+	/*	EmailHandler emailHandler = new EmailHandler();
+		emailHandler.addToSocialSDK();
+        // é‚®ä»¶  
+        MailShareContent mail = new MailShareContent(urlImage);  
+        mail.setTitle(title);  
+        mail.setShareContent(content);  
+        mail.set
+        // è®¾ç½®tencentåˆ†äº«å†…å®¹  
+        mController.setShareMedia(mail);  
+		*/
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.share_email:
@@ -33,9 +48,11 @@ public class ShareActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.share_weixin:
+
 			 new ShareAction(this).setPlatform(SHARE_MEDIA.EMAIL).setCallback(umShareListener)
              .withText("hello umeng")
              .withTitle("dddddd")
+  
              .share();
 			break;
 		}
@@ -45,17 +62,17 @@ public class ShareActivity extends Activity implements OnClickListener {
         @Override
         public void onResult(SHARE_MEDIA platform) {
 
-            Toast.makeText(ShareActivity.this, platform + " ·ÖÏí³É¹¦À²", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShareActivity.this, platform + "åˆ†äº«æˆåŠŸï¼", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(ShareActivity.this,platform + " ·ÖÏíÊ§°ÜÀ²", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShareActivity.this,platform + "åˆ†äº«å¤±è´¥ï¼", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(ShareActivity.this,platform + " ·ÖÏíÈ¡ÏûÁË", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShareActivity.this,platform + "åˆ†äº«å–æ¶ˆï¼", Toast.LENGTH_SHORT).show();
         }
     };
 }
