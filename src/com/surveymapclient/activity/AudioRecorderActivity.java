@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.FileUtils;
+import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.TimeUtils;
 import com.surveymapclient.impl.MyPlayerCallback;
@@ -318,7 +319,8 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 				
 			}else if (type==1) {
 				this.finish();
-			}else if (audiorecordmodel.complite==1) {			
+			}else if (audiorecordmodel.complite==1) {	
+//				IToast.show(this, "È·¶¨");
 				Bundle bundle=new Bundle();
 				bundle.putInt("BackAudio", 0);
 				bundle.putInt("AudioLen", voiceLength);

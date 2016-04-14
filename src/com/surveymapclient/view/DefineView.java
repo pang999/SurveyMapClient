@@ -604,6 +604,7 @@ public class DefineView extends View{
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
 	}
 	public void setAudioOnView(String url,int len){
+		
 		audioModel.Audio_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url,len);
 	}
 	public void SetwriteLineText(String text){

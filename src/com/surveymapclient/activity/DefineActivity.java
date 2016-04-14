@@ -246,6 +246,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 				defineview.ChangeAngleAttribute(index, angleBean);
 			}
 			if (requestCode == Contants.AUDIOATTRIBUTEBACK) {
+				IToast.show(this, "BackAudio");
 				Bundle bundle = data.getExtras();
 				if (bundle.getInt("BackAudio") == 0) {
 					defineview.setAudioOnView(bundle.getString("AudioUrl"),
