@@ -6,10 +6,10 @@ import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.db.DBHelper;
 import com.surveymapclient.db.OperateData;
-import com.surveymapclient.dialog.EditTextDialog;
-import com.surveymapclient.dialog.EditeAndDelDialog;
-import com.surveymapclient.dialog.ExitSaveSketchDialog;
-import com.surveymapclient.dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
+import com.surveymapclient.Dialog.EditTextDialog;
+import com.surveymapclient.Dialog.EditeAndDelDialog;
+import com.surveymapclient.Dialog.ExitSaveSketchDialog;
+import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
 import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
@@ -20,6 +20,11 @@ import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.impl.ClipCallBack;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
+
+import com.surveymapclient.model.LinesModel;
+import com.surveymapclient.pdf.PDFCreater;
+import com.surveymapclient.pdf.PDFSharer;
+
 import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.DefineView.TypeChangeListener;
 import com.surveymapclient.view.MorePopupWindow;
@@ -181,9 +186,12 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	}
 
 	public void ShareData() {
-		Intent intent = new Intent();
+		/*Intent intent = new Intent();
 		intent.setClass(this, ShareActivity.class);
-		startActivity(intent);
+		startActivity(intent);*/
+		
+		
+		new PDFSharer().share(this, "");
 
 	}
 

@@ -1,5 +1,6 @@
 package com.surveymapclient.activity;
 
+import com.surveymapclient.pdf.PDFSharer;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -20,11 +21,12 @@ public class ShareActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_share);
-		email=(ImageView) findViewById(R.id.share_email);
+		/*setContentView(R.layout.activity_share);*/
+	/*	email=(ImageView) findViewById(R.id.share_email);
 		weixin=(ImageView) findViewById(R.id.share_weixin);
 		email.setOnClickListener(this);
-		weixin.setOnClickListener(this);
+		weixin.setOnClickListener(this);*/
+		new PDFSharer().share(this, "/sdcard/aa.pdf");
 	}
 	@Override
 	public void onClick(View v) {

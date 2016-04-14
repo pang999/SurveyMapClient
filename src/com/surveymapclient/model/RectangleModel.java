@@ -3,7 +3,7 @@ package com.surveymapclient.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.coremedia.iso.IsoFile;
+
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.LineBean;
@@ -16,9 +16,9 @@ import android.graphics.PointF;
 
 public class RectangleModel {
 
-	//ç”»åœ¨Bitmapçš„çº¿ç¬”
+	//»­ÔÚBitmapµÄÏß±Ê
 	private Paint mPaint=ViewContans.generatePaint(Color.RED,4,true);
-	//é€‰ä¸­ç”»ç¬”
+	//Ñ¡ÖÐ»­±Ê
 	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10,true);
 	
 	private float start_x,start_y,end_x,end_y;
@@ -144,7 +144,7 @@ public class RectangleModel {
 		return -1;
 	}
 	public void AddTextOnRectangle(List<RectangleBean> list,Canvas canvas,int i,String area,String lengh,String width){
-		ViewContans.AddTextOnRectangle(list.get(i), canvas, area+"mÂ²", lengh+"m",width+"m");
+		ViewContans.AddTextOnRectangle(list.get(i), canvas, area+"m2", lengh+"m",width+"m");
 		list.get(i).setRectArea(Double.parseDouble(area));
 		list.get(i).setRectLenght(Float.parseFloat(lengh));
 		list.get(i).setRectWidth(Float.parseFloat(width));
@@ -163,7 +163,7 @@ public class RectangleModel {
 //			boolean righttop=((ex-40<dx)&&(ex+40>dx))&&((sy-40<dy)&&(sy+40>dy));
 			boolean rightbottom=((ex-40<dx)&&(ex+40>dx))&&((ey-40<dy)&&(ey+40>dy));
 			/*if (lefttop) {
-				Logger.i("é€‰ä¸­çŸ©å½¢", "lefttop");
+				Logger.i("Ñ¡ÖÐ¾ØÐÎ", "lefttop");
 				end_x=(float)ex;
 				end_y=(float)ey;
 				start_x=x;
@@ -171,7 +171,7 @@ public class RectangleModel {
 				lines.remove(i);
 				return true;
 			}else if (leftbottom) {
-				Logger.i("é€‰ä¸­çŸ©å½¢", "leftbottom");
+				Logger.i("Ñ¡ÖÐ¾ØÐÎ", "leftbottom");
 				start_x=x;
 				start_y=(float)sy;
 				end_x=(float)ex;
@@ -179,7 +179,7 @@ public class RectangleModel {
 				lines.remove(i);
 				return true;
 			}else if (righttop) {
-				Logger.i("é€‰ä¸­çŸ©å½¢", "righttop");
+				Logger.i("Ñ¡ÖÐ¾ØÐÎ", "righttop");
 				start_x=(float)sx;
 				start_y=y;
 				end_x=x;
@@ -188,7 +188,7 @@ public class RectangleModel {
 				return true;
 			}else*/ 
 			if (rightbottom) {
-				Logger.i("é€‰ä¸­çŸ©å½¢", "rightbottom");
+				Logger.i("Ñ¡ÖÐ¾ØÐÎ", "rightbottom");
 				start_x=(float)sx;
 				start_y=(float)sy;
 				end_x=x;
@@ -205,7 +205,7 @@ public class RectangleModel {
 		rect.setStartY(sy);
 		rect.setEndX(ex);
 		rect.setEndY(ey);
-		rect.setDescripte("æè¿°");
+		rect.setDescripte("ÃèÊö");
 		rect.setPaintColor(Color.RED);
 		rect.setPaintWidth(4);
 		rect.setFull(true);
@@ -242,8 +242,8 @@ public class RectangleModel {
 					ViewContans.generatePaint(list.get(i).getPaintColor(), list.get(i).getPaintWidth(),
 							list.get(i).isFull()));
 			if (list.get(i).getRectLenght()>0&&list.get(i).getRectWidth()>0) {
-	    		Logger.i("BackRectangle", "Modelé¢œè‰²="+list.get(i).getPaintColor());
-				ViewContans.AddTextOnRectangle(list.get(i), canvas, list.get(i).getRectArea()+"mÂ²", list.get(i).getRectLenght()+"m", list.get(i).getRectWidth()+"m");
+	    		Logger.i("BackRectangle", "ModelÑÕÉ«="+list.get(i).getPaintColor());
+				ViewContans.AddTextOnRectangle(list.get(i), canvas, list.get(i).getRectArea()+"m2", list.get(i).getRectLenght()+"m", list.get(i).getRectWidth()+"m");
 			}
 		}
 	}
@@ -255,8 +255,8 @@ public class RectangleModel {
     	canvas.drawRect(sx, sy, ex, ey,
     			ViewContans.generatePaint(rect.getPaintColor(), rect.getPaintWidth(), rect.isFull()));
     	if (rect.getRectLenght()>0&&rect.getRectWidth()>0) {
-    		Logger.i("BackRectangle", "Modelé¢œè‰²="+rect.getPaintColor());
-			ViewContans.AddTextOnRectangle(rectlist.get(index), canvas, rect.getRectArea()+"mÂ²", rect.getRectLenght()+"m", rect.getRectWidth()+"m");
+    		Logger.i("BackRectangle", "ModelÑÕÉ«="+rect.getPaintColor());
+			ViewContans.AddTextOnRectangle(rectlist.get(index), canvas, rect.getRectArea()+"m2", rect.getRectLenght()+"m", rect.getRectWidth()+"m");
 		}
     	rectlist.remove(index);
     	AddChangeRectangleParams(rectlist,sx, sy, ex, ey,

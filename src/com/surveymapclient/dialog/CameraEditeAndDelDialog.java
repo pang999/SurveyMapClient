@@ -1,4 +1,4 @@
-package com.surveymapclient.dialog;
+package com.surveymapclient.Dialog;
 
 import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
