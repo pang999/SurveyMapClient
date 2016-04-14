@@ -408,7 +408,7 @@ public class LinesModel {
     		ViewContans.AddTextOnLine(getremoveline, canvas,getremoveline.getLength()+"m "+getremoveline.getAngle()+"бу",10);
 		}
 	}
-	public void MoveLine_camera_up(Canvas canvas,float x,float y){    
+	public void MoveLine_camera_up(Canvas canvas){    
 		AddLinesParams(Getlines, start_mx,start_my,end_mx,end_my);
 		drawLineFirstOnBitmap( start_mx,start_my,end_mx,end_my, canvas);
 	}

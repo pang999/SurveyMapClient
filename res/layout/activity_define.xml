@@ -10,13 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <com.surveymapclient.view.MagnifyView
-        android:id="@+id/magnifyview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp" />
+
 	
     <RelativeLayout
         android:id="@+id/topLinearlayout"
@@ -52,8 +46,15 @@
             android:onClick="onMoreOperator"
             android:src="@drawable/tolistlines_bg" />
     </RelativeLayout>
+        <com.surveymapclient.view.MagnifyView
+        android:id="@+id/magnifyview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp" />
 	<EditText
-            android:id="@+id/editTitle"
+            android:id="@+id/camera_editTitle"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -169,14 +170,28 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/data_move"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#DCDCDC"
         android:layout_above="@+id/button1"
-
         android:layout_centerHorizontal="true"
-        android:text="2.289m" />
+        android:orientation="horizontal"
+        >
+        
+    	<LinearLayout 
+    	    android:id="@+id/data_move"
+    	    android:layout_width="70dp"
+        	android:layout_height="50dp"
+        	android:background="#DCDCDC"
+    	    >
+    	    <com.surveymapclient.view.StoreDataView
+		        
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		 		/>
+    	</LinearLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>

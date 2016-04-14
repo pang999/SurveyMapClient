@@ -1,4 +1,4 @@
-package com.surveymapclient.Dialog;
+package com.surveymapclient.dialog;
 
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
@@ -21,8 +21,10 @@ public class EditTextDialog extends DialogFragment implements OnClickListener{
 
 	EditText editname;
 	Button deletename,confirmname;
+	static int mType=-1;
 	
-	public static EditTextDialog newIntance(){
+	public static EditTextDialog newIntance(int type){
+		mType=type;
 		EditTextDialog editeAndDelDialog=new EditTextDialog();
 		Bundle bundle=new Bundle();
 		editeAndDelDialog.setArguments(bundle);
@@ -61,21 +63,29 @@ public class EditTextDialog extends DialogFragment implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		DefineActivity daActivity=(DefineActivity) getActivity();
-		int id = v.getId();
-		if (id == R.id.comfirmName) {
+		
+		switch (v.getId()) {
+		case R.id.comfirmName:
 			String name="";
 			if (!editname.getText().toString().equals("")&&""!=editname.getText().toString()) {
 				name=editname.getText().toString();
 			}else {
 				name="Text";				
 			}
-			daActivity.ChangeTextContent(name);
+			if (mType==0) {
+				DefineActivity daActivity=(DefineActivity) getActivity();
+				daActivity.ChangeTextContent(name);
+			}			
 			dismiss();
-		} else if (id == R.id.deleteName) {
-			daActivity.RemoveTextIndex();
+			break;
+
+		case R.id.deleteName:
+			if (mType==0) {
+				DefineActivity daActivity=(DefineActivity) getActivity();
+				daActivity.RemoveTextIndex();
+			}
 			dismiss();
-		} else {
+			break;
 		}
 	}
 	@Override

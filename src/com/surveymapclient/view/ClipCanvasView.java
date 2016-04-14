@@ -25,11 +25,9 @@ public class ClipCanvasView extends View implements ClipCallBack{
 		this.clipcanvas=canvas;
 	}
 
-
-
 	@Override
-	public void OnClipCallBack(Canvas canvas) {
+	public void OnClipCallBack(byte[] bs) {
 		// TODO Auto-generated method stub
-		this.clipcanvas=canvas;
+		
 	}
 }

@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
 import com.surveymapclient.activity.adapter.HistoryAdapter;
@@ -21,12 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
-public class MovePopupWindow extends PopupWindow implements OnClickListener{
+public class MorePopupWindow extends PopupWindow implements OnClickListener{
 
 	View conentView;
 	Activity activity;
+	int mType;
 	LinearLayout datelist,datashare,datahistory;
-	public MovePopupWindow(final Activity context){
+	public MorePopupWindow(final Activity context,int type){
+		mType=type;
 		activity=context;
 		LayoutInflater inflater = (LayoutInflater) context  
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
@@ -36,11 +39,8 @@ public class MovePopupWindow extends PopupWindow implements OnClickListener{
         // 设置SelectPicPopupWindow的View  
         this.setContentView(conentView);  
         // 设置SelectPicPopupWindow弹出窗体的宽  
-//<<<<<<< HEAD
         this.setWidth(LayoutParams.WRAP_CONTENT);  
-/*=======
         this.setWidth(w /3 + 50);  
->>>>>>> 5f0e3822ab87cb2fc0682396807aa3879550ccdc*/
         // 设置SelectPicPopupWindow弹出窗体的高  
         this.setHeight(LayoutParams.WRAP_CONTENT);  
         // 设置SelectPicPopupWindow弹出窗体可点击  
@@ -72,19 +72,38 @@ public class MovePopupWindow extends PopupWindow implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		DefineActivity defineActivity=(DefineActivity) activity;
+		
+		
 		switch (v.getId()) {
 		case R.id.datalist:
-			defineActivity.onDatalist();
+			if (mType==0) {
+				DefineActivity defineActivity=(DefineActivity) activity;
+				defineActivity.onDatalist();
+			}else if (mType==1) {
+				CameraActivity cameraActivity=(CameraActivity) activity;
+				cameraActivity.onDatalist();
+			}			
 			dismiss();
 			break;
 
 		case R.id.datashare:
-			defineActivity.ShareData();
+			if (mType==0) {
+				DefineActivity defineActivity=(DefineActivity) activity;
+//				defineActivity.ShareData();
+			}else if (mType==1) {
+				CameraActivity cameraActivity=(CameraActivity) activity;
+				
+			}	
 			dismiss();
 			break;
 		case R.id.datahistory:
-			defineActivity.HistoryData();
+			if (mType==0) {
+				DefineActivity defineActivity=(DefineActivity) activity;
+				defineActivity.HistoryData();
+			}else if (mType==1) {
+				CameraActivity cameraActivity=(CameraActivity) activity;
+				cameraActivity.HistoryData();
+			}	
 			dismiss();
 		break;
 		}

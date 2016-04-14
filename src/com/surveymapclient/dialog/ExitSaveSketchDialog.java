@@ -1,4 +1,4 @@
-package com.surveymapclient.Dialog;
+package com.surveymapclient.dialog;
 
 import android.R;
 import android.app.AlertDialog;

@@ -1,5 +1,6 @@
 package com.surveymapclient.view;
 
+import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
 
@@ -7,6 +8,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.renderscript.Type;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,8 +19,10 @@ import android.widget.TextView;
 public class NotePopupWindow extends PopupWindow{
 
 	private View conentView;
-
-	public NotePopupWindow(final Activity context) {
+	int mTyp=-1;
+	
+	public NotePopupWindow(final Activity context,int type) {
+		mTyp=type;
 		LayoutInflater inflater = (LayoutInflater) context  
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
         conentView = inflater.inflate(R.layout.popupeditewindow, null);  
@@ -37,14 +41,21 @@ public class NotePopupWindow extends PopupWindow{
         this.update();  
         TextView edittext=(TextView) conentView.findViewById(R.id.editetext);
         TextView tape=(TextView) conentView.findViewById(R.id.tape);
-        final DefineActivity defineActivity=(DefineActivity) context;
+
+        
         edittext.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				NotePopupWindow.this.dismiss();				
-				defineActivity.showEditeView();
+				NotePopupWindow.this.dismiss();	
+				if (mTyp==0) {
+					final DefineActivity defineActivity=(DefineActivity) context;
+					defineActivity.showEditeView();
+				}else if (mTyp==1) {
+					CameraActivity cameraActivity=(CameraActivity) context;	
+					cameraActivity.showEditeView();
+				}			
 			}
 		});
         tape.setOnClickListener(new OnClickListener() {
@@ -53,7 +64,13 @@ public class NotePopupWindow extends PopupWindow{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				NotePopupWindow.this.dismiss();
-				defineActivity.showTapeDialog();
+				if (mTyp==0) {
+					final DefineActivity defineActivity=(DefineActivity) context;
+					defineActivity.showTapeDialog();
+				}else if (mTyp==1) {
+					CameraActivity cameraActivity=(CameraActivity) context;
+					cameraActivity.showTapeDialog();
+				}
 			}
 		});
         // 实例化一个ColorDrawable颜色为半透明  

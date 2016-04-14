@@ -65,7 +65,7 @@ public class DataListActivity extends FragmentActivity implements OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);		
-		setContentView(R.layout.activity_daralist);
+		setContentView(R.layout.activity_datalist);
 		pagerSlidingTabStrip=(PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager=(ViewPager) findViewById(R.id.pager);
 		btnback=(ImageView) findViewById(R.id.btnback);

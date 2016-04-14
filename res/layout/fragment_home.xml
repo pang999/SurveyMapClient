@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="测量"
             android:textColor="@color/white"
-            android:textSize="@dimen/title_txt_size" />
+    		android:textSize="20sp"/>
     </LinearLayout>
 
     <ImageView

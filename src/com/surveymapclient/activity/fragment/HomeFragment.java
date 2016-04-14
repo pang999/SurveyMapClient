@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment implements OnClickListener{
 			            Bundle bundle=new Bundle();
 			            bundle.putString(TestCameraActivity.KEY_FILENAME, selectedImagePath);
 			            bundle.putInt("Where", 1);
+			            bundle.putInt("TYPE", 3);
 			            intent.putExtras(bundle);
 			            startActivity(intent);
 					}

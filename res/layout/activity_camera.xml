@@ -6,14 +6,11 @@
     android:orientation="vertical"
     android:padding="0dp" >
 
-    
-     <com.surveymapclient.view.CameraBitMapView
+    <com.surveymapclient.view.CameraBitMapView
         android:id="@+id/CameraBitMapView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"    
-         />
-    
-    
+        android:layout_height="wrap_content" />
+
     <RelativeLayout
         android:id="@+id/topLinearlayout"
         android:layout_width="match_parent"
@@ -21,17 +18,6 @@
         android:layout_gravity="top"
         android:background="@color/main_color" >
 
-        <EditText
-            android:id="@+id/editTitle"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@null"
-            android:gravity="center"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:text="Sketch1"
-            android:textColor="@color/white" />
 
         <com.surveymapclient.view.LocationView
             android:id="@+id/locationview"
@@ -41,36 +27,35 @@
 
         <ImageView
             android:id="@+id/defineBack"
-	          android:layout_width="@dimen/bottom_img_w_h"
-	          android:layout_height="@dimen/bottom_img_w_h"
+            android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-             android:layout_marginLeft="5dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/defineback_bg" />
 
         <ImageView
-            android:id="@+id/tolistlines"
-	          android:layout_width="@dimen/bottom_img_w_h"
-	          android:layout_height="@dimen/bottom_img_w_h"
+            android:id="@+id/btnmoveoperator"
+            android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:onClick="onListLines"
             android:src="@drawable/tolistlines_bg" />
-
-        <!--
-               <ImageView
-	          android:id="@+id/tohistory"
-	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
-	          android:layout_alignTop="@+id/tolistlines"
-	          android:layout_toRightOf="@+id/defineBack"
-	          android:onClick="onHistory"
-	          android:src="@drawable/histories" />
-        -->
-
     </RelativeLayout>
 
+    <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Sketch1"
+            android:layout_marginTop="14dp"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white" />
     <LinearLayout
         android:id="@+id/button1"
         android:layout_width="match_parent"
@@ -80,7 +65,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-       <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -178,21 +163,8 @@
         android:id="@+id/camera_data_move"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/button1"
         android:layout_centerHorizontal="true"
         android:text="2.289m" />
-
-    <Button
-        android:id="@+id/camera_center_move"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="#DCDCDCFA"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="text"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:visibility="invisible" />
 
 </RelativeLayout>
