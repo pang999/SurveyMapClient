@@ -1,10 +1,9 @@
 package com.surveymapclient.view;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.common.Contants;
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
@@ -25,8 +24,6 @@ import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
 import com.surveymapclient.model.RectangleModel;
 import com.surveymapclient.model.TextModel;
-
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -35,6 +32,7 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -97,6 +95,7 @@ public class DefineView extends View{
     private int mCurrentX, mCurrentY,sCurrentX, sCurrentY;
     private int rmCurrentX,rmCurrentY;
     private Canvas clipCanvas; 
+    private Bitmap mBitmap2;
     
 	public DefineView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -112,10 +111,12 @@ public class DefineView extends View{
 		initCanvas();
 		isFirst=true;	
 		dialogCallBack=(DialogCallBack) context;
-		vibratorCallBack=(VibratorCallBack) context;			
+		vibratorCallBack=(VibratorCallBack) context;
+		clipCallBack=(ClipCallBack) context;
 		sPath.addCircle(RADIUS, RADIUS, RADIUS, Direction.CW); 
         matrix.setScale(FACTOR, FACTOR);  
-        clipCanvas=new Canvas();
+        mBitmap2=Bitmap.createBitmap(80,80,Bitmap.Config.RGB_565);
+        clipCanvas=new Canvas(mBitmap2);
         DefineActivity.TYPE=Contants.DRAG;
 	}
 	//初始化画布
@@ -146,7 +147,7 @@ public class DefineView extends View{
 	        	}else{
 	        		linesModel.DrawLine(canvas);
 	    		}	
-				ClipCavas(canvas);
+//				ClipCavas(canvas,mBitmap);
 			}          	
 		}
         if (DefineActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
@@ -187,28 +188,38 @@ public class DefineView extends View{
 		} 
 		
 	}
-	
-	private void ClipCavas(Canvas canvas){
+	/**  
+     * 把Bitmap转Byte  
+     */    
+    private byte[] Bitmap2Bytes(Bitmap bm){    
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();    
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);    
+        return baos.toByteArray();    
+    } 
+	private void ClipCavas(Canvas canvas,Bitmap bitmap){
 		// TODO Auto-generated method stub
 		// 剪切  
-        Logger.i("清屏高度",""+ DefineActivity.TopHeaght);
-		canvas.translate(mCurrentX-RADIUS, mCurrentY-RADIUS ); 
+//        Logger.i("清屏高度",""+ DefineActivity.TopHeaght);
+//		canvas.translate(mCurrentX-RADIUS, mCurrentY-RADIUS ); 
 //		sPath.moveTo(sCurrentY, sCurrentY);
 //		sPath.quadTo(sCurrentY,sCurrentY,mCurrentX ,mCurrentY);
-		canvas.clipPath(sPath);
+//		canvas.clipPath(sPath);
 		
         int c=80;
-        canvas.drawRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c, ViewContans.generatePaint(Color.RED, 2,true));
+        Rect rect=new Rect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
+//        canvas.drawRect(rect, ViewContans.generatePaint(Color.RED, 2,true));
+        canvas.clipRect(rect);
+        clipCallBack.OnClipCallBack(Bitmap2Bytes(bitmap));
 //        canvas.clipRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
         // 画放大后的图         
-        canvas.translate(RADIUS - mCurrentX * FACTOR, RADIUS - mCurrentY * FACTOR); 
+//        canvas.translate(RADIUS - mCurrentX * FACTOR, RADIUS - mCurrentY * FACTOR); 
 //		 initCanvas();
 //        canvas.drawLine((float)sCurrentX, (float)sCurrentY,(float) mCurrentX,(float)  mCurrentY, ViewContans.generatePaint(Color.RED,3));
 //        canvas.translate(Contants.sreenWidth/2-screen_x, Contants.screenHeight/2-screen_y ); 
-        canvas.drawLine(sCurrentX, sCurrentY, mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 4,true));
-        canvas.drawPoint(mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 20,true));
-        canvas.drawBitmap(mBitmap, matrix, null); 
-        Logger.i("mBitmap大小", mBitmap.toString());
+//        canvas.drawLine(sCurrentX, sCurrentY, mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 4,true));
+//        canvas.drawPoint(mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 20,true));
+//        canvas.drawBitmap(mBitmap, matrix, null); 
+//        Logger.i("mBitmap大小", mBitmap.toString());
 //         clipCallBack.OnClipCallBack(canvas);
 	}
 	//长按事件参数值
@@ -591,7 +602,6 @@ public class DefineView extends View{
 	public void setManyTextOnView(){
 		Logger.i("文字位置", "x="+(Contants.sreenWidth/2-screen_x)+"y="+(Contants.screenHeight/2-screen_y));
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
-//		invalidate();
 	}
 	public void setAudioOnView(String url,int len){
 		audioModel.Audio_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url,len);
@@ -669,6 +679,13 @@ public class DefineView extends View{
             invalidate();// 刷新
          }
      }
+	 public void RemoveIndexPolygon(int index){
+		 if (polygonModel.GetpolyList!=null&&polygonModel.GetpolyList.size()>0) {
+			polygonModel.GetpolyList.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
 	 public void RemoveIndexRectangle(int index){
 		 if (rectangleModel.GetRectlist!=null&&rectangleModel.GetRectlist.size()>0) {
 			rectangleModel.GetRectlist.remove(index); 

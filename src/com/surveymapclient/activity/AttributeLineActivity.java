@@ -1,11 +1,7 @@
 package com.surveymapclient.activity;
 import com.surveymapclient.common.Contants;
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.entity.LineBean;
-import com.surveymapclient.impl.AlterlineCallBack;
-import com.surveymapclient.view.DefineView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +9,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +22,6 @@ public class AttributeLineActivity extends Activity{
 	private float width=0;	
 	LineBean line;
 	private int type=-1;
-	private int index=-1;
 	public static int BACKLINE=0;
 	Bundle getbundle;
 	@Override

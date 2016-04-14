@@ -15,8 +15,8 @@
     <RadioGroup
         android:id="@+id/bottom_group"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -24,17 +24,17 @@
             style="@style/main_footer_bar_radio"
             android:checked="true"
             android:drawableTop="@drawable/widget_bar_home_bg"
-            android:text="功能" />
+            />
         <RadioButton
             android:id="@+id/foot_bar_health"
             style="@style/main_footer_bar_radio"
             android:drawableTop="@drawable/widget_bar_health_bg"
-            android:text="文件" />
+            />
         <RadioButton
             android:id="@+id/foot_bar_market"
             style="@style/main_footer_bar_radio"
             android:drawableTop="@drawable/widget_bar_market_bg"
-            android:text="设置" />
+            />
     </RadioGroup>
 
     <LinearLayout

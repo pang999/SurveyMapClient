@@ -103,6 +103,7 @@ public class TestCameraActivity extends Activity implements OnClickListener,Surf
 			Intent i = new Intent(TestCameraActivity.this, CameraActivity.class);
 			Bundle bundle=new Bundle();
             bundle.putString(TestCameraActivity.KEY_FILENAME, mFileName);
+            bundle.putInt("TYPE", 3);
 //			intent.putExtra(TestCameraActivity.KEY_FILENAME, selectedImagePath);
             bundle.putInt("Where", 0);
             i.putExtras(bundle);

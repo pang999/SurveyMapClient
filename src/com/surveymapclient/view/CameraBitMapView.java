@@ -1,20 +1,23 @@
 package com.surveymapclient.view;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
+import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.TextBean;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.AngleModel;
+import com.surveymapclient.model.AudioModel;
 import com.surveymapclient.model.CoordinateModel;
+import com.surveymapclient.model.LineAndPolygonModel;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
 import com.surveymapclient.model.RectangleModel;
@@ -26,7 +29,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -41,7 +43,6 @@ public class CameraBitMapView extends View {
 	VibratorCallBack vibratorCallBack;
 //	
 	private Canvas  mCanvas;
-    private Path    mPath;
     private Paint   mBitmapPaint;// 画布的画笔
     private Bitmap  mBitmap;
 //    private Paint   mPaint;// 真实的画笔
@@ -66,16 +67,16 @@ public class CameraBitMapView extends View {
 	
 	private LinesModel linesModel;
 	private PolygonModel polygonModel;
+    private LineAndPolygonModel linepoly;
 	private RectangleModel rectangleModel;
     private CoordinateModel coordinateModel;
     private AngleModel angleModel;
     private TextModel textModel;
+    private AudioModel audioModel;
 	
 	 private boolean isWriteText=false;
 	 private static int m=-1;
-	
-	//连续线段获得条数
-//    List<LineBean> totallist=new ArrayList<LineBean>();
+
     
     public CameraBitMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -84,8 +85,10 @@ public class CameraBitMapView extends View {
 		polygonModel=new PolygonModel();
 		rectangleModel=new RectangleModel();
 		coordinateModel=new CoordinateModel();
+		linepoly=new LineAndPolygonModel();
 		textModel=new TextModel();
 		angleModel=new AngleModel();
+		audioModel=new AudioModel(context);
 		this.mContext=context;
 		CameraActivity.TYPE=Contants.DRAG;
 //		initCanvas();
@@ -154,8 +157,13 @@ public class CameraBitMapView extends View {
 	    		}
 			}
         	
-		}
-		if (CameraActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
+		}if (CameraActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
+        	if (isMoveLinedrag) {
+        		polygonModel.MoveDrawPolygon(canvas);
+			}			
+		}else if (CameraActivity.TYPE==Contants.CONTINU_XETEND&&isMovingdraw) {
+			polygonModel.ExtendDrawPolygon(canvas);
+		}else if (CameraActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
 			if (isMoveLinedrag) {
 				rectangleModel.MoveDrawRectangle(canvas);
 			}else {
@@ -177,6 +185,8 @@ public class CameraBitMapView extends View {
 		}else if (CameraActivity.TYPE==Contants.TEXT) {
 			textModel.DrawText(canvas);
 //			CameraActivity.TYPE=Contants.DRAG;
+		}else if (CameraActivity.TYPE==Contants.AUDIO) {
+			audioModel.DrawMoveAudio(canvas);
 		}else if (CameraActivity.TYPE==Contants.COORDINATE_AXIS&&isMovingdraw) {
 			coordinateModel.DrawCoordinate(canvas);
 		}
@@ -213,8 +223,16 @@ public class CameraBitMapView extends View {
 				}else {
 					linesModel.Line_camera_touch_down(x, y);
 				}
-			}else if (CameraActivity.TYPE==Contants.CONTINU) {
-				polygonModel.Continuous_touch_down(x, y);
+			}else if (CameraActivity.TYPE==Contants.CONTINU) {	
+				int i=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
+				if (i>=0) {
+					isMoveLinedrag=true;
+					Logger.i("点中多边形", "i="+i);
+					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
+					DrawAllOnBitmap();
+				}else {
+					polygonModel.Continuous_touch_down(x, y);
+				}								
 			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
 				int i=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
 				if (i>=0) {
@@ -254,6 +272,12 @@ public class CameraBitMapView extends View {
 				textModel.MoveText_down(textModel.GetTextlist, ti, rx, ry);
 				DrawAllOnBitmap();
 			}
+			int au=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
+			if (au>=0) {
+				CameraActivity.TYPE=Contants.AUDIO;
+				audioModel.MoveAudio_dowm(audioModel.GetAudiolist, au, rx, ry);
+				DrawAllOnBitmap();
+			}
 			invalidate();
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN: //如果有一只手指按下屏幕，后续又有一个手指按下     // 两只手指按下
@@ -269,7 +293,11 @@ public class CameraBitMapView extends View {
 	    			linesModel.Line_touch_move(x, y);
 				}			
 			}else if (CameraActivity.TYPE==Contants.CONTINU) {
-				polygonModel.Continuous_touch_move(x, y);
+				if (isMoveLinedrag) {
+					polygonModel.MovePolygon_move(rx, ry);
+				}else {
+					polygonModel.Continuous_touch_move(x, y);
+				}			
 			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					rectangleModel.MoveRectangle_move(rx, ry);
@@ -292,12 +320,14 @@ public class CameraBitMapView extends View {
 //				if (isMoveLinedrag) {
 					textModel.MoveText_move(rx, ry);
 //				}
+			}else if (CameraActivity.TYPE==Contants.AUDIO) {
+				audioModel.MoveAudio_move(rx, ry);
 			}else  if (CameraActivity.TYPE==Contants.DRAG){
 				if (mode==DRAG) {
 	            	drag_touch_move(rx, ry);
-				}else if(mode==ZOOM){
+				}/*else if(mode==ZOOM){
 					setzoomcanvas(event);
-				}
+				}*/
 			}
 		    if (!mIsLongPressed) {
             	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 1000);
@@ -325,7 +355,12 @@ public class CameraBitMapView extends View {
         				vibratorCallBack.onVibratorCallBack();
 						CameraActivity.TYPE=Contants.SINGLE;
 						DrawAllOnBitmap();
-					} 
+					}
+        			if (polygonModel.ExtendPolygon(polygonModel.GetpolyList, x, y)) {
+						vibratorCallBack.onVibratorCallBack();
+						CameraActivity.TYPE=Contants.CONTINU_XETEND;
+						DrawAllOnBitmap();
+					}
 				}          		
         		if (CameraActivity.TYPE==Contants.SINGLE) {
 					linesModel.Line_touch_move(x, y);
@@ -335,22 +370,48 @@ public class CameraBitMapView extends View {
 					coordinateModel.ExtandCoordinateOneAxis_touch_move(x,y);
 				}else if (CameraActivity.TYPE==Contants.ANGLE_AXIS) {
 					angleModel.ExtandAngleBorder_touch_move(x, y);	
+				}else if (CameraActivity.TYPE==Contants.CONTINU_XETEND) {
+					polygonModel.ExtendPolygonLine(x, y);
 				}
 			}
 			invalidate();
 			break;
 		case MotionEvent.ACTION_UP:		
 			isMovingdraw=false;
-			if (CameraActivity.TYPE==Contants.SINGLE) {			
+			mIsLongPressed=false;
+			if (CameraActivity.TYPE==Contants.CONTINU) {  
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
-					linesModel.MoveLine_camera_up(mCanvas, rx, ry);
+					polygonModel.MovePolygon_up(mCanvas);
 				}else {
-					mIsLongPressed=false;
-					linesModel.Line_camera_touch_up(x, y, mCanvas);
+	        		polygonModel.Continuous_touch_up(x, y, mCanvas);		
 				}
-			}else if (CameraActivity.TYPE==Contants.CONTINU) {
-				polygonModel.Continuous_camera_touch_up(x, y, mCanvas);
+        		
+			}else if (CameraActivity.TYPE==Contants.CONTINU_XETEND) {
+				polygonModel.MovePolygon_up(mCanvas);
+			}else if (CameraActivity.TYPE==Contants.SINGLE) {						
+				if (isMoveLinedrag) {
+					isMoveLinedrag=false;
+					linesModel.MoveLine_camera_up(mCanvas);
+				}else {
+					mIsLongPressed=false;				
+					linesModel.Line_touch_up(x, y , mCanvas);	
+				}
+				if (linesModel.Getlines.size()>=3) {					
+					linepoly.CalculatePolyFromlist(linesModel.Getlines);
+					for (int i = 0; i < linepoly.GetPolyInt.size(); i++) {
+						Logger.i("直线剩余总数", "GetPolyInt="+linepoly.GetPolyInt.get(i).intValue());
+						linesModel.Getlines.remove(linepoly.GetPolyInt.get(i).intValue());
+					}
+					for (int i = 0; i < linepoly.backpolylist.size(); i++) {
+						polygonModel.GetpolyList.add(linepoly.backpolylist.get(i));
+						DrawAllOnBitmap();
+					}
+					linepoly.ClearInt();					
+				}	
+								
+			}else if (CameraActivity.TYPE==Contants.CONTINU_XETEND) {
+				polygonModel.MovePolygon_up(mCanvas);
 			}else if (CameraActivity.TYPE==Contants.RECTANGLE) {
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
@@ -381,7 +442,24 @@ public class CameraBitMapView extends View {
 //				if (isMoveLinedrag) {
 //					isMoveLinedrag=false;
 					textModel.MoveText_up(mCanvas);
+					mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
+					if (mIsShortPressed) {
+						int tx=textModel.PitchOnText(textModel.GetTextlist, x, y);
+		        		if (tx>=0) {
+		        			Logger.i("选中文字", "t="+tx);
+							dialogCallBack.onDialogCallBack(textModel.GetTextlist.get(tx), tx);
+						}
+					}
 //				}
+			}else if (CameraActivity.TYPE==Contants.AUDIO) {
+				audioModel.MoveAudio_up(mCanvas);
+				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
+				if (mIsShortPressed) {
+					int aud=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
+					if (aud>=0) {
+						dialogCallBack.onDialogCallBack(audioModel.GetAudiolist.get(aud), aud);
+					}
+				}
 			}else if (CameraActivity.TYPE==Contants.COORDINATE_AXIS) {
 				mIsLongPressed=false;
 				coordinateModel.Coordinate_touch_up(x,y,mCanvas);
@@ -411,10 +489,11 @@ public class CameraBitMapView extends View {
 					} 
 				}
 			}
+			typeListener.onTypeChange();
 			CameraActivity.TYPE=Contants.DRAG;
 			break;		
 		}
-		invalidate();
+//		invalidate();
 		return true;
 	}
 	private void DrawAllOnBitmap(){
@@ -425,6 +504,7 @@ public class CameraBitMapView extends View {
 		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
 		textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
 		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
+		audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
 	}
 	private void drag_touch_start(float rx,float ry){
 		dragPoint.set(rx,ry);
@@ -453,7 +533,9 @@ public class CameraBitMapView extends View {
 	public void setManyTextOnView(){
 		Logger.i("文字位置", "x="+(Contants.sreenWidth/2-screen_x)+"y="+(Contants.screenHeight/2-screen_y));
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
-		invalidate();
+	}
+	public void setAudioOnView(String url,int len){
+		audioModel.Audio_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url,len);
 	}
 	public void SetwriteLineText(String text){
 		linesModel.AddTextOnLine(linesModel.Getlines, mCanvas, m,text,10);		
@@ -480,6 +562,29 @@ public class CameraBitMapView extends View {
 	}
 	public List<AngleBean> BackAnglelist(){
 		return angleModel.getAnglelist;
+	}
+	public List<TextBean> BackTextlist(){
+		return textModel.GetTextlist;
+	}
+	public List<AudioBean> BackAudiolist(){
+		return audioModel.GetAudiolist;
+	}
+	public void AddAllDataFromActivity(
+			List<LineBean> linelist,
+			List<PolygonBean> polygonlist,
+			List<RectangleBean> rectlist,
+			List<AngleBean> anglelist,
+			List<CoordinateBean> coorlist,
+			List<TextBean> textlist,
+			List<AudioBean> audiolist){
+		linesModel.Getlines=linelist;
+		polygonModel.GetpolyList=polygonlist;
+		rectangleModel.GetRectlist=rectlist;
+		coordinateModel.GetCoordlist=coorlist;
+		angleModel.getAnglelist=anglelist;
+		textModel.GetTextlist=textlist;
+		audioModel.GetAudiolist=audiolist;
+		DrawAllOnBitmap();
 	}
 	/**
 	 * 画布缩放
@@ -530,6 +635,13 @@ public class CameraBitMapView extends View {
             invalidate();// 刷新
          }
      }
+	 public void RemoveIndexPolygon(int index){
+		 if (polygonModel.GetpolyList!=null&&polygonModel.GetpolyList.size()>0) {
+				polygonModel.GetpolyList.remove(index);
+				DrawAllOnBitmap();
+				invalidate();
+			}
+	 }
 	 public void RemoveIndexRectangle(int index){
 		 if (rectangleModel.GetRectlist!=null&&rectangleModel.GetRectlist.size()>0) {
 			rectangleModel.GetRectlist.remove(index); 
@@ -544,29 +656,61 @@ public class CameraBitMapView extends View {
 			invalidate();
 		}
 	 }
+	 public void RemoveIndexAngle(int index){
+		 if (angleModel.getAnglelist!=null&&angleModel.getAnglelist.size()>0) {
+			angleModel.getAnglelist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
+	 public void RemoveIndexText(int index){
+		 if (textModel.GetTextlist!=null&&textModel.GetTextlist.size()>0) {
+			textModel.GetTextlist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
+	 public void RemoveIndexAudio(int index){
+		 if (audioModel.GetAudiolist!=null&&audioModel.GetAudiolist.size()>0) {
+			audioModel.GetAudiolist.remove(index);
+			DrawAllOnBitmap();
+			invalidate();
+		}
+	 }
 	 public void ChangeLineAttribute(int index,LineBean line){
 			//调用初始化画布函数以清空画布
-	         DrawAllOnBitmap();
-	         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
-	         invalidate();
-		 }
-		 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){
-			 DrawAllOnBitmap();
-			 rectangleModel.ChangeRectAttributeAtIndex(rectangleModel.GetRectlist, index, mCanvas, rectangleBean);
-			 invalidate();
-		 }
-		 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){
-			 DrawAllOnBitmap();
-			 coordinateModel.ChangeCoorAttributeAtIndex(coordinateModel.GetCoordlist, index,
-					 mCanvas, coordinateBean);
-			 invalidate();
-		 }
-		 public void ChangeAngleAttribute(int index,AngleBean angleBean){
-			 DrawAllOnBitmap();
-			 angleModel.ChangeAngleBeanAttributeAtIndex(angleModel.getAnglelist, index, mCanvas, angleBean);
-		 }
+       
+         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
+         DrawAllOnBitmap();
+	 }
+	 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){
+		 rectangleModel.ChangeRectAttributeAtIndex(rectangleModel.GetRectlist, index, mCanvas, rectangleBean);
+		  DrawAllOnBitmap();
+	 }
+	 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){
+		 coordinateModel.ChangeCoorAttributeAtIndex(coordinateModel.GetCoordlist, index,
+				 mCanvas, coordinateBean);
+		  DrawAllOnBitmap();
+	 }
+	 public void ChangeAngleAttribute(int index,AngleBean angleBean){
+		 angleModel.ChangeAngleBeanAttributeAtIndex(angleModel.getAnglelist, index, mCanvas, angleBean);
+		  DrawAllOnBitmap();
+	 }
+	 public void ChangeTextContent(int index,String text){		 
+		 textModel.ChangeTextContentAtIndex(textModel.GetTextlist,index,mCanvas,text);
+		 DrawAllOnBitmap();
+	 }
+	
 	 //保存图片
 	 public void SavaBitmap(){
 		 ViewContans.saveBitmap(mBitmap);
 	 }	
+	 public interface TypeChangeListener{
+		 public void onTypeChange();
+	 }
+	 
+	 private TypeChangeListener typeListener;
+	 public void setOnTypeChangeListener(TypeChangeListener listener){
+		 this.typeListener=listener;
+	 }
 }

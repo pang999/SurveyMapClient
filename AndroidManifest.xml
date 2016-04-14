@@ -50,68 +50,94 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.DefineActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name="com.surveymapclient.activity.ShareActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
+
+            android:launchMode="singleTask"
+
             android:name="com.surveymapclient.activity.GraphicalActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
+            android:launchMode="singleTask"
+
             android:name="com.surveymapclient.activity.CameraActivity"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
+            android:launchMode="singleTask"
+
             android:name="com.surveymapclient.activity.StadyActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+
+
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributeLineActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributePolygonActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributeRectangleActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributeCoordinateActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributeAngleActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.TestCameraActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.ImageShowActivity"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
-        <activity
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.DataListActivity"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AudioRecorderActivity"
             android:theme="@style/MyActivityDialogStyle" >
         </activity>
-        <activity
+   
+        <activity 
+            android:launchMode="singleTask"
             android:name="com.surveymapclient.activity.AttributeTextActivity"
             android:theme="@style/MyActivityDialogStyle" >
         </activity>
         <activity android:name="com.surveymapclient.activity.HistoryActivity" >
         </activity>
     </application>
+
+
 
 </manifest>

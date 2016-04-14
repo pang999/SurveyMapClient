@@ -1,22 +1,15 @@
 package com.surveymapclient.activity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.surveymapclient.common.Contants;
+import com.surveymapclient.common.IToast;
+import com.surveymapclient.common.Logger;
+import com.surveymapclient.db.DBHelper;
+import com.surveymapclient.db.OperateData;
 import com.surveymapclient.Dialog.EditTextDialog;
 import com.surveymapclient.Dialog.EditeAndDelDialog;
 import com.surveymapclient.Dialog.ExitSaveSketchDialog;
 import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
-import com.surveymapclient.common.Contants;
-import com.surveymapclient.common.IToast;
-import com.surveymapclient.common.Logger;
-import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.db.DBHelper;
-import com.surveymapclient.db.OperateData;
-import com.surveymapclient.db.greendao.Line;
-import com.surveymapclient.db.greendao.Polygon;
 import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
@@ -24,54 +17,41 @@ import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.entity.TextBean;
+import com.surveymapclient.impl.ClipCallBack;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
+
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.pdf.PDFCreater;
 import com.surveymapclient.pdf.PDFSharer;
+
 import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.DefineView.TypeChangeListener;
-import com.surveymapclient.view.MovePopupWindow;
+import com.surveymapclient.view.MorePopupWindow;
 import com.surveymapclient.view.LocationView;
 import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
+import com.surveymapclient.view.StoreDataView;
+
 import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.Vibrator;
-import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 public class DefineActivity extends Activity implements TypeChangeListener,
-		DialogCallBack, VibratorCallBack, OnClickListener,
+		DialogCallBack, VibratorCallBack, OnClickListener,ClipCallBack,
 		DialogFragmentClickImpl {
 
 	// 控件
@@ -82,14 +62,12 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 			btnrectangle, btncoordinate, btnangle, btnsingle, btncontinuous;
 
 	private static LocationView locationview;
-	private RelativeLayout topLinearlaout;
 	DialogFragmentClickImpl impl;
 	Bitmap bitmap;
 	boolean isdrag = true;
-	private Context mContext = null;
-	private Button dataMove;
+	private LinearLayout dataMove;
 	public static int TYPE = 0;
-	// 数据库
+	// 数据库操作
 	private DBHelper helper;
 	/**
 	 * 手机振动器
@@ -115,13 +93,12 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		initView();
 		// 震动效果的系统服务
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		mContext = this;
 		TopHeaght = 100;
 		// initData();
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle.getInt("TYPE") == 0) {
 			long key = bundle.getLong("KEY");
-			edittitle.setText(bundle.getString("Title"));
+//			edittitle.setText(bundle.getString("Title"));
 			defineview.AddAllDataFromActivity(
 					OperateData.searchLine(key, helper),
 					OperateData.searchPolygon(key, helper),
@@ -143,19 +120,19 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 	}
 
+	@SuppressLint("ClickableViewAccessibility")
 	private void initView() {
 		// top
 		btndefineback = (ImageView) findViewById(R.id.defineBack);
 		btnmoveoperator = (ImageView) findViewById(R.id.btnmoveoperator);
 		edittitle = (EditText) findViewById(R.id.editTitle);
-		topLinearlaout = (RelativeLayout) findViewById(R.id.topLinearlayout);
 		locationview = (LocationView) findViewById(R.id.locationview);
-		edittitle.setOnClickListener(this);
+//		edittitle.setOnClickListener(this);
 		btndefineback.setOnClickListener(this);
 		// center
 		magnifyview = (MagnifyView) findViewById(R.id.magnifyview);
 		defineview = (DefineView) findViewById(R.id.defineview);
-		dataMove = (Button) findViewById(R.id.data_move);
+		dataMove = (LinearLayout) findViewById(R.id.data_move);
 		dataMove.setOnTouchListener(mTouchListener);
 		// bottom
 		btnsingle = (ImageView) findViewById(R.id.type_single);
@@ -170,7 +147,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		btncoordinate.setOnClickListener(this);
 		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
-
 		defineview.setOnTypeChangeListener(this);
 
 	}
@@ -220,8 +196,8 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	}
 
 	public void onMoreOperator(View v) {
-		MovePopupWindow movePopupWindow = new MovePopupWindow(
-				DefineActivity.this);
+		MorePopupWindow movePopupWindow = new MorePopupWindow(
+				DefineActivity.this,0);
 		movePopupWindow.showPopupWindow(btnmoveoperator);
 	}
 
@@ -233,10 +209,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 	public static void LocationXY(int x, int y) {
 		locationview.LocationSketch(x, y);
-	}
-
-	public static void MagnifyBitmap(Bitmap canvas) {
-		magnifyview.setDrawableCanvas(canvas);
 	}
 
 	@Override
@@ -303,6 +275,9 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		defineview.RemoveIndexLine(index);
 	}
 
+	public void RemovePolygonIndex(){
+		defineview.RemoveIndexPolygon(index);
+	}
 	public void RemoveRectangleIndex() {
 		defineview.RemoveIndexRectangle(index);
 	}
@@ -326,7 +301,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	public void showTapeDialog() {
 		Intent intent = new Intent(this, AudioRecorderActivity.class);
 		intent.putExtra("TYPE", 0);
-		Logger.i("录音", "showTapeDialog" + "");
 		startActivityForResult(intent, Contants.AUDIOATTRIBUTEBACK);
 	}
 
@@ -385,13 +359,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 //			btncoordinate.setSelected(true);
 			btnsingle.setSelected(false);
 			btncontinuous.setSelected(false);
-/*<<<<<<< HEAD
-
-			btnrectangle.setSelected(false);
-
-			btncoordinate.setSelected(true);
-			btnangle.setSelected(false);
-=======*/
 			btnrectangle.setSelected(false);			
 			btnangle.setSelected(false);
 			
@@ -413,7 +380,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 			break;
 		case R.id.annotation:
 			NotePopupWindow notePopupWindow = new NotePopupWindow(
-					DefineActivity.this);
+					DefineActivity.this,0);
 			notePopupWindow.showPopupWindow(btneditNote);
 			IToast.show(this, "NotePopupWindow");
 			break;
@@ -424,7 +391,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 		int lastX, lastY;
 
-		@SuppressLint("NewApi")
+		@SuppressLint({ "NewApi", "ClickableViewAccessibility" })
 		public boolean onTouch(View v, MotionEvent event) {
 			// TODO Auto-generated method stub
 			switch (event.getAction()) {
@@ -587,7 +554,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		// TODO Auto-generated method stub
 		this.textBean = textBean;
 		this.index = i;
-		EditTextDialog etd = EditTextDialog.newIntance();
+		EditTextDialog etd = EditTextDialog.newIntance(0);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		etd.show(ft, "");
 	}
@@ -635,8 +602,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
 		OperateData.insertText(key, defineview.BackTextlist(), helper);
 		OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
-		OperateData.insertModule(key, edittitle.getText().toString(), null, 0,
-				helper);
+		OperateData.insertModule(key, "nihao", null, 0,helper);
 		finish();
 	}
 
@@ -649,16 +615,14 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		if (keyCode == event.KEYCODE_BACK) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			showAlertDialog();
-			// return true;
 		}
 		return false;
 	}
 
 	@Override
 	public void onTypeChange() {
-//		Logger.e("type", type + "");
 		// TODO Auto-generated method stub
 		btnsingle.setSelected(false);
 		btncontinuous.setSelected(false);
@@ -666,63 +630,17 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		btncoordinate.setSelected(false);
 		btnangle.setSelected(false);
 
-		/*
-		 * switch (type) { case Contants.RECTANGLE:
-		 * btnsingle.setSelected(false);
-		 * 
-		 * btncontinuous.setSelected(false);
-		 * 
-		 * btnrectangle.setSelected(false); btncoordinate.setSelected(false);
-		 * 
-		 * btnangle.setSelected(false);
-		 * 
-		 * break;
-		 * 
-		 * 
-		 * case Contants.COORDINATE: btnsingle.setSelected(false);
-		 * 
-		 * btncontinuous.setSelected(false);
-		 * 
-		 * btnrectangle.setSelected(false); btncoordinate.setSelected(true);
-		 * 
-		 * btnangle.setSelected(false);
-		 * 
-		 * break;
-		 * 
-		 * case Contants.ANGLE: btnsingle.setSelected(false);
-		 * 
-		 * btncontinuous.setSelected(false);
-		 * 
-		 * btnrectangle.setSelected(false); btncoordinate.setSelected(false);
-		 * 
-		 * btnangle.setSelected(true);
-		 * 
-		 * break;
-		 * 
-		 * case Contants.SINGLE: btnsingle.setSelected(true);
-		 * 
-		 * btncontinuous.setSelected(false);
-		 * 
-		 * btnrectangle.setSelected(false); btncoordinate.setSelected(false);
-		 * 
-		 * btnangle.setSelected(false);
-		 * 
-		 * break;
-		 * 
-		 * case Contants.CONTINU: btnsingle.setSelected(false);
-		 * 
-		 * btncontinuous.setSelected(true);
-		 * 
-		 * btnrectangle.setSelected(false); btncoordinate.setSelected(false);
-		 * btnangle.setSelected(false);
-		 * 
-		 * break; default: break; }
-		 */
-
 	}
 
 	public void onRecall(View v) {
 
+	}
+
+	@Override
+	public void OnClipCallBack(byte[] bs) {
+		// TODO Auto-generated method stub
+		magnifyview.setDrawableCanvas(bs);
+//		IToast.show(this, "OnClipCallBack");
 	}
 
 }

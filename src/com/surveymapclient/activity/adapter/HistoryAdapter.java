@@ -48,11 +48,17 @@ public class HistoryAdapter extends BaseAdapter {
 			viewHolder = new ViewHolder();
 			convertView=layoutInflater.inflate(R.layout.listview_history, null);
 			viewHolder.historyName=(TextView) convertView.findViewById(R.id.historylist);
+			viewHolder.imageView=(ImageView) convertView.findViewById(R.id.img_type);
 			convertView.setTag(viewHolder);
 		}else {
 			viewHolder=(ViewHolder) convertView.getTag();
 		}
 		viewHolder.historyName.setText(mList.get(position).getName());
+		if (mList.get(position).getImgUrl()!=null&&!"".equals(mList.get(position).getImgUrl())) {
+			viewHolder.imageView.setBackgroundResource(R.drawable.meinv);
+		}else {
+			viewHolder.imageView.setBackgroundResource(R.drawable.wangge);
+		}
 		return convertView;
 	}
 	

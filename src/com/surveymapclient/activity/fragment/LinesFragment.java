@@ -30,7 +30,7 @@ public class LinesFragment extends Fragment{
 	LineAdapter adapter;
 	ImageView imageView;
 	static List<LineBean> mList;
-	
+	int index;
 	static Context mContext;	
 	public static LinesFragment newInstance(Context context,List<LineBean> list){
 		LinesFragment linesFragment=new LinesFragment();
@@ -59,6 +59,7 @@ public class LinesFragment extends Fragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
+				index=position;
 				Intent intent=new Intent();
 				Bundle bundle=new Bundle();
 				bundle.putInt("TYPE", 0);
@@ -67,7 +68,6 @@ public class LinesFragment extends Fragment{
 				intent.putExtras(bundle);
 				intent.setClass(getActivity(), AttributeLineActivity.class);
 				startActivity(intent);
-				getActivity().finish();
 			}
 		});
 		return parentView;
@@ -77,6 +77,21 @@ public class LinesFragment extends Fragment{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode==getActivity().RESULT_OK) {
+			Bundle bundle = data.getExtras();
+			LineBean lineBean=new LineBean();
+			LineBean lineBeans = (LineBean) bundle.getSerializable("BackLine");
+			lineBean.setName(lineBeans.getName());
+			lineBean.setLength(lineBeans.getLength());
+			lineBean.setPaintColor(lineBeans.getPaintColor());
+			lineBean.setPaintIsFull(lineBeans.isPaintIsFull());
+			lineBean.setPaintWidth(lineBeans.getPaintWidth());
+			lineBean.setDescripte(lineBeans.getDescripte());
+			lineBean.setAngle(lineBeans.getAngle());
+			mList.set(index, lineBean);
+			adapter.notifyDataSetChanged();	
+			IToast.show(getActivity(), "Ë¢ÐÂadapter");
+		}
 	}
 	
 }
