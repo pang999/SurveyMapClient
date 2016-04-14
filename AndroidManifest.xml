@@ -7,31 +7,33 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="23" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.VIBRATE"/> 
-	<uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.READ_LOGS" />
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.GET_TASKS" />
-	<uses-permission android:name="android.permission.SET_DEBUG_APP" />
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
-	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <!-- umengAppKey，replace to yours -->
     <meta-data
         android:name="UMENG_APPKEY"
         android:value="5704f7c667e58e83d50018a1" >
     </meta-data>
+
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
@@ -40,9 +42,7 @@
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.surveymapclient.activity.HomeActivity"
-            
             android:label="@string/app_name" >
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,68 +51,66 @@
         </activity>
         <activity
             android:name="com.surveymapclient.activity.DefineActivity"
-            android:screenOrientation="portrait"  >                 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
+            android:name="com.surveymapclient.activity.ShareActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.surveymapclient.activity.GraphicalActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.CameraActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.StadyActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributeLineActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributePolygonActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributeRectangleActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributeCoordinateActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributeAngleActivity"
-            android:screenOrientation="portrait"  > 
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.TestCameraActivity"
-            android:configChanges="orientation|keyboardHidden" 
-            android:screenOrientation="portrait"  > 
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.ImageShowActivity"
-            android:configChanges="keyboardHidden|orientation"
-             > 
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.DataListActivity"
-            android:configChanges="keyboardHidden|orientation"
-             > 
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AudioRecorderActivity"
-            android:theme="@style/MyActivityDialogStyle"
-             > 
+            android:theme="@style/MyActivityDialogStyle" >
         </activity>
-        <activity 
+        <activity
             android:name="com.surveymapclient.activity.AttributeTextActivity"
-            android:theme="@style/MyActivityDialogStyle"
-             > 
+            android:theme="@style/MyActivityDialogStyle" >
         </activity>
-
-        <activity 
-            android:name="com.surveymapclient.activity.HistoryActivity">
+        <activity android:name="com.surveymapclient.activity.HistoryActivity" >
         </activity>
     </application>
 

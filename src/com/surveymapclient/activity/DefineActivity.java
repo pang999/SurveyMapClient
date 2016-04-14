@@ -28,6 +28,7 @@ import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.pdf.PDFCreater;
+import com.surveymapclient.pdf.PDFSharer;
 import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.DefineView.TypeChangeListener;
 import com.surveymapclient.view.MovePopupWindow;
@@ -209,9 +210,12 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	}
 
 	public void ShareData() {
-		Intent intent = new Intent();
+		/*Intent intent = new Intent();
 		intent.setClass(this, ShareActivity.class);
-		startActivity(intent);
+		startActivity(intent);*/
+		
+		
+		new PDFSharer().share(this, "");
 
 	}
 

@@ -6,6 +6,7 @@ import com.surveymapclient.activity.R;
 import com.surveymapclient.activity.R.layout;
 import com.surveymapclient.entity.AngleBean;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
