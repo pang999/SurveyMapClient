@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+         
+       <RelativeLayout
+     android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:id="@+id/ll1"
+        android:layout_height="@dimen/title_height"
+        android:background="@color/main_color"
+        
+      
+        android:orientation="horizontal" >
+<ImageView
+            android:clickable="true"
+            android:onClick="onClickBack"
+            android:layout_width="@dimen/bottom_img_w_h"
+            android:layout_height="@dimen/bottom_img_w_h"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/defineback_bg" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="蓝牙扫描"
+            
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+    		android:textSize="20sp"/>
+    </RelativeLayout>  
+    
+    <FrameLayout android:layout_below="@+id/ll1" android:id="@+id/container" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+   
+    
+    
+   
+</RelativeLayout>

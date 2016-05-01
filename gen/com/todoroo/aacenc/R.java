@@ -8,21 +8,21 @@ package com.todoroo.aacenc;
 
 public final class R {
 	public static final class drawable {
-		public static final int ic_launcher = 0x7f02001f;
+		public static final int ic_launcher = 0x7f020020;
 	}
 	public static final class id {
-		public static final int play = 0x7f0a00bd;
-		public static final int text = 0x7f0a00be;
-		public static final int write = 0x7f0a00bc;
+		public static final int play = 0x7f0b00ca;
+		public static final int text = 0x7f0b00cb;
+		public static final int write = 0x7f0b00c9;
 	}
 	public static final class layout {
-		public static final int main = 0x7f030025;
+		public static final int main = 0x7f030029;
 	}
 	public static final class raw {
-		public static final int isoparser = 0x7f050000;
+		public static final int isoparser = 0x7f060000;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f060001;
-		public static final int hello = 0x7f060000;
+		public static final int app_name = 0x7f070001;
+		public static final int hello = 0x7f070000;
 	}
 }
