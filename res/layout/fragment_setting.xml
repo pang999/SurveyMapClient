@@ -90,4 +90,39 @@
            android:textColor="#000000"
             android:text="虚线" />
     </LinearLayout>
+    
+        <View 
+       android:layout_width="match_parent"
+         android:layout_height="0.1dp"
+        android:background="#000000"
+        />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:id="@+id/onSetBLE"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:text="蓝牙设置" />
+
+        <TextView
+            android:paddingLeft="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:text="" />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+         android:layout_height="0.1dp"
+        android:background="#000000"
+        />
+    
+    
 </LinearLayout>
