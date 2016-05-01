@@ -4,30 +4,26 @@
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:orientation="horizontal"
-    android:padding="10dp"
+    android:padding="6dp"
      >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:padding="2dp"
          >
 
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="2"
+            android:gravity="center"
              >
-            <TextView
-                android:id="@+id/lineName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="名称：" />
 
             <TextView
                 android:id="@+id/lineNameshow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="lineName" />
+                android:text="line1" />
              
         </LinearLayout>
 
@@ -35,42 +31,38 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="2"
+            android:gravity="center"
              >
-            <TextView
-                android:id="@+id/lineLenght"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="长度:" />
-
             <TextView
                 android:id="@+id/lineLenghtshow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 m" />
+                android:text="0.00" />
         </LinearLayout>
          <LinearLayout
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:gravity="center"
              >
-            <TextView
-                android:id="@+id/lineAngle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="角度:" />
-
             <TextView
                 android:id="@+id/lineAngleshow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20" />
+                android:text="0.0" />
         </LinearLayout>
 
-         <TextView
-             android:id="@+id/textView1"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text=">" />
+         <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=">" />
+        </LinearLayout>
         
     </LinearLayout>
 

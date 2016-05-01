@@ -2,6 +2,7 @@ package com.surveymapclient.pdf;
 
 import java.io.File;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,6 +29,16 @@ public class PDFSharer {
 	 * @author Pang
 	 * @date 2016-4-13 下午1:56:13
 	 */
+	private ProgressDialog mProgressDialog = null;
+	public PDFSharer(Context context) {
+		// TODO Auto-generated constructor stub
+		mProgressDialog = new ProgressDialog(context);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setCanceledOnTouchOutside(false);
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.setTitle("提示");
+		mProgressDialog.setMessage("正在保存数据，请耐心等候......");	
+	}
 	public void share(Context context, String path) {
 		if (path==null||"".equals(path)||!new File(path).exists()) {
 			Toast.makeText(context, "PDF文件不存在!", Toast.LENGTH_SHORT).show();
@@ -40,6 +51,17 @@ public class PDFSharer {
 								Uri.fromFile(new File(path)))
 						.setType("application/pdf"), "分享到:"));
 
+	}
+	
+	public void showProgressDialog(){
+		mProgressDialog.show();
+	}
+	
+	public void dismissProgressDialog(){
+		if(mProgressDialog.isShowing()){
+			mProgressDialog.cancel();
+			mProgressDialog.dismiss();
+		}
 	}
 
 }

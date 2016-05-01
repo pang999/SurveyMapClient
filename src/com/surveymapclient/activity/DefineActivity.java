@@ -1,15 +1,16 @@
 package com.surveymapclient.activity;
 
 import java.io.Serializable;
+import java.util.Date;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.db.DBHelper;
 import com.surveymapclient.db.OperateData;
-import com.surveymapclient.Dialog.EditTextDialog;
-import com.surveymapclient.Dialog.EditeAndDelDialog;
-import com.surveymapclient.Dialog.ExitSaveSketchDialog;
-import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
+import com.surveymapclient.dialog.EditTextDialog;
+import com.surveymapclient.dialog.EditeAndDelDialog;
+import com.surveymapclient.dialog.ExitSaveSketchDialog;
+import com.surveymapclient.dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
 import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
@@ -17,22 +18,17 @@ import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
 import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.entity.TextBean;
-import com.surveymapclient.impl.ClipCallBack;
+import com.surveymapclient.impl.CallBackData;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
-
-import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.pdf.PDFCreater;
 import com.surveymapclient.pdf.PDFSharer;
-
 import com.surveymapclient.view.DefineView;
 import com.surveymapclient.view.DefineView.TypeChangeListener;
+import com.surveymapclient.view.DefineViewPopupWindow;
 import com.surveymapclient.view.MorePopupWindow;
 import com.surveymapclient.view.LocationView;
-import com.surveymapclient.view.MagnifyView;
 import com.surveymapclient.view.NotePopupWindow;
-import com.surveymapclient.view.StoreDataView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -40,6 +36,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,24 +45,21 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class DefineActivity extends Activity implements TypeChangeListener,
-		DialogCallBack, VibratorCallBack, OnClickListener,ClipCallBack,
+		DialogCallBack, VibratorCallBack, OnClickListener,CallBackData,
 		DialogFragmentClickImpl {
 
 	// 控件
-	private static MagnifyView magnifyview;
 	private DefineView defineview;
 	private EditText edittitle;
-	private ImageView btndefineback, btneditNote, btnmoveoperator,
-			btnrectangle, btncoordinate, btnangle, btnsingle, btncontinuous;
-
+	private ImageView btndefineback, btneditNote, btnmoveoperator,btnrecall,
+			btnsingle, btncontinuous;
 	private static LocationView locationview;
 	DialogFragmentClickImpl impl;
 	Bitmap bitmap;
 	boolean isdrag = true;
-	private LinearLayout dataMove;
+	private Button dataMove;
 	public static int TYPE = 0;
 	// 数据库操作
 	private DBHelper helper;
@@ -76,13 +70,15 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 	LineBean line;
 	PolygonBean polygon;
-	RectangleBean rectangle;
-	CoordinateBean coordinate;
-	AngleBean angle;
+//	RectangleBean rectangle;
+//	CoordinateBean coordinate;
+//	AngleBean angle;
 	TextBean textBean;
+	PDFSharer sharer;
 	int index;
 
 	public static int TopHeaght;
+	private DefineViewPopupWindow window;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +86,9 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_define);
 		helper = DBHelper.getInstance(this);
+		sharer=new PDFSharer(this);		
 		initView();
+		window=new DefineViewPopupWindow(this);
 		// 震动效果的系统服务
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		TopHeaght = 100;
@@ -98,13 +96,15 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle.getInt("TYPE") == 0) {
 			long key = bundle.getLong("KEY");
-//			edittitle.setText(bundle.getString("Title"));
+			edittitle.setText(bundle.getString("Title"));
 			defineview.AddAllDataFromActivity(
 					OperateData.searchLine(key, helper),
 					OperateData.searchPolygon(key, helper),
-					OperateData.searchRectangle(key, helper),
-					OperateData.searchAngle(key, helper),
-					OperateData.searchCoordinate(key, helper),
+					OperateData.searchText(key, helper),
+					OperateData.searchAudio(key, helper));
+			window.AddAllDataFromActivity(
+					OperateData.searchLine(key, helper),
+					OperateData.searchPolygon(key, helper),
 					OperateData.searchText(key, helper),
 					OperateData.searchAudio(key, helper));
 			OperateData.dedeleLine(helper.searchDataLine(key), helper);
@@ -116,8 +116,9 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 			OperateData.deleteAngle(helper.searchDataAngle(key), helper);
 			OperateData.deleteText(helper.searchDataText(key), helper);
 			OperateData.deleteAudio(helper.searchDataAudio(key), helper);
+			
 		}
-
+		
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -130,23 +131,24 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 //		edittitle.setOnClickListener(this);
 		btndefineback.setOnClickListener(this);
 		// center
-		magnifyview = (MagnifyView) findViewById(R.id.magnifyview);
 		defineview = (DefineView) findViewById(R.id.defineview);
-		dataMove = (LinearLayout) findViewById(R.id.data_move);
+		dataMove = (Button) findViewById(R.id.data_move);
 		dataMove.setOnTouchListener(mTouchListener);
 		// bottom
 		btnsingle = (ImageView) findViewById(R.id.type_single);
 		btncontinuous = (ImageView) findViewById(R.id.type_continuous);
-		btnrectangle = (ImageView) findViewById(R.id.type_rectangle);
-		btncoordinate = (ImageView) findViewById(R.id.type_coordinate);
-		btnangle = (ImageView) findViewById(R.id.type_angle);
+//		btnrectangle = (ImageView) findViewById(R.id.type_rectangle);
+//		btncoordinate = (ImageView) findViewById(R.id.type_coordinate);
+//		btnangle = (ImageView) findViewById(R.id.type_angle);
+		btnrecall=(ImageView) findViewById(R.id.recall);
 		btneditNote = (ImageView) findViewById(R.id.annotation);
 		btnsingle.setOnClickListener(this);
 		btncontinuous.setOnClickListener(this);
-		btnrectangle.setOnClickListener(this);
-		btncoordinate.setOnClickListener(this);
-		btnangle.setOnClickListener(this);
+//		btnrectangle.setOnClickListener(this);
+//		btncoordinate.setOnClickListener(this);
+//		btnangle.setOnClickListener(this);
 		btneditNote.setOnClickListener(this);
+		btnrecall.setOnClickListener(this);
 		defineview.setOnTypeChangeListener(this);
 
 	}
@@ -156,45 +158,34 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		defineview.LocationXY();
 	}
 
-	public void onReCall(View v) {
-		// defineview.UnDo();
-		// String pngurl=defineview.SavaBitmap();
-		// IToast.show(this, "保存图片");
-		// new PDFCreater("/sdcard/surveymap/pdf/", new
-		// Date().getTime()+".pdf").createPDF(pngurl,
-		// defineview.BackLinelist(),
-		// defineview.BackPolylist(),
-		// defineview.BackRectlist(),
-		// defineview.BackCoorlist(),
-		// defineview.BackAnglelist(),
-		// defineview.BackTextlist(),
-		// defineview.BackAudiolist());
-
-	}
-
 	public void onDatalist() {
 		Intent intent = new Intent();
 		intent.putExtra("LineList", (Serializable) defineview.BackLinelist());
-		intent.putExtra("RectList", (Serializable) defineview.BackRectlist());
 		intent.putExtra("PolyList", (Serializable) defineview.BackPolylist());
-		intent.putExtra("CoorList", (Serializable) defineview.BackCoorlist());
-		intent.putExtra("AngleList", (Serializable) defineview.BackAnglelist());
-		intent.putExtra("TextList", (Serializable) defineview.BackTextlist());
-		intent.putExtra("AudioList", (Serializable) defineview.BackAudiolist());
-		intent.setClass(this, DataListActivity.class);
+//		intent.putExtra("TextList", (Serializable) defineview.BackTextlist());
+//		intent.putExtra("AudioList", (Serializable) defineview.BackAudiolist());
+		intent.setClass(this, DefineDataListActivity.class);
 		startActivity(intent);
 	}
 
+	@SuppressLint("SdCardPath")
 	public void ShareData() {
-		/*Intent intent = new Intent();
-		intent.setClass(this, ShareActivity.class);
-		startActivity(intent);*/
-		
-		
-		new PDFSharer().share(this, "");
+		 sharer.showProgressDialog();		
+		 String pngurl=defineview.SavaBitmap();	
+		 String pdfname=new Date().getTime()+".pdf";
+		 new PDFCreater("/sdcard/surveymap/pdf/",pdfname).createPDF(pngurl,
+		 defineview.BackLinelist(),
+		 defineview.BackPolylist(),
+		 defineview.BackTextlist(),
+		 defineview.BackAudiolist());
+		 sharer.dismissProgressDialog();
+		 sharer.share(this,"/sdcard/surveymap/pdf/"+ pdfname);
 
 	}
-
+	
+	
+	
+	@SuppressLint("SdCardPath")
 	public void onMoreOperator(View v) {
 		MorePopupWindow movePopupWindow = new MorePopupWindow(
 				DefineActivity.this,0);
@@ -233,28 +224,15 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 				LineBean lineBeans = (LineBean) bundle
 						.getSerializable("BackLine");
 				defineview.ChangeLineAttribute(index, lineBeans);
-			}
-			if (requestCode == Contants.RECTATTRIBUTEBACK) {
+			}	
+			if (requestCode==Contants.POLYGONLINEATTRIBUTEBACK) {
+				Logger.i("ChangePolygon", "ChangePolygonLineAttribute");
 				Bundle bundle = data.getExtras();
-				RectangleBean rectangleBean = (RectangleBean) bundle
-						.getSerializable("BackRectangle");
-				defineview.ChangeRectangleAttribute(index, rectangleBean);
-				Logger.i("BackRectangle", rectangleBean.getRectName());
-			}
-			if (requestCode == Contants.COORDATTRIBUTEBACK) {
-				Bundle bundle = data.getExtras();
-				CoordinateBean coordinateBean = (CoordinateBean) bundle
-						.getSerializable("BackCoordinate");
-				defineview.ChangeCoordinateAttribute(index, coordinateBean);
-			}
-			if (requestCode == Contants.ANGLEATTRIBUTEBACK) {
-				Bundle bundle = data.getExtras();
-				AngleBean angleBean = (AngleBean) bundle
-						.getSerializable("BackAngle");
-				defineview.ChangeAngleAttribute(index, angleBean);
+				LineBean polyline = (LineBean) bundle
+						.getSerializable("BackLine");
+				defineview.ChangePolygonLineAttribute(index, polyline);
 			}
 			if (requestCode == Contants.AUDIOATTRIBUTEBACK) {
-				IToast.show(this, "BackAudio");
 				Bundle bundle = data.getExtras();
 				if (bundle.getInt("BackAudio") == 0) {
 					defineview.setAudioOnView(bundle.getString("AudioUrl"),
@@ -264,6 +242,7 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 					defineview.RemoveIndexAudio(index);
 				}
 			}
+			
 		}
 	}
 
@@ -279,18 +258,9 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	public void RemovePolygonIndex(){
 		defineview.RemoveIndexPolygon(index);
 	}
-	public void RemoveRectangleIndex() {
-		defineview.RemoveIndexRectangle(index);
+	public void RemovePolygonLineIndex(){
+		defineview.RemoveIndexPolygonLine(index);
 	}
-
-	public void RemoveCoordinateIndex() {
-		defineview.RemoveIndexCoordinate(index);
-	}
-
-	public void RemoveAngleIndex() {
-		defineview.RemoveIndexAngle(index);
-	}
-
 	public void RemoveTextIndex() {
 		defineview.RemoveIndexText(index);
 	}
@@ -317,12 +287,6 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 			btncontinuous.setSelected(false);
 
-			btnrectangle.setSelected(false);
-
-			btncoordinate.setSelected(false);
-
-			btnangle.setSelected(false);
-
 			break;
 		case R.id.type_continuous:
 			defineview.ZoomCanvas(1);
@@ -332,58 +296,18 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 
 			btncontinuous.setSelected(true);
 
-			btnrectangle.setSelected(false);
-
-			btncoordinate.setSelected(false);
-
-			btnangle.setSelected(false);
-
 			break;
-		case R.id.type_rectangle:
-			defineview.ZoomCanvas(1);
-			TYPE = Contants.RECTANGLE;
 
-			btnsingle.setSelected(false);
-
-			btncontinuous.setSelected(false);
-
-			btnrectangle.setSelected(true);
-
-			btncoordinate.setSelected(false);
-
-			btnangle.setSelected(false);
-
-			break;
-		case R.id.type_coordinate:
-			defineview.ZoomCanvas(1);
-			TYPE = Contants.COORDINATE;	
-//			btncoordinate.setSelected(true);
-			btnsingle.setSelected(false);
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(false);			
-			btnangle.setSelected(false);
-			
-
-			break;
-		case R.id.type_angle:
-			defineview.ZoomCanvas(1);
-			TYPE = Contants.ANGLE;	
-//			btnangle.setSelected(true);
-			btnsingle.setSelected(false);			
-			btncontinuous.setSelected(false);
-			btnrectangle.setSelected(false);
-			btncoordinate.setSelected(false);
-	
-			break;
 		case R.id.defineBack:
-			// IToast.show(this, "保存图片成功");
 			showAlertDialog();
+			break;
+		case R.id.recall:
+			IToast.show(this, "保存图片");
 			break;
 		case R.id.annotation:
 			NotePopupWindow notePopupWindow = new NotePopupWindow(
 					DefineActivity.this,0);
 			notePopupWindow.showPopupWindow(btneditNote);
-			IToast.show(this, "NotePopupWindow");
 			break;
 		}
 	}
@@ -433,6 +357,12 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 				} else {
 					defineview.LineNoChangeToText();
 				}
+				if (defineview.SetTextToPolygonLine((int)event.getRawX(), 
+						(int)event.getRawY())) {
+					defineview.PolygonLineChangeToText();
+				}else {
+					defineview.PolygonLineNoChangeToText();
+				}
 				lastX = (int) event.getRawX();
 				lastY = (int) event.getRawY();
 				break;
@@ -445,6 +375,14 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 						dataMove.setVisibility(View.INVISIBLE);
 					}
 					defineview.LineNoChangeToText();
+				}
+				if (defineview.SetTextToPolygonLine((int) event.getRawX(),
+						(int) event.getRawY())) {
+					if (v==dataMove) {
+						defineview.SetwritePolygonLineText("2.985");
+						defineview.setVisibility(View.INVISIBLE);
+					}
+					defineview.PolygonLineNoChangeToText();
 				}
 				break;
 			}
@@ -462,6 +400,15 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		intent.setClass(DefineActivity.this, AttributeLineActivity.class);
 		startActivityForResult(intent, Contants.LINEATTRIBUTEBACK);
 	}
+	public void SendPolygonLineData(){
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("Line", line);
+		bundle.putInt("TYPE", 1);
+		intent.putExtras(bundle);
+		intent.setClass(DefineActivity.this, AttributeLineActivity.class);
+		startActivityForResult(intent, Contants.POLYGONLINEATTRIBUTEBACK);
+	}
 
 	public void SendPolygonData() {
 		Intent intent = new Intent();
@@ -472,40 +419,13 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		startActivityForResult(intent, Contants.POLYGONATTRIBUTEBACK);
 	}
 
-	public void SendRectangleData() {
-		Intent intent = new Intent();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("Rectangle", rectangle);
-		intent.putExtras(bundle);
-		intent.setClass(DefineActivity.this, AttributeRectangleActivity.class);
-		startActivityForResult(intent, Contants.RECTATTRIBUTEBACK);
-	}
-
-	public void SendCoordinateData() {
-		Intent intent = new Intent();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("Coordinate", coordinate);
-		intent.putExtras(bundle);
-		intent.setClass(DefineActivity.this, AttributeCoordinateActivity.class);
-		startActivityForResult(intent, Contants.COORDATTRIBUTEBACK);
-	}
-
-	public void SendAngleData() {
-		Intent intent = new Intent();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("Angle", angle);
-		intent.putExtras(bundle);
-		intent.setClass(DefineActivity.this, AttributeAngleActivity.class);
-		startActivityForResult(intent, Contants.ANGLEATTRIBUTEBACK);
-	}
-
 	@SuppressLint("NewApi")
 	@Override
-	public void onDialogCallBack(LineBean couplePoint, int i) {
+	public void onDialogCallBack(LineBean couplePoint, int i,int type) {
 		// TODO Auto-generated method stub
 		this.line = couplePoint;
 		this.index = i;
-		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(0);
+		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(type);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		eadd.show(ft, "");
 	}
@@ -523,31 +443,31 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 	@Override
 	public void onDialogCallBack(RectangleBean rectangle, int i) {
 		// TODO Auto-generated method stub
-		this.rectangle = rectangle;
-		this.index = i;
-		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(2);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		eadd.show(ft, "");
+//		this.rectangle = rectangle;
+//		this.index = i;
+//		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(2);
+//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+//		eadd.show(ft, "");
 	}
 
 	@Override
 	public void onDialogCallBack(CoordinateBean coordinate, int i) {
 		// TODO Auto-generated method stub
-		this.coordinate = coordinate;
-		this.index = i;
-		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(3);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		eadd.show(ft, "");
+//		this.coordinate = coordinate;
+//		this.index = i;
+//		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(3);
+//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+//		eadd.show(ft, "");
 	}
 
 	@Override
 	public void onDialogCallBack(AngleBean angleLine, int i) {
 		// TODO Auto-generated method stub
-		this.angle = angleLine;
-		this.index = i;
-		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(4);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		eadd.show(ft, "");
+//		this.angle = angleLine;
+//		this.index = i;
+//		EditeAndDelDialog eadd = EditeAndDelDialog.newIntance(4);
+//		FragmentTransaction ft = getFragmentManager().beginTransaction();
+//		eadd.show(ft, "");
 	}
 
 	@Override
@@ -598,12 +518,9 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		long key = System.currentTimeMillis();
 		OperateData.insertLine(key, defineview.BackLinelist(), helper);
 		OperateData.insertPolygon(key, defineview.BackPolylist(), helper);
-		OperateData.insertRectangle(key, defineview.BackRectlist(), helper);
-		OperateData.insertCoordinate(key, defineview.BackCoorlist(), helper);
-		OperateData.insertAngle(key, defineview.BackAnglelist(), helper);
 		OperateData.insertText(key, defineview.BackTextlist(), helper);
 		OperateData.insertAudio(key, defineview.BackAudiolist(), helper);
-		OperateData.insertModule(key, "nihao", null, 0,helper);
+		OperateData.insertModule(key, edittitle.getText().toString(), null, 0,helper);
 		finish();
 	}
 
@@ -627,21 +544,117 @@ public class DefineActivity extends Activity implements TypeChangeListener,
 		// TODO Auto-generated method stub
 		btnsingle.setSelected(false);
 		btncontinuous.setSelected(false);
-		btnrectangle.setSelected(false);
-		btncoordinate.setSelected(false);
-		btnangle.setSelected(false);
-
-	}
-
-	public void onRecall(View v) {
-
 	}
 
 	@Override
-	public void OnClipCallBack(byte[] bs) {
+	public void onCallBackDown(float x, float y) {
 		// TODO Auto-generated method stub
-		magnifyview.setDrawableCanvas(bs);
-//		IToast.show(this, "OnClipCallBack");
+		window.DrawDown(x, y);
 	}
+
+	@Override
+	public void onCallBackMove(float x, float y) {
+		// TODO Auto-generated method stub
+		window.showAtLocation(defineview, Gravity.NO_GRAVITY,0,150);
+		window.DrawMove(x, y);
+	}
+
+	@Override
+	public void onCallBackUp(float x, float y) {
+		// TODO Auto-generated method stub
+		window.DrawUp(x,y);
+		window.dismiss();
+	}
+
+	@Override
+	public void onCallBackLong(boolean islong,boolean isyes) {
+		// TODO Auto-generated method stub
+		window.DownlongTime(islong,isyes);
+	}
+
+	@Override
+	public void onCallBackDeleteLine(int i) {
+		// TODO Auto-generated method stub
+		window.DeleteLine(i);
+	}
+
+	@Override
+	public void onCallBackMoveLine(LineBean lineBean) {
+		// TODO Auto-generated method stub
+		window.MoveLineUp(lineBean);
+	}
+
+	@Override
+	public void onCallBackDeletePolygon(int i) {
+		// TODO Auto-generated method stub
+		window.DeletePolygon(i);
+	}
+
+	@Override
+	public void onCallBackMovePolygon(PolygonBean polygonBean) {
+		// TODO Auto-generated method stub
+		window.MovePolygonUp(polygonBean);
+	}
+
+	@Override
+	public void onCallBackDeletePolygonLine(int n, int i) {
+		// TODO Auto-generated method stub
+		window.DeletePolygonLine(n, i);
+	}
+
+	@Override
+	public void onCallBackLineAttribute(int index, LineBean lineBean) {
+		// TODO Auto-generated method stub
+		window.ChangeLineAttribute(index, lineBean);
+	}
+
+	@Override
+	public void onCallBaclPolygonLineAttribute(int n, int index, LineBean line) {
+		// TODO Auto-generated method stub
+		window.ChangePolygonLineAttribute(n, index, line);
+	}
+
+	@Override
+	public void onCallBackText(float x, float y) {
+		// TODO Auto-generated method stub
+		window.setManyTextOnView(x, y);
+	}
+
+	@Override
+	public void onCallBackAudio(float x, float y, String url, int len) {
+		// TODO Auto-generated method stub
+		window.setAudoiOnView(x, y, url, len);
+	}
+
+	@Override
+	public void onCallBackDeleteText(int i) {
+		// TODO Auto-generated method stub
+		window.DeleteText(i);
+	}
+
+	@Override
+	public void onCallBackDeleteAudio(int i) {
+		// TODO Auto-generated method stub
+		window.DeleteAudio(i);
+	}
+
+	@Override
+	public void onCallBackMoveTextUp(TextBean textBean) {
+		// TODO Auto-generated method stub
+		window.MoveTextUp(textBean);
+	}
+
+	@Override
+	public void onCallBackMoveAudioUp(AudioBean audioBean) {
+		// TODO Auto-generated method stub
+		window.MoveAudioUp(audioBean);
+	}
+
+	@Override
+	public void onCallBackChangeTextContent(int i, String text) {
+		// TODO Auto-generated method stub
+		window.ChangeTextContent(i, text);
+	}
+
 
 }

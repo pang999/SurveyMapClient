@@ -16,7 +16,7 @@ public class Contants {
 	public static final int TEXT=7;
 	public static final int COORDINATE_AXIS=8;
 	public static final int ANGLE_AXIS=9;
-	public static final int CONTINU_XETEND=21;
+	
 
 	
 	public static final int IS_CONTINUES=10;
@@ -31,6 +31,12 @@ public class Contants {
 	public static final int TEXTATTRIBUTEBACK=18;
 	public static final int AUDIOATTRIBUTEBACK=19;
 	public static final int AUDIO=20;
+	public static final int CONTINU_XETEND=21;
+	public static final int SINGLE_XETEND=22;
+	public static final int POLYGONLINEATTRIBUTEBACK=23;
+	public static final int LENGTHLINEATTRIBUTEBACK=24;
+	public static final int WIDTHLINEATTRIBUTEBACK=25;
+	public static final int HEIGHTLINEATTRIBUTEBACK=26;
 	/**
 	 * 根目录
 	 */

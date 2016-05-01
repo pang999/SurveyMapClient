@@ -2,20 +2,14 @@ package com.surveymapclient.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.AngleBean;
-import com.surveymapclient.entity.CoordinateBean;
-import com.surveymapclient.entity.LineBean;
-
-import android.R.integer;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.view.View;
 
 public class AngleModel {
 	
@@ -26,6 +20,7 @@ public class AngleModel {
 	Path mPath;
 	private Paint mPaint=ViewContans.generatePaint(Color.RED, 4,true);
 	private Paint checkpaint=ViewContans.generatePaint(Color.BLUE, 10,true);
+	private Paint threepaint=ViewContans.generatePaint(Color.GREEN, 6, true);
 	private float mX, mY;// ÁÙÊ±µã×ø±ê
 	private static final float TOUCH_TOLERANCE = 4;
 	float start_x,start_y,end_x,end_y,angle_x,angle_y;
@@ -45,10 +40,12 @@ public class AngleModel {
 	public void DrawAngle(Canvas canvas){
 		canvas.drawLine(start_x, start_y, angle_x, angle_y, mPaint);
 		canvas.drawLine(angle_x, angle_y, end_x, end_y, mPaint);
+		canvas.drawLine(start_x, start_y, end_x, end_y, threepaint);
 	}
 	public void MoveDrawAngle(Canvas canvas){
 		canvas.drawLine(start_mx, start_my, angle_mx, angle_my, checkpaint);
 		canvas.drawLine(angle_mx, angle_my, end_mx, end_my, checkpaint);
+		canvas.drawLine(start_mx, start_my, end_mx, end_my, checkpaint);
 	}
 
 	public void DrawAngleOnBitmap(List<AngleBean> list,Canvas canvas){
@@ -154,6 +151,7 @@ public class AngleModel {
 		Paint paint=ViewContans.generatePaint(angleBean.getPaintColor(), angleBean.getPaintWidth(), angleBean.isPaintIsFull());
 		canvas.drawLine(start_mx, start_my, angle_mx, angle_my, paint);
 		canvas.drawLine(angle_mx, angle_my, end_mx, end_my, paint);
+		canvas.drawLine(start_mx, start_my, end_mx, end_my, threepaint);
 		if (angleBean.getAngle()>0) {
 			ViewContans.AddTextOnAngle(angleBean, canvas, angleBean.getAngle()+"¡ã");
 		}
@@ -171,6 +169,7 @@ public class AngleModel {
 		Paint paint=ViewContans.generatePaint(angleBean.getPaintColor(), angleBean.getPaintWidth(), angleBean.isPaintIsFull());
 		canvas.drawLine(start_mx, start_my, angle_mx, angle_my, paint);
 		canvas.drawLine(angle_mx, angle_my, end_mx, end_my, paint);
+		canvas.drawLine(start_mx, start_my, end_mx, end_my, threepaint);
 		if (angleBean.getAngle()>0) {
 			ViewContans.AddTextOnAngle(angleBean, canvas, angleBean.getAngle()+"¡ã");
 		}

@@ -1,25 +1,16 @@
-package com.surveymapclient.Dialog;
+package com.surveymapclient.dialog;
 
 import com.surveymapclient.activity.DefineActivity;
-import com.surveymapclient.activity.AttributeLineActivity;
 import com.surveymapclient.activity.R;
-import com.surveymapclient.common.IToast;
-import com.surveymapclient.entity.LineBean;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class EditeAndDelDialog extends DialogFragment implements OnClickListener{
@@ -35,6 +26,7 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 		return editeAndDelDialog;
 		
 	}
+	@SuppressLint("InflateParams")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -79,13 +71,7 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 				daActivity.SendPolygonData();
 			}
 			if (type==2) {
-				daActivity.SendRectangleData();
-			}
-			if (type==3) {
-				daActivity.SendCoordinateData();
-			}
-			if (type==4) {
-				daActivity.SendAngleData();
+				daActivity.SendPolygonLineData();
 			}
 			dismiss();
 		} else if (id == R.id.dialogdelete) {
@@ -93,16 +79,9 @@ public class EditeAndDelDialog extends DialogFragment implements OnClickListener
 				daActivity.RemoveLineIndex();
 			}if (type==1) {
 				daActivity.RemovePolygonIndex();
-			}
-			if (type==2) {
-				daActivity.RemoveRectangleIndex();
-			}
-			if (type==3) {
-				daActivity.RemoveCoordinateIndex();
-			}
-			if (type==4) {
-				daActivity.RemoveAngleIndex();
-			}
+			}if (type==2) {
+				daActivity.RemovePolygonLineIndex();
+			}		
 			dismiss();
 		} else {
 		}

@@ -1,25 +1,16 @@
 package com.surveymapclient.view;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.surveymapclient.activity.CameraActivity;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;
-import com.surveymapclient.activity.adapter.HistoryAdapter;
-
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 
 public class MorePopupWindow extends PopupWindow implements OnClickListener{
@@ -33,7 +24,7 @@ public class MorePopupWindow extends PopupWindow implements OnClickListener{
 		activity=context;
 		LayoutInflater inflater = (LayoutInflater) context  
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
-        conentView = inflater.inflate(R.layout.popupmovewindow, null);  
+        conentView = inflater.inflate(R.layout.popupwindowmore, null);  
         int h = context.getWindowManager().getDefaultDisplay().getHeight();  
         int w = context.getWindowManager().getDefaultDisplay().getWidth();  
         // …Ë÷√SelectPicPopupWindowµƒView  
@@ -89,7 +80,7 @@ public class MorePopupWindow extends PopupWindow implements OnClickListener{
 		case R.id.datashare:
 			if (mType==0) {
 				DefineActivity defineActivity=(DefineActivity) activity;
-//				defineActivity.ShareData();
+				defineActivity.ShareData();
 			}else if (mType==1) {
 				CameraActivity cameraActivity=(CameraActivity) activity;
 				

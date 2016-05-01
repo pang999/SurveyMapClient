@@ -1,6 +1,9 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=5f0e3822ab87cb2fc0682396807aa3879550ccdc
 eclipse.preferences.version=1
-<<<<<<< HEAD
+encoding//src/com/surveymapclient/activity/AttributeCoordinateActivity.java=UTF-8
 encoding//src/com/surveymapclient/activity/ShareActivity.java=UTF-8
-=======
+encoding//src/com/surveymapclient/activity/adapter/ViewPagerAdapter.java=UTF-8
+encoding//src/com/surveymapclient/activity/welcome/Pages.java=UTF-8
 encoding//src/com/surveymapclient/common/Contants.java=UTF-8
->>>>>>> 5f0e3822ab87cb2fc0682396807aa3879550ccdc

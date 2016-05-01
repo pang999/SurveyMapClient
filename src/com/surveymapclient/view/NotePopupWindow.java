@@ -25,7 +25,7 @@ public class NotePopupWindow extends PopupWindow{
 		mTyp=type;
 		LayoutInflater inflater = (LayoutInflater) context  
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
-        conentView = inflater.inflate(R.layout.popupeditewindow, null);  
+        conentView = inflater.inflate(R.layout.popupwindowedite, null);  
         int h = context.getWindowManager().getDefaultDisplay().getHeight();  
         int w = context.getWindowManager().getDefaultDisplay().getWidth();  
         // …Ë÷√SelectPicPopupWindowµƒView  

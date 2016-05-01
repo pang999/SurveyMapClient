@@ -26,7 +26,7 @@ public class ShareActivity extends Activity implements OnClickListener {
 		weixin=(ImageView) findViewById(R.id.share_weixin);
 		email.setOnClickListener(this);
 		weixin.setOnClickListener(this);*/
-		new PDFSharer().share(this, "/sdcard/aa.pdf");
+//		new PDFSharer().share(this, "/sdcard/surveymap/pdf/1460690565111.pdf");
 	}
 	@Override
 	public void onClick(View v) {
@@ -43,19 +43,19 @@ public class ShareActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.share_email:
-			  new ShareAction(this).setPlatform(SHARE_MEDIA.WEIXIN).setCallback(umShareListener)
-              .withText("hello umeng")
-              .withTargetUrl("http://dev.umeng.com")
-             .share();
+//			  new ShareAction(this).setPlatform(SHARE_MEDIA.WEIXIN).setCallback(umShareListener)
+//              .withText("hello umeng")
+//              .withTargetUrl("http://dev.umeng.com")
+//             .share();
 			break;
 
 		case R.id.share_weixin:
 
-			 new ShareAction(this).setPlatform(SHARE_MEDIA.EMAIL).setCallback(umShareListener)
-             .withText("hello umeng")
-             .withTitle("dddddd")
-  
-             .share();
+//			 new ShareAction(this).setPlatform(SHARE_MEDIA.EMAIL).setCallback(umShareListener)
+//             .withText("hello umeng")
+//             .withTitle("dddddd")
+//  
+//             .share();
 			break;
 		}
 		

@@ -18,9 +18,6 @@
         android:layout_height="@dimen/title_height"
         android:layout_gravity="top"
         android:background="@color/main_color" >
-
-        
-
         <com.surveymapclient.view.LocationView
             android:id="@+id/locationview"
             android:layout_width="wrap_content"
@@ -46,15 +43,8 @@
             android:onClick="onMoreOperator"
             android:src="@drawable/tolistlines_bg" />
     </RelativeLayout>
-        <com.surveymapclient.view.MagnifyView
-        android:id="@+id/magnifyview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp" />
 	<EditText
-            android:id="@+id/camera_editTitle"
+            android:id="@+id/editTitle"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -99,7 +89,7 @@
                 android:layout_height="@dimen/bottom_img_w_h"
                 android:src="@drawable/type_continuous_bg" />
         </LinearLayout>
-
+<!-- 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -137,7 +127,7 @@
                 android:layout_width="@dimen/bottom_img_w_h"
                 android:layout_height="@dimen/bottom_img_w_h"
                 android:src="@drawable/type_angle_bg" />
-        </LinearLayout>
+        </LinearLayout> -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,28 +160,23 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#DCDCDC"
-        android:layout_above="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        >
-        
-    	<LinearLayout 
-    	    android:id="@+id/data_move"
-    	    android:layout_width="70dp"
-        	android:layout_height="50dp"
-        	android:background="#DCDCDC"
-    	    >
-    	    <com.surveymapclient.view.StoreDataView
-		        
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		 		/>
-    	</LinearLayout>
-    </LinearLayout>
+     <com.surveymapclient.view.StoreDataView	
+         android:layout_above="@id/button1"	
+            android:id="@+id/data_move"        
+	        android:layout_width="100dp"
+	        android:layout_height="50dp"
 
+	 		/> 
+	<!-- <Button 
+	    
+	    	android:id="@+id/data_move"        
+	        android:layout_width="70dp"
+	        android:layout_above="@id/button1"
+	        android:layout_height="wrap_content"
+	        android:background="@null"
+	        android:maxLines="3"
+	        android:textColor="#000000"
+	        android:text="2.490m 39m 89m"
+	    /> -->
 
 </RelativeLayout>

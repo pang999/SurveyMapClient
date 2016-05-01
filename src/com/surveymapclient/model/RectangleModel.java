@@ -2,13 +2,9 @@ package com.surveymapclient.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.RectangleBean;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,10 +25,20 @@ public class RectangleModel {
     private RectangleBean rectangleBean=new RectangleBean();
 		
 	public void DrawRectangle(Canvas canvas){		
-		canvas.drawRect(start_x, start_y, end_x, end_y, mPaint);
+//		canvas.drawRect(start_x, start_y, end_x, end_y, mPaint);
+		float[] pts={start_x,start_y,end_x,start_y,
+				end_x,start_y,end_x,end_y,
+				end_x,end_y,start_x,end_y,
+				start_x,end_y,start_x,start_y};
+		canvas.drawLines(pts, mPaint);
 	}
 	public void MoveDrawRectangle(Canvas canvas){	
-		canvas.drawRect(smx, smy, emx, emy, checkpaint);		
+//		canvas.drawRect(smx, smy, emx, emy, checkpaint);	
+		float[] pts={smx,smy,emx,smy,
+				emx,smy,emx,emy,
+				emx,emy,smx,emy,
+				smx,emy,smx,smy};
+		canvas.drawLines(pts, checkpaint);
 	}
 
 	public void drawRectangleOnBitmap(Canvas canvas){

@@ -4,12 +4,11 @@ import java.io.Serializable;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
-import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.db.DBHelper;
 import com.surveymapclient.db.OperateData;
-import com.surveymapclient.Dialog.CameraEditeAndDelDialog;
-import com.surveymapclient.Dialog.ExitSaveSketchDialog;
-import com.surveymapclient.Dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
+import com.surveymapclient.dialog.CameraEditeAndDelDialog;
+import com.surveymapclient.dialog.ExitSaveSketchDialog;
+import com.surveymapclient.dialog.ExitSaveSketchDialog.DialogFragmentClickImpl;
 import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.AudioBean;
 import com.surveymapclient.entity.CoordinateBean;
@@ -44,7 +43,7 @@ public class CameraActivity extends Activity
 		implements TypeChangeListener, DialogCallBack, VibratorCallBack, OnClickListener, DialogFragmentClickImpl {
 
 	// ¿Ø¼þ
-//	private EditText edittitle;
+	private EditText edittitle;
 	private ImageView btndefineback, btneditNote, btnrectangle, btnmoveoperator, btncoordinate, btnangle, btnsingle,
 			btncontinuous;
 	private static LocationView locationview;
@@ -90,7 +89,7 @@ public class CameraActivity extends Activity
 				String path = bundle.getString("imgUrl");
 				imgurl=path;
 				cameraBitMapView.setimagebitmap(path);
-				// edittitle.setText(bundle.getString("Title"));
+				 edittitle.setText(bundle.getString("Title"));
 				cameraBitMapView.AddAllDataFromActivity(OperateData.searchLine(key, helper),
 						OperateData.searchPolygon(key, helper), OperateData.searchRectangle(key, helper),
 						OperateData.searchAngle(key, helper), OperateData.searchCoordinate(key, helper),
@@ -126,11 +125,11 @@ public class CameraActivity extends Activity
 	private void initView() {
 		// top
 		btndefineback = (ImageView) findViewById(R.id.defineBack);
-//		edittitle = (EditText) findViewById(R.id.camera_editTitle);
+		edittitle = (EditText) findViewById(R.id.camera_editTitle);
 		locationview = (LocationView) findViewById(R.id.locationview);
 		btnmoveoperator = (ImageView) findViewById(R.id.btnmoveoperator);
 		btnmoveoperator.setOnClickListener(this);
-		// edittitle.setOnClickListener(this);
+//		 edittitle.setOnClickListener(this);
 		btndefineback.setOnClickListener(this);
 		// center
 		cameraBitMapView = (CameraBitMapView) findViewById(R.id.CameraBitMapView);
@@ -231,7 +230,7 @@ public class CameraActivity extends Activity
 		intent.putExtra("AngleList", (Serializable) cameraBitMapView.BackAnglelist());
 		intent.putExtra("TextList", (Serializable) cameraBitMapView.BackTextlist());
 		intent.putExtra("AudioList", (Serializable) cameraBitMapView.BackAudiolist());
-		intent.setClass(this, DataListActivity.class);
+		intent.setClass(this, CameraDataListActivity.class);
 		startActivity(intent);
 	}
 
@@ -328,7 +327,7 @@ public class CameraActivity extends Activity
 
 	@SuppressLint("NewApi")
 	@Override
-	public void onDialogCallBack(LineBean couplePoint, int i) {
+	public void onDialogCallBack(LineBean couplePoint, int i,int type) {
 		// TODO Auto-generated method stub
 		this.line = couplePoint;
 		this.index = i;
@@ -555,7 +554,7 @@ public class CameraActivity extends Activity
 		OperateData.insertAngle(key, cameraBitMapView.BackAnglelist(), helper);
 		OperateData.insertText(key, cameraBitMapView.BackTextlist(), helper);
 		OperateData.insertAudio(key, cameraBitMapView.BackAudiolist(), helper);
-		OperateData.insertModule(key, "nihaol", imgurl, 1, helper);
+		OperateData.insertModule(key, edittitle.getText().toString(), imgurl, 1, helper);
 		finish();
 	}
 

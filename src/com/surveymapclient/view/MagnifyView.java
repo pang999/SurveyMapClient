@@ -40,10 +40,10 @@ public class MagnifyView extends View {
 		super.onDraw(canvas);
 		bitmap=getPicFromBytes(mb, options);
 		Logger.i("放大图片", ""+mb);
-		if (bitmap!=null) {			
-			canvas.drawBitmap(bitmap, matrix, null);
-			bitmap.recycle();
-		}
+//		if (bitmap!=null) {			
+//			canvas.drawBitmap(bitmap, matrix, null);
+//			bitmap.recycle();
+//		}
 	}
 	 /**  
      * @param 将字节数组转换为ImageView可调用的Bitmap对象  

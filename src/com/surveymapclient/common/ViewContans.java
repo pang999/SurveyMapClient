@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.model.PolygonModel;
 
+import android.R.string;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -96,8 +96,7 @@ public class ViewContans {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
-         
+        }          
         return paintPath;
     }
 	/**计算两点之间的距离像素**/
@@ -170,36 +169,36 @@ public class ViewContans {
      }
 	 //整除获得吸附
 	 public static float AdsorbPoint(int x){
-			int n=x/20;
-			int dx=x%20;
+			int n=x/40;
+			int dx=x%40;
 			Logger.i("求整数", "除整="+n+"，除余="+dx);
 			int m=0;
 			if (dx==0) {
 				m=n;
-			}else if (dx<=10) {
+			}else if (dx<=20) {
 				m=n;
 			}else {
 				m=n+1;
 			}
-			return (float)20*m;
+			return (float)40*m;
 	}
 	public static void initCanvasHuabu(Canvas canvas,Bitmap mBitmap,float scale){
 		canvas.drawColor(Color.WHITE);
-		final int space = 20;   //长宽间隔  
+		final int space = 40;   //长宽间隔  
 	    int vertz = 0;  
 	    int hortz = 0;  
-	    int xcount=height/10;
-	    int ycount=width/10;
-		canvas.scale(scale, scale,width/2,height/2);
+	    int xcount=height/40;
+	    int ycount=width/40;
+		canvas.scale(scale,scale,width/2,height/2);
 		// 将前面已经画过得显示出来
-	    canvas.drawBitmap(mBitmap, 0, 0, null);     //显示旧的画布       
+//	    canvas.drawBitmap(mBitmap, 0, 0, null);     //显示旧的画布       
 	    Logger.i("mBitmap大小", mBitmap.toString());
 	    
-	    for(int i=0;i<xcount/2+1;i++){  
+	    for(int i=0;i<xcount+1;i++){  
 	       canvas.drawLine(0,  vertz,  width, vertz, huabu);  
 	       vertz+=space;  
 	    }   
-	    for (int i = 0; i < ycount/2+1; i++) {
+	    for (int i = 0; i < ycount+1; i++) {
 	       canvas.drawLine(hortz, 0, hortz, height, huabu);  
 	       hortz+=space;  
 		}
@@ -314,37 +313,37 @@ public class ViewContans {
 	}
 	public static void AddTextOnCoordinate(CoordinateBean coor,Canvas canvas,
 			String volum,String lengh,String width,String height){
-		Paint textpaint = new Paint();                
-    	textpaint.setColor(Color.BLUE);
-    	textpaint.setTextSize(30);
-		float cx=coor.getCenterX();
-		float cy=coor.getCenterY();
-		float xx=coor.getXaxisX();
-		float xy=coor.getXaxisY();
-		float yx=coor.getYaxisX();
-		float yy=coor.getYaxisY();
-		float zx=coor.getZaxisX();
-		float zy=coor.getZaxisY();
-		List<PointF> pointFs=new ArrayList<PointF>();	
-		pointFs.add(new PointF(xx,cy));
-    	pointFs.add(new PointF(cx,cy));
-    	pointFs.add(new PointF(xx,xy));
-		int place=20;
-		float zx_x=cx;
-		float zx_y=zy/2+cy/2;				
-		float yy_x=cx/2+yx/2;
-		float yy_y=cy;		
-		float xx_x=xx/2+cx/2;
-		float xx_y=xy/2+cy/2;
-		float A=(float) PolygonModel.Angle(pointFs);
-		float lenL=getTextWidth(textpaint, lengh);
-		float lenW=getTextWidth(textpaint, width);
-		float lenH=getTextWidth(textpaint, height);
-		float lenV=getTextWidth(textpaint, volum);
-		drawText(canvas, lengh, yy_x-place, yy_y-place, textpaint, 0, lenL);
-		drawText(canvas, width, xx_x-40, xx_y+40, textpaint,-A, lenW);
-		drawText(canvas, height, zx_x-place, zx_y+lenH/2, textpaint,  -90, lenH);		
-		drawText(canvas, volum, xx_x-lenV/2, yy_y, textpaint, 0, lenV);
+//		Paint textpaint = new Paint();                
+//    	textpaint.setColor(Color.BLUE);
+//    	textpaint.setTextSize(30);
+//		float cx=coor.getCenterX();
+//		float cy=coor.getCenterY();
+//		float xx=coor.getXaxisX();
+//		float xy=coor.getXaxisY();
+//		float yx=coor.getYaxisX();
+//		float yy=coor.getYaxisY();
+//		float zx=coor.getZaxisX();
+//		float zy=coor.getZaxisY();
+//		List<PointF> pointFs=new ArrayList<PointF>();	
+//		pointFs.add(new PointF(xx,cy));
+//    	pointFs.add(new PointF(cx,cy));
+//    	pointFs.add(new PointF(xx,xy));
+//		int place=20;
+//		float zx_x=cx;
+//		float zx_y=zy/2+cy/2;				
+//		float yy_x=cx/2+yx/2;
+//		float yy_y=cy;		
+//		float xx_x=xx/2+cx/2;
+//		float xx_y=xy/2+cy/2;
+//		float A=(float) PolygonModel.Angle(pointFs);
+//		float lenL=getTextWidth(textpaint, lengh);
+//		float lenW=getTextWidth(textpaint, width);
+//		float lenH=getTextWidth(textpaint, height);
+//		float lenV=getTextWidth(textpaint, volum);
+//		drawText(canvas, lengh, yy_x-place, yy_y-place, textpaint, 0, lenL);
+//		drawText(canvas, width, xx_x-40, xx_y+40, textpaint,-A, lenW);
+//		drawText(canvas, height, zx_x-place, zx_y+lenH/2, textpaint,  -90, lenH);		
+//		drawText(canvas, volum, xx_x-lenV/2, yy_y, textpaint, 0, lenV);
 	}
 	public static void AddTextOnAngle(AngleBean angleBean,Canvas canvas,String angle){
 		Paint textpaint = new Paint();                
@@ -366,5 +365,55 @@ public class ViewContans {
             }              
         }  
         return iRet;  
+	}
+	public static String setColor(int c){
+		if (c==Color.RED) {			
+			return "红色";
+		}else if (c==Color.BLUE) {
+			return "蓝色";
+		}else if (c==Color.GREEN) {
+			return "绿色";
+		}else if (c==Color.WHITE) {
+			return "白色";
+		}else if (c==Color.YELLOW) {
+			return "黄色";
+		}else if (c==Color.BLACK) {
+			return "黑色";
+		}
+		return "";
+	}
+	public static String setWidth(float c){
+		if (c==2) {			
+			return "50%";
+		}else if (c==4) {
+			return "100%";
+		}else if (c==6) {
+			return "150%";
+		}else if (c==8) {
+			return "200%";
+		}else if (c==10) {
+			return "300%";
+		}
+		return "";
+	}
+	public static LineBean setLineBean(float sx,float sy,float ex,float ey){
+		LineBean lineBean=new LineBean();
+		lineBean.setStartX(sx);
+		lineBean.setStartY(sy);
+		lineBean.setEndX(ex);
+		lineBean.setEndY(ey);
+		lineBean.setAngle(0.0);
+		lineBean.setDescripte("描述");
+		lineBean.setLength(0.0);
+		lineBean.setAngle(0.0);
+		lineBean.setPaintColor(Color.RED);
+		lineBean.setPaintWidth(4);
+		lineBean.setPaintIsFull(true);
+		lineBean.setName("lines");
+		return lineBean;		
+	}
+	public static void DrawLine(Canvas canvas,LineBean lineBean){
+		canvas.drawLine(lineBean.getStartX(), lineBean.getStartY(), lineBean.getEndX(),
+				lineBean.getEndY(), generatePaint(lineBean.getPaintColor(), lineBean.getPaintWidth(), lineBean.isPaintIsFull()));
 	}
 }

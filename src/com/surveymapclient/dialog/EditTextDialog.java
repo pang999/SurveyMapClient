@@ -1,4 +1,4 @@
-package com.surveymapclient.Dialog;
+package com.surveymapclient.dialog;
 
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.activity.R;

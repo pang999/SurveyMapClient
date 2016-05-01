@@ -2,9 +2,6 @@ package com.surveymapclient.entity;
 
 import java.io.Serializable;
 
-import android.graphics.PointF;
-import android.os.Parcelable;
-
 public class RectangleBean implements Serializable{
 
 	private static final long serialVersionUID = -7060210544600464481L;

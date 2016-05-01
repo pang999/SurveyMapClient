@@ -15,6 +15,7 @@
               android:id="@+id/imageButton1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_alignParentStart="true" 
               android:layout_alignParentLeft="true"
               android:onClick="AttributeBack"
               android:src="@drawable/back_bg" />
@@ -23,11 +24,12 @@
               android:id="@+id/button1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
               android:layout_alignParentRight="true"
               android:layout_centerVertical="true"
               android:background="@color/main_color"
               android:onClick="EditComplete"
-              android:text="完成"
+              android:text="@string/done"
               android:textColor="#FFFFFF"
               android:textSize="20sp" />
 
@@ -38,7 +40,7 @@
               android:layout_alignBottom="@+id/button1"
               android:layout_centerHorizontal="true"
               android:layout_centerVertical="true"
-              android:text="坐标"
+              android:text="@string/coordinate"
               android:textColor="#FFFFFF"
               android:textSize="20sp"/>
       </RelativeLayout>
@@ -49,19 +51,18 @@
         android:layout_height="wrap_content" >
 
         <TextView
-                 android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="4"
             android:textColor="#000000"
-            android:textSize="18sp"
-     
-            android:text="名称:" />
+            android:textSize="18sp"   
+            android:text="@string/coordinate_name" />
 
         <EditText
             android:id="@+id/editcoorName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:layout_marginLeft="30dp" 
             android:textSize="18sp"
             android:background="@null"
         	android:singleLine="true"
@@ -79,20 +80,18 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:text="体积:"
+            android:text="@string/coordinate_volum"
             android:textColor="#000000"
             android:textSize="18sp" />
 
-        <EditText
-            
+        <TextView            
             android:id="@+id/editcoorvolum"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:textSize="18sp"
+            android:layout_marginLeft="30dp"            
             android:background="@null"
         	android:singleLine="true"
             android:imeOptions="actionDone"
@@ -104,183 +103,115 @@
         android:layout_height="0.5dp"
         android:background="#DCDCDC"
         />
-    <LinearLayout
-        android:padding="10dp"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:id="@+id/gotoeditcoorlength"
+        android:padding="10dp" >
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:text="长度:"
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coordinate_lengh"
             android:textColor="#000000"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/editcoorLengh"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:background="@null"
-        	android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:inputType="number"
- 
-            android:text="90" />
-    </LinearLayout>
-    <View 
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
-     <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/more_btn" />
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:textColor="#000000"
-            android:textSize="18sp"
- 
-            android:text="宽度:" />
-
-        <EditText
-            android:id="@+id/editcoorwidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:id="@+id/coorLengh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/textView2"
             android:background="@null"
-            android:imeOptions="actionDone"
-            android:inputType="number"
             android:singleLine="true"
             android:text="90"
             android:textSize="18sp" />
+    </RelativeLayout>
 
-    </LinearLayout>
     <View 
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#DCDCDC"
         />
-    <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:id="@+id/gotoeditcoorwidth"    
+     android:padding="10dp" >
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:textColor="#000000"
-            android:textSize="18sp"
-  
-            android:text="高度:" />
+     <TextView
+         android:id="@+id/textView4"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/coordinate_width"
+         android:textColor="#000000"
+         android:textSize="18sp" />
 
-        <EditText
-            
-            android:id="@+id/editcoorheight"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:background="@null"
-        	android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="20m" />
-    </LinearLayout>
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentEnd="true"
+         android:layout_alignParentRight="true"
+         android:src="@drawable/more_btn" />
+
+     <TextView
+         android:id="@+id/coorwidth"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="30dp"
+         android:layout_toRightOf="@+id/textView4"
+         android:background="@null"
+         android:singleLine="true"
+         android:text="90"
+         android:textSize="18sp" />
+    </RelativeLayout>
     <View 
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#DCDCDC"
         />
-    <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onSetColor"
-         >
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/gotoeditcoorheight" 
+      android:padding="10dp" >
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="颜色:" />
+      <TextView
+          android:id="@+id/textView3"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/coordinate_height"
+          android:textColor="#000000"
+          android:textSize="18sp" />
 
-        <TextView
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentRight="true"
+          android:src="@drawable/more_btn" />
 
-            android:id="@+id/editcoorlinecolor"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"          
-            android:text="红" />
-    </LinearLayout>
-    <View 
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
-    <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:onClick="onSetWidth"
-        >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="线段大小:" />
-
-        <TextView
-
-            android:id="@+id/editcoorlinewidth"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="3" />
-    </LinearLayout>
-    <View 
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
-    <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         android:onClick="onSetStyle"
-         >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="样式:" />
-
-        <TextView
-
-            android:id="@+id/editcoorlineStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"          
-            android:text="虚线" />
-    </LinearLayout>
+      <TextView
+          android:id="@+id/coorheight"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="30dp"
+          android:layout_toRightOf="@+id/textView3"
+          android:background="@null"
+          android:singleLine="true"
+          android:text="90"
+          android:textSize="18sp" />
+    </RelativeLayout>
     <View 
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -307,7 +238,7 @@
             android:textSize="18sp"
             android:background="@null"
             android:imeOptions="actionDone"
-            android:text="描述" />
+            android:text="@string/coordinate_description" />
     </LinearLayout>
     <View 
         android:layout_width="match_parent"

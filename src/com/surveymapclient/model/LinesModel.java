@@ -3,20 +3,13 @@ package com.surveymapclient.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.surveymapclient.common.Contants;
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.LineBean;
-
-import android.R.integer;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.graphics.PointF;
 
 public class LinesModel {
@@ -71,7 +64,7 @@ public class LinesModel {
 					lines.get(i).getEndY(), 
 					ViewContans.generatePaint(lines.get(i).getPaintColor(),lines.get(i).getPaintWidth(), lines.get(i).isPaintIsFull()), 
 					point);
-			if (lines.get(i).getName().length()<8&&lines.get(i).getName().length()>0) {
+			if (!lines.get(i).getName().equals("lines")&&lines.get(i).getName().length()>0) {
         		ViewContans.AddTextOnLine(lines.get(i), canvas,lines.get(i).getName(),-25);
 			}            	
         	if (lines.get(i).getLength()>0||lines.get(i).getAngle()>0) {
@@ -185,7 +178,7 @@ public class LinesModel {
 		line.setAngle(0.00);
 		line.setPaintColor(Color.BLACK);
 		line.setLength(0);
-		line.setName("lineName-"+lists.size());
+		line.setName("lines");
 		line.setPaintIsFull(false);
 		line.setPaintWidth(6);
 		line.setDescripte("描述"+lists.size());
@@ -217,7 +210,6 @@ public class LinesModel {
 						sy2=lines.get(j).getEndY();
 						ex12=x;
 						ey12=y;
-//		            	Logger.i("起点终点", "---->Li"+i+": ("+sxi+","+syi+")  ,  ("+exi+","+eyi+")");
 						lines.remove(j);
 						lines.remove(i);
 						return true;
@@ -401,7 +393,7 @@ public class LinesModel {
 		getremoveline.setStartY(start_my);
 		getremoveline.setEndX(end_mx);
 		getremoveline.setEndY(end_my);
-		if (getremoveline.getName().length()<8&&getremoveline.getName().length()>0) {
+		if (!getremoveline.getName().equals("lines")&&getremoveline.getName().length()>0) {
     		ViewContans.AddTextOnLine(getremoveline, canvas,getremoveline.getName(),-25);
 		}            	
     	if (getremoveline.getLength()>0||getremoveline.getAngle()>0) {
@@ -447,21 +439,28 @@ public class LinesModel {
         Logger.i("线段总数", "after-->Lines="+lines.size());
         
 	}
-	public void ChangeLineAttributeAtIndex(List<LineBean> list
-			,Canvas canvas,int index,LineBean line){
+	public void ChangeLineAttributeAtIndex(List<LineBean> list,int index,LineBean line){
 		float sx=list.get(index).getStartX();
     	float sy=list.get(index).getStartY();
     	float ex=list.get(index).getEndX();
     	float ey=list.get(index).getEndY();  
-    	list.remove(index);
-    	AddChangeLineParams(list,
-    			sx, sy, ex, ey, 
-    			line.getAngle(), 
-    			line.getName(),
-    			line.getDescripte(), 
-    			line.getLength(), 
-    			line.getPaintColor(),
-    			line.getPaintWidth(), 
-    			line.isPaintIsFull());
+//    	list.remove(index);
+//    	AddChangeLineParams(list,
+//    			sx, sy, ex, ey, 
+//    			line.getAngle(), 
+//    			line.getName(),
+//    			line.getDescripte(), 
+//    			line.getLength(), 
+//    			line.getPaintColor(),
+//    			line.getPaintWidth(), 
+//    			line.isPaintIsFull());
+    	line.setStartX(sx);
+    	line.setStartY(sy);
+    	line.setEndX(ex);
+    	line.setEndY(ey);
+    	list.set(index, line);
 	}
+//	public LineBean AddLineToLines(List<LineBean> list){
+//		
+//	}
 }

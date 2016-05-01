@@ -76,8 +76,7 @@ public class CameraBitMapView extends View {
 	
 	 private boolean isWriteText=false;
 	 private static int m=-1;
-
-    
+   
     public CameraBitMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -136,6 +135,7 @@ public class CameraBitMapView extends View {
 		vibratorCallBack=(VibratorCallBack) mContext;
     	initCanvas();
     }
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// TODO Auto-generated method stub
@@ -147,6 +147,7 @@ public class CameraBitMapView extends View {
 		polygonModel.DrawPath(canvas);
 		angleModel.DrawPath(canvas);
 		if (CameraActivity.TYPE==Contants.SINGLE&&isMovingdraw) {
+			
 			if (isMoveLinedrag) {
 				linesModel.MoveDrawLine(canvas);
 			}else {
@@ -156,7 +157,6 @@ public class CameraBitMapView extends View {
 	        		linesModel.DrawLine(canvas);
 	    		}
 			}
-        	
 		}if (CameraActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
         	if (isMoveLinedrag) {
         		polygonModel.MoveDrawPolygon(canvas);
@@ -284,7 +284,7 @@ public class CameraBitMapView extends View {
 			Logger.i("中心点距离", "ACTION_POINTER_DOWN");
 			zoom_down(event);
         	break;
-		case MotionEvent.ACTION_MOVE:
+		case MotionEvent.ACTION_MOVE: 
 //        	Logger.i("屏幕与视图", "屏幕:x="+getLeft()+",screem_x="+screen_x+",RowX="+(int)rx+"，视图:x="+(int)x+"; 屏幕:y="+getTop()+",screem_y="+screen_y+",RowY="+(int)ry+",视图:y="+(int)y);
 			if (CameraActivity.TYPE==Contants.SINGLE) {
 				if (isMoveLinedrag) {        		
@@ -468,7 +468,7 @@ public class CameraBitMapView extends View {
 	        	if (mIsShortPressed) {
 	        		int l=linesModel.PitchOnLine(linesModel.Getlines, x, y);
 	        		if (l>=0) {
-	    				dialogCallBack.onDialogCallBack(linesModel.Getlines.get(l), l);
+	    				dialogCallBack.onDialogCallBack(linesModel.Getlines.get(l), l,0);
 					}
 	        		int p=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
 	        		if (p>=0) {
@@ -680,7 +680,7 @@ public class CameraBitMapView extends View {
 	 public void ChangeLineAttribute(int index,LineBean line){
 			//调用初始化画布函数以清空画布
        
-         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
+         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, index, line);         
          DrawAllOnBitmap();
 	 }
 	 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){

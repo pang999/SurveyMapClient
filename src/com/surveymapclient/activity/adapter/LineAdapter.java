@@ -1,12 +1,10 @@
 package com.surveymapclient.activity.adapter;
 
 
-import java.util.ArrayList;
 import java.util.List;
-
 import com.surveymapclient.activity.R;
 import com.surveymapclient.entity.LineBean;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +43,7 @@ public class LineAdapter extends BaseAdapter implements ListAdapter{
 		return position;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub

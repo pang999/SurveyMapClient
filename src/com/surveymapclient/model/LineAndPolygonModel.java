@@ -3,12 +3,9 @@ package com.surveymapclient.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import com.surveymapclient.common.Logger;
-import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
-
 import android.graphics.PointF;
 
 public class LineAndPolygonModel {

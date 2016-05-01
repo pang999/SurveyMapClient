@@ -54,7 +54,7 @@ public class CoordinateAdapter extends BaseAdapter {
 		}
 		viewHolder.coordName.setText(mList.get(position).getName());
 		viewHolder.coordVolum.setText(mList.get(position).getVolum()+"m³");
-		viewHolder.coordHeight.setText(mList.get(position).getHeight()+"m");
+//		viewHolder.coordHeight.setText(mList.get(position).getHeight()+"m");
 		return convertView;
 	}
 

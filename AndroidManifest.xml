@@ -41,7 +41,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name="com.surveymapclient.activity.HomeActivity"
+            android:name="com.surveymapclient.activity.welcome.StartAnimation"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,44 +50,31 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.surveymapclient.activity.welcome.Pages"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.surveymapclient.activity.HomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.surveymapclient.activity.DefineActivity"
             android:screenOrientation="portrait" >
         </activity>
-<<<<<<< HEAD
-        <activity 
-=======
-
         <activity
             android:name="com.surveymapclient.activity.ShareActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
 
-            android:launchMode="singleTask"
-
->>>>>>> 205e5a53e5bb7b58a86dfd5a6b385015f6a76c77
             android:name="com.surveymapclient.activity.GraphicalActivity"
             android:screenOrientation="portrait" >
         </activity>
-<<<<<<< HEAD
-        <activity 
-=======
-
         <activity
-            android:launchMode="singleTask"
-
->>>>>>> 205e5a53e5bb7b58a86dfd5a6b385015f6a76c77
             android:name="com.surveymapclient.activity.CameraActivity"
             android:screenOrientation="portrait" >
         </activity>
-<<<<<<< HEAD
-        <activity 
-=======
-
         <activity
-            android:launchMode="singleTask"
-
->>>>>>> 205e5a53e5bb7b58a86dfd5a6b385015f6a76c77
             android:name="com.surveymapclient.activity.StadyActivity"
             android:screenOrientation="portrait" >
         </activity>
@@ -123,15 +110,10 @@
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity 
-            android:name="com.surveymapclient.activity.DataListActivity"
+            android:name="com.surveymapclient.activity.DefineDataListActivity"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
-<<<<<<< HEAD
-        <activity 
-=======
         <activity
-            android:launchMode="singleTask"
->>>>>>> 205e5a53e5bb7b58a86dfd5a6b385015f6a76c77
             android:name="com.surveymapclient.activity.AudioRecorderActivity"
             android:theme="@style/MyActivityDialogStyle" >
         </activity>
@@ -140,7 +122,17 @@
             android:name="com.surveymapclient.activity.AttributeTextActivity"
             android:theme="@style/MyActivityDialogStyle" >
         </activity>
-        <activity android:name="com.surveymapclient.activity.HistoryActivity" >
+        <activity 
+            android:name="com.surveymapclient.activity.HistoryActivity" >
+        </activity>
+        <activity 
+            android:name="com.surveymapclient.activity.SelectColorActivity" >
+        </activity>
+        <activity 
+            android:name="com.surveymapclient.activity.SelectWidthActivity" >
+        </activity>
+        <activity 
+            android:name="com.surveymapclient.activity.CameraDataListActivity" >
         </activity>
     </application>
 

@@ -8,263 +8,263 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:background="@color/main_color"
-         >
+        android:padding="8dp" >
 
         <ImageView
-            android:layout_alignParentLeft="true"
             android:id="@+id/imageButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:onClick="AttributeBack"
             android:src="@drawable/back_bg" />
 
         <Button
-          
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="完成"
             android:background="@color/main_color"
-            android:textColor="#FFFFFF"
             android:onClick="EditComplete"
+            android:text="完成"
+            android:textColor="#FFFFFF"
             android:textSize="20sp" />
-         <TextView
-          android:id="@+id/textView1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignBaseline="@+id/button1"
-          android:layout_alignBottom="@+id/button1"
-          android:layout_centerHorizontal="true"
-          android:layout_centerVertical="true"
-          android:text="单直线"
-          android:textColor="#FFFFFF"
-          android:textSize="20sp" />
-        
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button1"
+            android:layout_alignBottom="@+id/button1"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="单直线"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <LinearLayout
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineName"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-
-            android:textColor="#000000"
             android:layout_weight="4"
-            android:textSize="18sp"
-            android:text="名称:" />
+            android:text="名称:"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editlineName"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-   
-            android:textSize="18sp"
             android:layout_weight="1"
             android:background="@null"
-        	android:singleLine="true"
             android:imeOptions="actionDone"
-            android:text="line1" />
+            android:singleLine="true"
+            android:text="line1"
+            android:textSize="18sp" />
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineLength"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
+            android:text="长度:"
             android:textColor="#000000"
-
-            android:textSize="18sp"
-            
-            android:text="长度:" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editlineLength"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textSize="18sp"
-
             android:background="@null"
-        	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:text="20m" />
+            android:singleLine="true"
+            android:text="20m"
+            android:textSize="18sp" />
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineAngle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
+            android:text="角度:"
             android:textColor="#000000"
-
-            android:textSize="18sp"
-            android:text="角度:" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editlineAngle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textSize="18sp"
             android:background="@null"
-
-        	android:singleLine="true"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
-            android:text="90" />
+            android:singleLine="true"
+            android:text="90"
+            android:textSize="18sp" />
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
+        android:id="@+id/onsetcolor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSetColor"
-         >
+        android:padding="10dp" >
 
         <TextView
-            android:id="@+id/lineColor"
-            android:layout_width="fill_parent"
+            android:layout_width="61dp"
             android:layout_height="fill_parent"
-            android:layout_weight="4"
+            android:text="颜色:"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="颜色:" />
+            android:textSize="18sp" />
 
-        <TextView
-   
-            android:id="@+id/editlineColor"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            
-            android:text="红" />
+            android:layout_weight="1.4" >
+
+            <View
+                android:id="@+id/settingcolor"
+                android:layout_width="@dimen/color_size"
+                android:layout_height="@dimen/color_size"
+                android:layout_weight="1"
+                android:background="#FFD700" />
+
+            <TextView
+                android:id="@+id/editlineColor"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="红"
+                android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
+        android:id="@+id/setlineWidth"        
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:onClick="onSetWidth"
-        >
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineWidth"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
+            android:text="宽度:"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="宽度:" />
+            android:textSize="18sp" />
 
         <TextView
-   
             android:id="@+id/editlineWidth"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="3" />
+            android:text="3"
+            android:textSize="18sp" />
     </LinearLayout>
-    <View 
+
+    <!-- <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:onClick="onSetStyle"
-         >
+        android:onClick="onSetStyle"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineStyle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
+            android:text="样式:"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="样式:" />
+            android:textSize="18sp" />
 
         <TextView
-        
             android:id="@+id/editlineStyle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textSize="18sp"
-           
-            android:text="虚线" />
-    </LinearLayout>
-    <View 
+            android:text="虚线"
+            android:textSize="18sp" />
+    </LinearLayout> -->
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
     <LinearLayout
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/lineDescripte"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="4"
+            android:text="描述:"
             android:textColor="#000000"
-            android:textSize="18sp"
-
-            android:text="描述:" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editlineDescripte"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textSize="18sp"
-
             android:background="@null"
             android:imeOptions="actionDone"
-            android:text="line1" />
+            android:text="line1"
+            android:textSize="18sp" />
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#DCDCDC"
-        />
+        android:background="#DCDCDC" />
+
 </LinearLayout>

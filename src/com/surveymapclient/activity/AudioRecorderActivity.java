@@ -1,27 +1,19 @@
 package com.surveymapclient.activity;
-import java.io.IOException;
 
-import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.FileUtils;
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.TimeUtils;
 import com.surveymapclient.impl.MyPlayerCallback;
 import com.surveymapclient.model.AudioRecordModel;
 import com.surveymapclient.model.PlayerModel;
-
 import android.app.Activity;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -78,7 +70,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
     /**
      * 录音按钮
      */
-    private ImageView btnRecord;// 录音按钮
+//    private ImageView btnRecord;// 录音按钮
     /**
      * 最大录音长度
      */
@@ -230,6 +222,7 @@ public class AudioRecorderActivity extends Activity implements OnClickListener {
 	 */
 	private void timing() {
 		runnable = new Runnable() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				voiceLength += 100;

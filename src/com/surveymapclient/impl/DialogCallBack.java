@@ -10,7 +10,7 @@ import com.surveymapclient.entity.TextBean;
 
 public interface DialogCallBack {
 
-	void onDialogCallBack(LineBean couplePoint,int i);
+	void onDialogCallBack(LineBean couplePoint,int i,int type);
 	void onDialogCallBack(PolygonBean polygon,int i);
 	void onDialogCallBack(RectangleBean rectangle,int i);
 	void onDialogCallBack(CoordinateBean coordinate,int i);

@@ -1,38 +1,29 @@
 package com.surveymapclient.view;
 
-import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import com.surveymapclient.activity.DefineActivity;
 import com.surveymapclient.common.Contants;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
-import com.surveymapclient.entity.AngleBean;
 import com.surveymapclient.entity.AudioBean;
-import com.surveymapclient.entity.CoordinateBean;
 import com.surveymapclient.entity.LineBean;
 import com.surveymapclient.entity.PolygonBean;
-import com.surveymapclient.entity.RectangleBean;
 import com.surveymapclient.entity.TextBean;
-import com.surveymapclient.impl.ClipCallBack;
+import com.surveymapclient.impl.CallBackData;
 import com.surveymapclient.impl.DialogCallBack;
 import com.surveymapclient.impl.VibratorCallBack;
-import com.surveymapclient.model.AngleModel;
 import com.surveymapclient.model.AudioModel;
-import com.surveymapclient.model.CoordinateModel;
 import com.surveymapclient.model.LineAndPolygonModel;
 import com.surveymapclient.model.LinesModel;
 import com.surveymapclient.model.PolygonModel;
-import com.surveymapclient.model.RectangleModel;
 import com.surveymapclient.model.TextModel;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Path;
-import android.graphics.Path.Direction;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,16 +31,16 @@ import android.view.View;
 public class DefineView extends View{
 	
 	DialogCallBack dialogCallBack;
-	VibratorCallBack vibratorCallBack;
-	ClipCallBack clipCallBack;
+	VibratorCallBack vibratorCallBack;	
+	CallBackData callBackData;
 	
     private Canvas  mCanvas;
     private Bitmap  mBitmap;    
     	
     final int width = Contants.sreenWidth*3;
 	final int height = Contants.screenHeight*3;
-	public int screen_x=-Contants.sreenWidth;
-	public int screen_y=-Contants.screenHeight;
+	public int screen_x=-Contants.sreenWidth*1;
+	public int screen_y=-Contants.screenHeight*1;
 	
 	private boolean isFirst=false;
 	
@@ -69,55 +60,37 @@ public class DefineView extends View{
     private boolean mIsShortPressed=false;
     private boolean isMoveLinedrag=false;
 
-    //连续线段获得条数
-//    public List<LineBean> totallist=new ArrayList<LineBean>();
-//    public List<PolygonBean> totalPolys=new ArrayList<PolygonBean>();
-    private boolean isWriteText=false;
+    private boolean isLineWriteText=false;
+    private boolean isPolygonLineWriteText=false;
     //选中直线
 	private static int m=-1;
+	private static int n=-1;
     
     private LinesModel linesModel;
     private PolygonModel polygonModel;
     private LineAndPolygonModel linepoly;
-    private RectangleModel rectangleModel;
-    private CoordinateModel coordinateModel;
-    private AngleModel angleModel;
     private TextModel textModel;
     private AudioModel audioModel;
-//    float left, top, right, bottom;
-    private  Path sPath = new Path();  
-    private  Matrix matrix = new Matrix();  
-    // 放大镜的半径  
-  
-    private static final int RADIUS = 80;  
-    // 放大倍数  
-    private static final int FACTOR = 2;  
-    private int mCurrentX, mCurrentY,sCurrentX, sCurrentY;
-    private int rmCurrentX,rmCurrentY;
-    private Canvas clipCanvas; 
-    private Bitmap mBitmap2;
+    
+    public DefineView(Context context) {
+		// TODO Auto-generated constructor stub
+    	super(context);
+	}
     
 	public DefineView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		linesModel=new LinesModel();
 		polygonModel=new PolygonModel();
-		rectangleModel=new RectangleModel();
-		coordinateModel=new CoordinateModel();
 		linepoly=new LineAndPolygonModel();
-		angleModel=new AngleModel();
 		textModel=new TextModel();
-		audioModel=new AudioModel(context);
-		initCanvas();
-		isFirst=true;	
+		audioModel=new AudioModel(context);			
 		dialogCallBack=(DialogCallBack) context;
 		vibratorCallBack=(VibratorCallBack) context;
-		clipCallBack=(ClipCallBack) context;
-		sPath.addCircle(RADIUS, RADIUS, RADIUS, Direction.CW); 
-        matrix.setScale(FACTOR, FACTOR);  
-        mBitmap2=Bitmap.createBitmap(80,80,Bitmap.Config.RGB_565);
-        clipCanvas=new Canvas(mBitmap2);
+		callBackData=(CallBackData) context;
+		isFirst=true;	
         DefineActivity.TYPE=Contants.DRAG;
+        initCanvas();	
 	}
 	//初始化画布
     public void initCanvas(){      
@@ -135,10 +108,12 @@ public class DefineView extends View{
 			isFirst=false;
 			layout(screen_x, screen_y, 3*Contants.sreenWidth+screen_x, 3*Contants.screenHeight+screen_y);
 		}		
-	    ViewContans.initCanvasHuabu(canvas,mBitmap,scale);
+//	    ViewContans.initCanvasHuabu(canvas,mBitmap,scale);
+		canvas.scale(scale, scale,width/2,height/2);
+		// 将前面已经画过得显示出来
+	    canvas.drawBitmap(mBitmap, 0, 0, null);     //显示旧的画布         
 		polygonModel.DrawPath(canvas);
-		angleModel.DrawPath(canvas);
-        if (DefineActivity.TYPE==Contants.SINGLE&&isMovingdraw) {       	
+        if (DefineActivity.TYPE==Contants.SINGLE&&isMovingdraw||DefineActivity.TYPE==Contants.SINGLE_XETEND) {       	
         	if (isMoveLinedrag) {
 				linesModel.MoveDrawLine(canvas);
 			}else {
@@ -147,7 +122,6 @@ public class DefineView extends View{
 	        	}else{
 	        		linesModel.DrawLine(canvas);
 	    		}	
-//				ClipCavas(canvas,mBitmap);
 			}          	
 		}
         if (DefineActivity.TYPE==Contants.CONTINU&&isMovingdraw) {
@@ -156,85 +130,31 @@ public class DefineView extends View{
 			}			
 		}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND&&isMovingdraw) {
 			polygonModel.ExtendDrawPolygon(canvas);
-		}
-        if (DefineActivity.TYPE==Contants.RECTANGLE&&isMovingdraw) {
-        	if (isMoveLinedrag) {
-				rectangleModel.MoveDrawRectangle(canvas);
-			}else {
-				rectangleModel.DrawRectangle(canvas);
-			}			
-		} else if (DefineActivity.TYPE==Contants.COORDINATE&&isMovingdraw) {
-			if (isMoveLinedrag) {
-				coordinateModel.MoveDrawCoordinate(canvas);
-			}else {
-				coordinateModel.DrawCoordinate(canvas);
-			}
-			
-		}else if(DefineActivity.TYPE==Contants.ANGLE&&isMovingdraw){
-			if (isMoveLinedrag) {
-				angleModel.MoveDrawAngle(canvas);
-			}
-		}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS&&isMovingdraw) {
-			angleModel.DrawAngle(canvas);
 		}else if (DefineActivity.TYPE==Contants.TEXT) {
 			textModel.DrawMoveText(canvas);
 		}else if (DefineActivity.TYPE==Contants.AUDIO) {
 			audioModel.DrawMoveAudio(canvas);
-		}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS&&isMovingdraw) {
-			coordinateModel.DrawCoordinate(canvas);
-		}if (isWriteText) {
-        	Logger.i("选中的值", "m="+m);
+		}if (isLineWriteText) {
         	linesModel.LineChangeToText(linesModel.Getlines, canvas, m);
+		}if (isPolygonLineWriteText) {		
+			polygonModel.PolygonLineChangeToText(polygonModel.GetpolyList.get(n).getPolyLine(), canvas, m);
 		} 
 		
 	}
-	/**  
-     * 把Bitmap转Byte  
-     */    
-    private byte[] Bitmap2Bytes(Bitmap bm){    
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();    
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);    
-        return baos.toByteArray();    
-    } 
-	private void ClipCavas(Canvas canvas,Bitmap bitmap){
-		// TODO Auto-generated method stub
-		// 剪切  
-//        Logger.i("清屏高度",""+ DefineActivity.TopHeaght);
-//		canvas.translate(mCurrentX-RADIUS, mCurrentY-RADIUS ); 
-//		sPath.moveTo(sCurrentY, sCurrentY);
-//		sPath.quadTo(sCurrentY,sCurrentY,mCurrentX ,mCurrentY);
-//		canvas.clipPath(sPath);
-		
-        int c=80;
-        Rect rect=new Rect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
-//        canvas.drawRect(rect, ViewContans.generatePaint(Color.RED, 2,true));
-        canvas.clipRect(rect);
-        clipCallBack.OnClipCallBack(Bitmap2Bytes(bitmap));
-//        canvas.clipRect(mCurrentX-c, mCurrentY-c, mCurrentX+c, mCurrentY+c);
-        // 画放大后的图         
-//        canvas.translate(RADIUS - mCurrentX * FACTOR, RADIUS - mCurrentY * FACTOR); 
-//		 initCanvas();
-//        canvas.drawLine((float)sCurrentX, (float)sCurrentY,(float) mCurrentX,(float)  mCurrentY, ViewContans.generatePaint(Color.RED,3));
-//        canvas.translate(Contants.sreenWidth/2-screen_x, Contants.screenHeight/2-screen_y ); 
-//        canvas.drawLine(sCurrentX, sCurrentY, mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 4,true));
-//        canvas.drawPoint(mCurrentX, mCurrentY, ViewContans.generatePaint(Color.RED, 20,true));
-//        canvas.drawBitmap(mBitmap, matrix, null); 
-//        Logger.i("mBitmap大小", mBitmap.toString());
-//         clipCallBack.OnClipCallBack(canvas);
-	}
+
 	//长按事件参数值
 	float lastx=0;
 	float lasty=0;
 	long lastDownTime=0;
+	
 	boolean Yes=false;	
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		float x=event.getX();
 		float y=event.getY();
 		float rx=event.getRawX();
 		float ry=event.getRawY();
-		rmCurrentX=(int) rx;
-		rmCurrentY=(int) ry;
 		// TODO Auto-generated method stub
 		switch (event.getAction()& MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_DOWN: 
@@ -242,18 +162,47 @@ public class DefineView extends View{
         	lastx=x;
         	lasty=y;
         	lastDownTime= event.getDownTime();   
-        	sCurrentX = (int) event.getX();  
-            sCurrentY = (int) event.getY();  
 			if (DefineActivity.TYPE==Contants.SINGLE) {							
 				int i=linesModel.PitchOnLine(linesModel.Getlines, x, y);
 				if (i>=0) {				
 					isMoveLinedrag=true;
 					linesModel.MoveLine_down(linesModel.Getlines, i, rx, ry);
+					callBackData.onCallBackDeleteLine(i);
 					DrawAllOnBitmap();
 				}else {
 					linesModel.Line_touch_down(x, y);
+					callBackData.onCallBackDown(x, y);
+				}	
+				int p=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
+        		int pl=polygonModel.PitchOnPolygonLine(polygonModel.GetpolyList, x, y);
+        		if (p>=0) {
+        			n=p;
+        			if (pl>=0) {
+        				List<LineBean> lines=polygonModel.GetpolyList.get(n).getPolyLine();
+        				polygonModel.GetpolyList.remove(n);
+        				int m=linesModel.Getlines.size();  
+        				Logger.i("GetlineList","before="+ linesModel.Getlines.size());
+        				for (int j = 0; j < lines.size(); j++) {
+        					LineBean lineBean=new LineBean();
+        					lineBean.setName(lines.get(j).getName());
+        					lineBean.setStartX(lines.get(j).getStartX());
+        					lineBean.setStartY(lines.get(j).getStartY());
+        					lineBean.setEndX(lines.get(j).getEndX());
+        					lineBean.setEndY(lines.get(j).getEndY());
+        					lineBean.setDescripte(lines.get(j).getDescripte());	
+        					lineBean.setPaintColor(lines.get(j).getPaintColor());
+        					lineBean.setPaintWidth(lines.get(j).getPaintWidth());
+        					lineBean.setPaintIsFull(lines.get(j).isPaintIsFull());
+        					linesModel.Getlines.add(lineBean);							
+						}
+//        				linesModel.Getlines=lines;
+        				Logger.i("GetlineList","after="+ linesModel.Getlines.size());
+        				isMoveLinedrag=true;
+    					linesModel.MoveLine_down(linesModel.Getlines,m+ pl, rx, ry);   					
+    					callBackData.onCallBackDeletePolygonLine(n, m+pl);
+    					DrawAllOnBitmap();
+        			}
 				}
-				
 				
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {	
 				int i=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
@@ -261,37 +210,12 @@ public class DefineView extends View{
 					isMoveLinedrag=true;
 					Logger.i("点中多边形", "i="+i);
 					polygonModel.MovePolygon_down(polygonModel.GetpolyList, i, rx, ry);
+					callBackData.onCallBackDeletePolygon(i);
 					DrawAllOnBitmap();
 				}else {
 					polygonModel.Continuous_touch_down(x, y);
+					callBackData.onCallBackDown(x, y);
 				}								
-			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
-				int i=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
-				if (i>=0) {
-					isMoveLinedrag=true;
-					rectangleModel.MoveRectangle_down(rectangleModel.GetRectlist, i, rx, ry);
-					DrawAllOnBitmap();
-				}else {
-					rectangleModel.Rectangle_touch_down(x, y);
-				}			
-			}else if (DefineActivity.TYPE==Contants.COORDINATE) {
-				int i=coordinateModel.PitchOnCoordinate(coordinateModel.GetCoordlist, x, y);	
-				if (i>=0) {
-					isMoveLinedrag=true;
-					coordinateModel.MoveCoordinate_down(coordinateModel.GetCoordlist, i, rx, ry);
-					DrawAllOnBitmap();
-				} else {
-//					coordinateModel.Coordinate_touch_down(x, y);
-				}
-			}else if (DefineActivity.TYPE==Contants.ANGLE) {
-				int i=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
-				if (i>=0) {
-					isMoveLinedrag=true;
-					angleModel.MoveAngle_down(angleModel.getAnglelist, i, rx, ry);
-					DrawAllOnBitmap();
-				}else {
-					angleModel.Angle_touch_down(x, y);	
-				}
 			}else if(DefineActivity.TYPE==Contants.DRAG){
 				mIsShortPressed=false;
 				drag_touch_start(rx, ry);
@@ -300,15 +224,16 @@ public class DefineView extends View{
 			if (ti>=0) {
 				DefineActivity.TYPE=Contants.TEXT;
 				Logger.i("获取文字", "i="+ti);
-//				isMoveLinedrag=true;
 				textModel.MoveText_down(textModel.GetTextlist, ti, rx, ry);
 				DrawAllOnBitmap();
+				callBackData.onCallBackDeleteText(ti);
 			}
 			int au=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
 			if (au>=0) {
 				DefineActivity.TYPE=Contants.AUDIO;
 				audioModel.MoveAudio_dowm(audioModel.GetAudiolist, au, rx, ry);
 				DrawAllOnBitmap();
+				callBackData.onCallBackDeleteAudio(au);
 			}
     	    invalidate();
             break;
@@ -316,44 +241,25 @@ public class DefineView extends View{
         	zoom_down(event);
 		    invalidate();
 			break;
-        case MotionEvent.ACTION_MOVE:  
-        	mCurrentX = (int) event.getX();  
-            mCurrentY = (int) event.getY();  
+        case MotionEvent.ACTION_MOVE:   
         	Logger.i("屏幕与视图", "屏幕:x="+getLeft()+",screem_x="+screen_x+",RowX="+(int)rx+"，视图:x="+(int)x+"; 屏幕:y="+getTop()+",screem_y="+screen_y+",RowY="+(int)ry+",视图:y="+(int)y);
             if (DefineActivity.TYPE==Contants.SINGLE) {       	
             	if (isMoveLinedrag) {        		
 					linesModel.MoveLine_move(rx, ry);
 				}else {					
 	    			linesModel.Line_touch_move(x, y);
-				}
+	    			callBackData.onCallBackMove(x, y);
+				}          	
+            	
 			}else if (DefineActivity.TYPE==Contants.CONTINU) {
 				if (isMoveLinedrag) {
 					polygonModel.MovePolygon_move(rx, ry);
 				}else {
 					polygonModel.Continuous_touch_move(x, y);
+					callBackData.onCallBackMove(x, y);
 				}			
-			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
-				if (isMoveLinedrag) {
-					rectangleModel.MoveRectangle_move(rx, ry);
-				}else {				
-	    			rectangleModel.Rectangle_touch_move(x, y);
-				}			
-			}else if (DefineActivity.TYPE==Contants.COORDINATE) {
-				if (isMoveLinedrag) {
-					coordinateModel.MoveCoordinate_move(rx, ry);
-				}else {				
-	    			coordinateModel.Coordinate_touch_move(x, y);						
-				}				
-			}else if (DefineActivity.TYPE==Contants.ANGLE) {
-				if (isMoveLinedrag) {
-					angleModel.MoveAngle_move(rx, ry);
-				}else {					
-	    			angleModel.Angle_touch_move(x, y);
-				}				
 			}else if (DefineActivity.TYPE==Contants.TEXT) {
-//				if (isMoveLinedrag) {
-					textModel.MoveText_move(rx, ry);
-//				}
+				textModel.MoveText_move(rx, ry);
 			}else if (DefineActivity.TYPE==Contants.AUDIO) {
 				audioModel.MoveAudio_move(rx, ry);
 			}else if(DefineActivity.TYPE==Contants.DRAG) {				
@@ -363,50 +269,35 @@ public class DefineView extends View{
 					setzoomcanvas(event);
 				}
 			}	
-            if (!mIsLongPressed) {
+            if (!mIsLongPressed) {           	
             	mIsLongPressed=ViewContans.isLongPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 750);
             	Yes=true;
         	}
             if (mIsLongPressed) {        		
         		if (Yes) {
-        			Yes=false;        			
-        			if (angleModel.ExtandAngle(angleModel.getAnglelist, x, y)) {
-						vibratorCallBack.onVibratorCallBack();
-        				DefineActivity.TYPE=Contants.ANGLE_AXIS;
-        				DrawAllOnBitmap();
-					}
-        			if (coordinateModel.ExtandCoordinate(coordinateModel.GetCoordlist, x, y)) {
-						vibratorCallBack.onVibratorCallBack();
-						DefineActivity.TYPE=Contants.COORDINATE_AXIS;
-						DrawAllOnBitmap();
-					}
-        			if (rectangleModel.ExtandRectangle(rectangleModel.GetRectlist, x, y)) {
-						vibratorCallBack.onVibratorCallBack();
-						DefineActivity.TYPE=Contants.RECTANGLE;
-						DrawAllOnBitmap();
-					} 
+        			Yes=false;        			        			 
         			if (linesModel.ExtendLine(linesModel.Getlines, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
-						DefineActivity.TYPE=Contants.SINGLE;
+						DefineActivity.TYPE=Contants.SINGLE_XETEND;
 						DrawAllOnBitmap();
+						callBackData.onCallBackDown(x, y);	
+						callBackData.onCallBackLong(true,true);
 					} 
         			if (polygonModel.ExtendPolygon(polygonModel.GetpolyList, x, y)) {
 						vibratorCallBack.onVibratorCallBack();
 						DefineActivity.TYPE=Contants.CONTINU_XETEND;
 						DrawAllOnBitmap();
+						callBackData.onCallBackDown(x, y);
+						callBackData.onCallBackLong(true,true);
 					}
         			Logger.i("长按时间了", "长按时间了");      			
 				}          		
-        		if (DefineActivity.TYPE==Contants.SINGLE) {
+        		if (DefineActivity.TYPE==Contants.SINGLE_XETEND) {
 					linesModel.Line_touch_move(x, y);
-				}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
-					rectangleModel.Rectangle_touch_move(x, y);
-				}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS) {
-					coordinateModel.ExtandCoordinateOneAxis_touch_move(x,y);
-				}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
-					angleModel.ExtandAngleBorder_touch_move(x, y);	
+					callBackData.onCallBackMove(x, y);					
 				}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
 					polygonModel.ExtendPolygonLine(x, y);
+					callBackData.onCallBackMove(x, y);
 				}
 			}
     	    invalidate();
@@ -418,19 +309,26 @@ public class DefineView extends View{
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
 					polygonModel.MovePolygon_up(mCanvas);
+					int m=polygonModel.GetpolyList.size()-1;
+					callBackData.onCallBackMovePolygon(polygonModel.GetpolyList.get(m));
 				}else {
-	        		polygonModel.Continuous_touch_up(x, y, mCanvas);		
+	        		polygonModel.Continuous_touch_up(x, y, mCanvas);
+	        		callBackData.onCallBackUp(x, y);
 				}
         		
 			}else if (DefineActivity.TYPE==Contants.CONTINU_XETEND) {
-				polygonModel.MovePolygon_up(mCanvas);
-			}else if (DefineActivity.TYPE==Contants.SINGLE) {						
+				polygonModel.MovePolygon_up(mCanvas);				
+				callBackData.onCallBackUp(x, y);
+			}else if (DefineActivity.TYPE==Contants.SINGLE||DefineActivity.TYPE==Contants.SINGLE_XETEND) {						
 				if (isMoveLinedrag) {
 					isMoveLinedrag=false;
 					linesModel.MoveLine_up(mCanvas, rx, ry);
+					int m=linesModel.Getlines.size()-1;
+					callBackData.onCallBackMoveLine(linesModel.Getlines.get(m));
 				}else {
 					mIsLongPressed=false;				
 					linesModel.Line_touch_up(x, y , mCanvas);	
+					callBackData.onCallBackUp(x, y);
 				}
 				if (linesModel.Getlines.size()>=3) {					
 					linepoly.CalculatePolyFromlist(linesModel.Getlines);
@@ -438,54 +336,44 @@ public class DefineView extends View{
 						Logger.i("直线剩余总数", "GetPolyInt="+linepoly.GetPolyInt.get(i).intValue());
 						linesModel.Getlines.remove(linepoly.GetPolyInt.get(i).intValue());
 					}
-					for (int i = 0; i < linepoly.backpolylist.size(); i++) {
-						polygonModel.GetpolyList.add(linepoly.backpolylist.get(i));
+					for (int i = 0; i < linepoly.backpolylist.size(); i++) {						
+						PolygonBean polygonBean=new PolygonBean();
+						List<LineBean> lineslist=new ArrayList<LineBean>();
+						for (int j = 0; j < linepoly.backpolylist.get(i).getPolyLine().size(); j++) {
+							LineBean lineBean=new LineBean();
+							lineBean.setName("lines");
+							lineBean.setStartX(linepoly.backpolylist.get(i).getPolyLine().get(j).getStartX());
+							lineBean.setStartY(linepoly.backpolylist.get(i).getPolyLine().get(j).getStartY());
+							lineBean.setEndX(linepoly.backpolylist.get(i).getPolyLine().get(j).getEndX());
+							lineBean.setEndY(linepoly.backpolylist.get(i).getPolyLine().get(j).getEndY());
+							lineBean.setDescripte("描述-"+j);	
+							lineBean.setPaintColor(Color.BLACK);
+							lineBean.setPaintWidth(6);
+							lineBean.setPaintIsFull(false);
+							lineslist.add(lineBean);
+						}				
+						polygonBean.setPolyLine(lineslist);
+						polygonModel.GetpolyList.add(polygonBean);
 						DrawAllOnBitmap();
 					}
 					linepoly.ClearInt();					
 				}	
 								
-			}else if (DefineActivity.TYPE==Contants.RECTANGLE) {
-				if (isMoveLinedrag) {
-					isMoveLinedrag=false;
-					rectangleModel.MoveRectangle_up(mCanvas);
-				} else {
-					mIsLongPressed=false;
-					rectangleModel.Rectangle_touch_up(x, y,mCanvas);
-				}				
-			}else if (DefineActivity.TYPE==Contants.COORDINATE) {
-				if (isMoveLinedrag) {
-					isMoveLinedrag=false;
-					coordinateModel.MoveCoordinate_up(mCanvas);
-				}else {
-					mIsLongPressed=false;
-					coordinateModel.Coordinate_touch_up(x,y,mCanvas);
-				}				
-			}else if (DefineActivity.TYPE==Contants.ANGLE) {
-				if (isMoveLinedrag) {
-					isMoveLinedrag=false;
-					angleModel.MoveAngle_up(mCanvas);
-				}else {
-					mIsLongPressed=false;
-					angleModel.Angle_touch_up(x, y, mCanvas);
-				}				
-			}else if (DefineActivity.TYPE==Contants.ANGLE_AXIS) {
-				angleModel.ExtandAngle_touch_up(mCanvas);
 			}else if (DefineActivity.TYPE==Contants.TEXT) {
-//				if (isMoveLinedrag) {
-//					isMoveLinedrag=false;
-					textModel.MoveText_up(mCanvas);
-					mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
-					if (mIsShortPressed) {
-						int tx=textModel.PitchOnText(textModel.GetTextlist, x, y);
-		        		if (tx>=0) {
-		        			Logger.i("选中文字", "t="+tx);
-							dialogCallBack.onDialogCallBack(textModel.GetTextlist.get(tx), tx);
-						}
+				textModel.MoveText_up(mCanvas);	
+				int m=textModel.GetTextlist.size()-1;
+				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
+				if (mIsShortPressed) {
+					int tx=textModel.PitchOnText(textModel.GetTextlist, x, y);
+	        		if (tx>=0) {
+	        			Logger.i("选中文字", "t="+tx);
+						dialogCallBack.onDialogCallBack(textModel.GetTextlist.get(tx), tx);
 					}
-//				}
+				}
+				callBackData.onCallBackMoveTextUp(textModel.GetTextlist.get(m));
 			}else if (DefineActivity.TYPE==Contants.AUDIO) {
 				audioModel.MoveAudio_up(mCanvas);
+				int m=audioModel.GetAudiolist.size()-1;
 				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
 				if (mIsShortPressed) {
 					int aud=audioModel.PitchOnAudio(audioModel.GetAudiolist, x, y);
@@ -493,38 +381,29 @@ public class DefineView extends View{
 						dialogCallBack.onDialogCallBack(audioModel.GetAudiolist.get(aud), aud);
 					}
 				}
-			}else if (DefineActivity.TYPE==Contants.COORDINATE_AXIS) {
-				mIsLongPressed=false;
-				coordinateModel.Coordinate_touch_up(x,y,mCanvas);
+				callBackData.onCallBackMoveAudioUp(audioModel.GetAudiolist.get(m));
 			}else {
 				mIsShortPressed=ViewContans.isShortPressed(lastx, lasty, x, y, lastDownTime, event.getEventTime(), 200);												      	      	
 				if (mIsShortPressed) {
 	        		int l=linesModel.PitchOnLine(linesModel.Getlines, x, y);
 	        		if (l>=0) {
-	    				dialogCallBack.onDialogCallBack(linesModel.Getlines.get(l), l);
+	    				dialogCallBack.onDialogCallBack(linesModel.Getlines.get(l), l,0);
 					}
 	        		int p=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, x, y);
+	        		int pl=polygonModel.PitchOnPolygonLine(polygonModel.GetpolyList, x, y);
 	        		if (p>=0) {
-	        			dialogCallBack.onDialogCallBack(polygonModel.GetpolyList.get(p), p);
-	        			Logger.i("选中多边形", "p="+p);
-	        		}
-	        		int r=rectangleModel.PitchOnRectangle(rectangleModel.GetRectlist, x, y);
-	        		if (r>=0) {
-						dialogCallBack.onDialogCallBack(rectangleModel.GetRectlist.get(r), r);
-					}
-	        		int c=coordinateModel.PitchOnCoordinate(coordinateModel.GetCoordlist, x, y);
-	        		if (c>=0) {
-						dialogCallBack.onDialogCallBack(coordinateModel.GetCoordlist.get(c), c);
-					}
-	        		int a=angleModel.PitchOnAngle(angleModel.getAnglelist, x, y);
-	        		if (a>=0) {
-						dialogCallBack.onDialogCallBack(angleModel.getAnglelist.get(a), a);
-					}	
-	        		
+	        			n=p;
+	        			if (pl>=0) {
+		        			dialogCallBack.onDialogCallBack(polygonModel.GetpolyList.get(p).getPolyLine().get(pl),pl,2);
+						}else
+							if (p>=0) {
+		        			dialogCallBack.onDialogCallBack(polygonModel.GetpolyList.get(p), p);
+		        			Logger.i("选中多边形", "p="+p);
+		        		}
+					}        		
 				}
 			}			
 			typeListener.onTypeChange();
-//			Logger.i("添加个数", "在line中 ，lines="+linesModel.Getlines.size());  
 			DefineActivity.TYPE=Contants.DRAG;
     	    invalidate();
             break;
@@ -536,28 +415,23 @@ public class DefineView extends View{
 		return true;
 	}
 	private void DrawAllOnBitmap(){
-		initCanvas(); 
-		linesModel.DrawLinesOnBitmap(linesModel.Getlines, mCanvas);
-		rectangleModel.DrawRectanleOnBitmap(rectangleModel.GetRectlist, mCanvas);
-		coordinateModel.DrawCoordinatesOnBitmap(coordinateModel.GetCoordlist, mCanvas);
-		angleModel.DrawAngleOnBitmap(angleModel.getAnglelist, mCanvas);
-		textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
-		polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
-		audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
+		try {
+			initCanvas(); 
+			linesModel.DrawLinesOnBitmap(linesModel.Getlines, mCanvas);
+			textModel.DrawTextOnBitmap(textModel.GetTextlist, mCanvas);
+			polygonModel.DrawPolygonsOnBitmap(polygonModel.GetpolyList,mCanvas);
+			audioModel.DrawAudiosOnBitmap(audioModel.GetAudiolist, mCanvas);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	public void AddAllDataFromActivity(
 			List<LineBean> linelist,
 			List<PolygonBean> polygonlist,
-			List<RectangleBean> rectlist,
-			List<AngleBean> anglelist,
-			List<CoordinateBean> coorlist,
 			List<TextBean> textlist,
 			List<AudioBean> audiolist){
 		linesModel.Getlines=linelist;
 		polygonModel.GetpolyList=polygonlist;
-		rectangleModel.GetRectlist=rectlist;
-		coordinateModel.GetCoordlist=coorlist;
-		angleModel.getAnglelist=anglelist;
 		textModel.GetTextlist=textlist;
 		audioModel.GetAudiolist=audiolist;
 		DrawAllOnBitmap();
@@ -599,39 +473,60 @@ public class DefineView extends View{
 			return false;
 		}		
 	}
+	public boolean SetTextToPolygonLine(int rx,int ry){
+		float gx=(float)(-screen_x+rx);
+		float gy=(float)(-screen_y+ry-50);
+		int p=polygonModel.PitchOnPolygon(polygonModel.GetpolyList, gx, gy);		
+		if (p>=0) {
+			n=p;
+			int i=linesModel.PitchOnLineToText(polygonModel.GetpolyList.get(p).getPolyLine(), gx, gy);
+			if (i>=0) {
+				m=i;
+				return true;
+			}else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
 	public void setManyTextOnView(){
 		Logger.i("文字位置", "x="+(Contants.sreenWidth/2-screen_x)+"y="+(Contants.screenHeight/2-screen_y));
 		textModel.Text_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
+		callBackData.onCallBackText((Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y));
 	}
-	public void setAudioOnView(String url,int len){
-		
+	public void setAudioOnView(String url,int len){		
 		audioModel.Audio_touch_up(mCanvas, (Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url,len);
+		callBackData.onCallBackAudio((Contants.sreenWidth/2-screen_x), (Contants.screenHeight/2-screen_y), url, len);
 	}
 	public void SetwriteLineText(String text){
 		linesModel.AddTextOnLine(linesModel.Getlines, mCanvas, m,text,10);		
 	}
+	public void SetwritePolygonLineText(String text){
+		polygonModel.AddTextOnPolygonLine(polygonModel.GetpolyList.get(n).getPolyLine(), mCanvas,m, text, 10);	
+	}
 	public void LineChangeToText(){
-		isWriteText=true;
+		isLineWriteText=true;
 		invalidate();
 	}
 	public void LineNoChangeToText(){
-		isWriteText=false;
+		isLineWriteText=false;
+		invalidate();
+	}
+	public void PolygonLineChangeToText(){
+		isPolygonLineWriteText=true;
+		invalidate();
+	}
+	public void PolygonLineNoChangeToText(){
+		isPolygonLineWriteText=false;
 		invalidate();
 	}
 	public List<LineBean> BackLinelist(){
 		return linesModel.Getlines;
 	}
-	public List<RectangleBean> BackRectlist(){
-		return rectangleModel.GetRectlist;
-	}
 	public List<PolygonBean> BackPolylist(){
 		return polygonModel.GetpolyList;
-	}
-	public List<CoordinateBean> BackCoorlist(){
-		return coordinateModel.GetCoordlist;
-	}
-	public List<AngleBean> BackAnglelist(){
-		return angleModel.getAnglelist;
 	}
 	public List<TextBean> BackTextlist(){
 		return textModel.GetTextlist;
@@ -687,26 +582,27 @@ public class DefineView extends View{
 			invalidate();
 		}
 	 }
-	 public void RemoveIndexRectangle(int index){
-		 if (rectangleModel.GetRectlist!=null&&rectangleModel.GetRectlist.size()>0) {
-			rectangleModel.GetRectlist.remove(index); 
-			DrawAllOnBitmap();  
-			invalidate();
-		}
-	 }
-	 public void RemoveIndexCoordinate(int index){
-		 if (coordinateModel.GetCoordlist!=null&&coordinateModel.GetCoordlist.size()>0) {
-			coordinateModel.GetCoordlist.remove(index);
-			DrawAllOnBitmap();
-			invalidate();
-		}
-	 }
-	 public void RemoveIndexAngle(int index){
-		 if (angleModel.getAnglelist!=null&&angleModel.getAnglelist.size()>0) {
-			angleModel.getAnglelist.remove(index);
-			DrawAllOnBitmap();
-			invalidate();
-		}
+	 public void RemoveIndexPolygonLine(int index){
+		 if (polygonModel.GetpolyList!=null&&polygonModel.GetpolyList.size()>0){	
+			 List<LineBean> lines=polygonModel.GetpolyList.get(n).getPolyLine();
+			 polygonModel.GetpolyList.remove(n);
+			 lines.remove(index);
+			 for (int j = 0; j < lines.size(); j++) {
+				LineBean lineBean=new LineBean();
+				lineBean.setName(lines.get(j).getName());
+				lineBean.setStartX(lines.get(j).getStartX());
+				lineBean.setStartY(lines.get(j).getStartY());
+				lineBean.setEndX(lines.get(j).getEndX());
+				lineBean.setEndY(lines.get(j).getEndY());
+				lineBean.setDescripte(lines.get(j).getDescripte());	
+				lineBean.setPaintColor(lines.get(j).getPaintColor());
+				lineBean.setPaintWidth(lines.get(j).getPaintWidth());
+				lineBean.setPaintIsFull(lines.get(j).isPaintIsFull());
+				linesModel.Getlines.add(lineBean);							
+			 }
+			 DrawAllOnBitmap();				 
+			 invalidate();
+		 }
 	 }
 	 public void RemoveIndexText(int index){
 		 if (textModel.GetTextlist!=null&&textModel.GetTextlist.size()>0) {
@@ -722,30 +618,21 @@ public class DefineView extends View{
 			invalidate();
 		}
 	 }
-	 public void ChangeLineAttribute(int index,LineBean line){
-		//调用初始化画布函数以清空画布
-         
-         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, mCanvas, index, line);         
+	 public void ChangeLineAttribute(int index,LineBean line){		 
+		//调用初始化画布函数以清空画布        
+         linesModel.ChangeLineAttributeAtIndex(linesModel.Getlines, index, line);         
          DrawAllOnBitmap();
+         callBackData.onCallBackLineAttribute(index, line);
 	 }
-	 public void ChangeRectangleAttribute(int index,RectangleBean rectangleBean){
-		 
-		 rectangleModel.ChangeRectAttributeAtIndex(rectangleModel.GetRectlist, index, mCanvas, rectangleBean);
+	 public void ChangePolygonLineAttribute(int index,LineBean line){
+		 polygonModel.ChangePolygonLineAttributeAtIndex(polygonModel.GetpolyList,n,index,line);
 		 DrawAllOnBitmap();
-	 }
-	 public void ChangeCoordinateAttribute(int index,CoordinateBean coordinateBean){		 
-		 coordinateModel.ChangeCoorAttributeAtIndex(coordinateModel.GetCoordlist, index,
-				 mCanvas, coordinateBean);
-		 DrawAllOnBitmap();
-	 }
-	 public void ChangeAngleAttribute(int index,AngleBean angleBean){
-		 
-		 angleModel.ChangeAngleBeanAttributeAtIndex(angleModel.getAnglelist, index, mCanvas, angleBean);
-		 DrawAllOnBitmap();
+		 callBackData.onCallBaclPolygonLineAttribute(n, index, line);
 	 }
 	 public void ChangeTextContent(int index,String text){		 
 		 textModel.ChangeTextContentAtIndex(textModel.GetTextlist,index,mCanvas,text);
 		 DrawAllOnBitmap();
+		 callBackData.onCallBackChangeTextContent(index, text);
 	 }
 	 public void LocationXY(){
 		 screen_x=-Contants.sreenWidth;
@@ -765,18 +652,6 @@ public class DefineView extends View{
 		scale=cale;
 		invalidate();
 	 }	  
-
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
 	 /**
 	  * @Description(描述):    切换形状触发此事件
 	  * @Package(包名): com.surveymapclient.view

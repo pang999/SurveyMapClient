@@ -1,13 +1,8 @@
 package com.surveymapclient.model;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
-import com.surveymapclient.common.IToast;
 import com.surveymapclient.common.Logger;
 import com.surveymapclient.common.ViewContans;
 import com.surveymapclient.entity.LineBean;
@@ -17,10 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.os.Looper;
-import android.provider.MediaStore.Video;
 
 public class PolygonModel {
 	
@@ -33,6 +25,7 @@ public class PolygonModel {
     private float mX, mY;// 临时点坐标
     private static final float TOUCH_TOLERANCE = 4;
     public List<PolygonBean> GetpolyList=new ArrayList<PolygonBean>();
+    public List<LineBean> GetlineList=new ArrayList<LineBean>();
 //    private PolygonBean drawpolygon=new PolygonBean();
     //每隔10像素取点
   	private static int space=10;
@@ -96,13 +89,26 @@ public class PolygonModel {
 	   		mshadowpath.reset();
 	   		Logger.i("多边形次数", "i="+i);
 	   		for (int j = 0;j < polylist.get(i).getPolyLine().size(); j++) {
-				float sx=polylist.get(i).getPolyLine().get(j).getStartX();
-				float sy=polylist.get(i).getPolyLine().get(j).getStartY();
-				float ex=polylist.get(i).getPolyLine().get(j).getEndX();
-				float ey=polylist.get(i).getPolyLine().get(j).getEndY();
-				canvas.drawLine(sx, sy, ex, ey, mPaint);
-				canvas.drawPoint(sx, sy, point);
-				canvas.drawPoint(ex, ey, point);
+	   			LineBean lineBean=polylist.get(i).getPolyLine().get(j);
+				float sx=lineBean.getStartX();
+				float sy=lineBean.getStartY();
+				float ex=lineBean.getEndX();
+				float ey=lineBean.getEndY();
+				int color=lineBean.getPaintColor();
+				float width=lineBean.getPaintWidth();
+				boolean isfull=lineBean.isPaintIsFull();
+//				canvas.drawLine(sx, sy, ex, ey, mPaint);
+//				canvas.drawPoint(sx, sy, point);
+//				canvas.drawPoint(ex, ey, point);
+				ViewContans.DrawLine(canvas,sx,sy,ex,ey,ViewContans.generatePaint(color,width,isfull),point);
+				if (lineBean!=null) {
+					if (!lineBean.getName().equals("lines")&&lineBean.getName().length()>0) {
+		        		ViewContans.AddTextOnLine(lineBean, canvas,lineBean.getName(),-25);
+					}            	
+		        	if (lineBean.getLength()>0||lineBean.getAngle()>0) {
+		        		ViewContans.AddTextOnLine(lineBean, canvas,lineBean.getLength()+"m "+lineBean.getAngle()+"°",10);
+					}
+				}
 				if (j==0) {
 					mshadowpath.moveTo(polylist.get(i).getPolyLine().get(0).getStartX(), polylist.get(i).getPolyLine().get(0).getStartY());
 				}else {
@@ -324,64 +330,143 @@ public class PolygonModel {
 		}
 	    return -1;
 	}
+//	public int PitchOnPolyLineIndex(List<PolygonBean> list,float x,float y){
+//		return PitchOnLineIndex(list.get(PitchOnPolygon(list, x, y)).getPolyLine(), x, y);
+//	}
+//	public int PitchOnLineIndex(List<LineBean> list,float x,float y){
+//		Logger.i("线段总数", "Lines="+list.size());
+//	    int dx=(int) x;
+//	    int dy=(int) y;			
+//		for (int i = 0; i < list.size(); i++) {
+//			int gspx=(int) list.get(i).getStartX();
+//			int gspy=(int) list.get(i).getStartY();
+//			int gepx=(int) list.get(i).getEndX();
+//			int gepy=(int) list.get(i).getEndY();
+//        	Logger.i("起点终点", "---->L"+i+": ("+gspx+","+gspy+")  ,  ("+gepx+","+gepy+")");
+//			boolean xCan=(gspx<dx&&dx<gepx)||(gspx>dx&&dx>gepx);
+//			boolean xx=(gspx==gepx);
+//			boolean yCan=(gspy<dy&&dy<gepy)||(gspy>dy&&dy>gepy);
+//			boolean yy=(gspy==gepy);
+//			if ((xCan&&yCan)||xx||yy) {
+//				int k_fz=gepy-gspy;
+//				int k_fm=gepx-gspx;
+//				if (k_fz==0) {
+//					int cy=Math.abs(dy-gepy);
+//					if (cy<40&&xCan) {
+//						return i;						
+//					}
+//				}
+//				else if (k_fm==0) {
+//					int cx=Math.abs(dx-gepx);
+//					if (cx<40&&yCan) {
+//						return i;
+//					}
+//				}else {
+//					double val=((double)k_fz)/k_fm;
+//		    		BigDecimal bd =new BigDecimal(val);
+//		    		//保留2位小数
+//		    		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 		    		
+//		    		int b_fz1=gspy*gepx;
+//		    		int b_fz2=gepy*gspx;
+//		    		int b_fz=b_fz1-b_fz2;
+//		    		int b_fm=gepx-gspx;
+//		    		double d=((double)b_fz)/b_fm;
+//		    		BigDecimal bdb =new BigDecimal(d);
+//		    		//保留2位小数
+//		    		double b = bdb.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 
+//		    		double gety=k*dx+b;
+//		    		double getx=(dy-b)/k;
+//		    		int cx=dx-(int)getx;
+//		    		int cy=dy-(int)gety;
+//		    		if (Math.abs(cx)<40&&Math.abs(cy)<40) {
+//		    			return i;
+//					}
+//		    		
+//				}
+//			}					
+//		 }	
+//		return -1;
+//	}
 	public int PitchOnPolygonLine(List<PolygonBean> list,float x,float y){
-		 int dx=(int) x;
-		    int dy=(int) y;
-		    for (int i = 0; i < list.size(); i++) {	    	
-		   		for (int j = 0;j < list.get(i).getPolyLine().size(); j++) {
-		   			Logger.i("For循环", "i="+i+",j="+j);
-					int gspx=(int) list.get(i).getPolyLine().get(j).getStartX();
-					int gspy=(int) list.get(i).getPolyLine().get(j).getStartY();
-					int gepx=(int) list.get(i).getPolyLine().get(j).getEndX();
-					int gepy=(int) list.get(i).getPolyLine().get(j).getEndY();
-					Logger.i("起点终点", "---->L"+i+": ("+gspx+","+gspy+")  ,  ("+gepx+","+gepy+")");
-					boolean xCan=(gspx<dx&&dx<gepx)||(gspx>dx&&dx>gepx);
-					boolean xx=(gspx==gepx);
-					boolean yCan=(gspy<dy&&dy<gepy)||(gspy>dy&&dy>gepy);
-					boolean yy=(gspy==gepy);
-					if ((xCan&&yCan)||xx||yy) {
-						int k_fz=gepy-gspy;
-						int k_fm=gepx-gspx;
-						if (k_fz==0) {
-							int cy=Math.abs(dy-gepy);
-							if (cy<40&&xCan) {
-								Logger.i("选中多边形的边", "j="+j);
-								return j;						
-							}
+	 	int dx=(int) x;
+	    int dy=(int) y;
+	    for (int i = 0; i < list.size(); i++) {	    	
+	   		for (int j = 0;j < list.get(i).getPolyLine().size(); j++) {
+	   			Logger.i("For循环", "i="+i+",j="+j);
+				int gspx=(int) list.get(i).getPolyLine().get(j).getStartX();
+				int gspy=(int) list.get(i).getPolyLine().get(j).getStartY();
+				int gepx=(int) list.get(i).getPolyLine().get(j).getEndX();
+				int gepy=(int) list.get(i).getPolyLine().get(j).getEndY();
+				Logger.i("起点终点", "---->L"+i+": ("+gspx+","+gspy+")  ,  ("+gepx+","+gepy+")");
+				boolean xCan=(gspx<dx&&dx<gepx)||(gspx>dx&&dx>gepx);
+				boolean xx=(gspx==gepx);
+				boolean yCan=(gspy<dy&&dy<gepy)||(gspy>dy&&dy>gepy);
+				boolean yy=(gspy==gepy);
+				if ((xCan&&yCan)||xx||yy) {
+					int k_fz=gepy-gspy;
+					int k_fm=gepx-gspx;
+					if (k_fz==0) {
+						int cy=Math.abs(dy-gepy);
+						if (cy<40&&xCan) {
+							Logger.i("选中多边形的边", "j="+j);
+							return j;						
 						}
-						else if (k_fm==0) {
-							int cx=Math.abs(dx-gepx);
-							if (cx<40&&yCan) {
-								Logger.i("选中多边形的边", "j="+j);
-								return j;
-							}
-						}else {
-							double val=((double)k_fz)/k_fm;
-				    		BigDecimal bd =new BigDecimal(val);
-				    		//保留2位小数
-				    		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 		    		
-				    		int b_fz1=gspy*gepx;
-				    		int b_fz2=gepy*gspx;
-				    		int b_fz=b_fz1-b_fz2;
-				    		int b_fm=gepx-gspx;
-				    		double d=((double)b_fz)/b_fm;
-				    		BigDecimal bdb =new BigDecimal(d);
-				    		//保留2位小数
-				    		double b = bdb.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 
-				    		double gety=k*dx+b;
-				    		double getx=(dy-b)/k;
-				    		int cx=dx-(int)getx;
-				    		int cy=dy-(int)gety;
-				    		if (Math.abs(cx)<40&&Math.abs(cy)<40) {
-				    			Logger.i("选中多边形的边", "j="+j);
-				    			return j;
-							}
-				    		
+					}
+					else if (k_fm==0) {
+						int cx=Math.abs(dx-gepx);
+						if (cx<40&&yCan) {
+							Logger.i("选中多边形的边", "j="+j);
+							return j;
 						}
-					}			
-				}
+					}else {
+						double val=((double)k_fz)/k_fm;
+			    		BigDecimal bd =new BigDecimal(val);
+			    		//保留2位小数
+			    		double k = bd.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 		    		
+			    		int b_fz1=gspy*gepx;
+			    		int b_fz2=gepy*gspx;
+			    		int b_fz=b_fz1-b_fz2;
+			    		int b_fm=gepx-gspx;
+			    		double d=((double)b_fz)/b_fm;
+			    		BigDecimal bdb =new BigDecimal(d);
+			    		//保留2位小数
+			    		double b = bdb.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue(); 
+			    		double gety=k*dx+b;
+			    		double getx=(dy-b)/k;
+			    		int cx=dx-(int)getx;
+			    		int cy=dy-(int)gety;
+			    		if (Math.abs(cx)<40&&Math.abs(cy)<40) {
+			    			Logger.i("选中多边形的边", "j="+j);
+			    			return j;
+						}
+			    		
+					}
+				}			
 			}
+		}
 		return -1;
+	}
+//	public int PitchOnPolygonLineToText(List<PolygonBean> list,float rx,float ry){
+//		int i=PitchOnPolyLineIndex(list, rx, ry);
+//		return i;
+//	}
+	public void PolygonLineChangeToText(List<LineBean> list,Canvas canvas,int i){
+		Paint paint=ViewContans.generatePaint(Color.BLUE, 10,true);
+		float sx=list.get(i).getStartX();
+		float sy=list.get(i).getStartY();
+		float ex=list.get(i).getEndX();
+		float ey=list.get(i).getEndY();
+		canvas.drawLine(sx, sy, ex, ey, paint);
+	}
+
+	public void AddTextOnPolygonLine(List<LineBean> list,Canvas canvas,int i,String text,int place){
+		ViewContans.AddTextOnLine(list.get(i), canvas,text, place);
+		list.get(i).setLength(Double.parseDouble(text));
+	}
+	public void ChangePolygonLineAttributeAtIndex(List<PolygonBean> list
+			,int n, int index,LineBean line){
+    	AddChangePolygonLineParams(list, n, index, line);
+		
 	}
 	public void ExtendPolygonLine(float x,float y){
 		LineBean line1=new LineBean();
@@ -472,26 +557,32 @@ public class PolygonModel {
 		line.setStartY(sy);
 		line.setEndX(ex);
 		line.setEndY(ey);
-		line.setAngle(0.00);
-		line.setPaintColor(Color.BLACK);
-		line.setLength(0);
-		line.setName("polylineName");
-		line.setPaintIsFull(false);
-		line.setPaintWidth(4);
-		line.setDescripte("描述");
 		lists.add(line);
+	}
+	
+	public void AddChangePolygonLineParams(List<PolygonBean> polylist
+			,int n,int index,LineBean line){
+		LineBean lineBean=polylist.get(n).getPolyLine().get(index);		
+		line.setStartX(lineBean.getStartX());
+		line.setStartY(lineBean.getStartY());
+		line.setEndX(lineBean.getEndX());
+		line.setEndY(lineBean.getEndY());
+		polylist.get(n).getPolyLine().set(index, line);
 	}
 	public void AddPolygonParams(List<PolygonBean> polylist,List<LineBean> linelist){
 		PolygonBean poly=new PolygonBean();
 		List<LineBean> lineslist=new ArrayList<LineBean>();
 		for (int i = 0; i <linelist.size(); i++) {
 			LineBean lineBean=new LineBean();
-			lineBean.setName("lines-"+i);
+			lineBean.setName("lines");
 			lineBean.setStartX(linelist.get(i).getStartX());
 			lineBean.setStartY(linelist.get(i).getStartY());
 			lineBean.setEndX(linelist.get(i).getEndX());
 			lineBean.setEndY(linelist.get(i).getEndY());
-			lineBean.setDescripte("描述-"+i);
+			lineBean.setDescripte("描述-"+i);	
+			lineBean.setPaintColor(Color.BLACK);
+			lineBean.setPaintWidth(6);
+			lineBean.setPaintIsFull(false);
 			lineslist.add(lineBean);			
 		}
 		poly.setPolyName("polyName-"+polylist.size());

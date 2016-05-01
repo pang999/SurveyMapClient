@@ -1,71 +1,55 @@
 package com.surveymapclient.activity;
 
+import com.surveymapclient.common.Contants;
 import com.surveymapclient.entity.CoordinateBean;
-import com.surveymapclient.entity.RectangleBean;
+import com.surveymapclient.entity.LineBean;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class AttributeCoordinateActivity extends Activity {
+public class AttributeCoordinateActivity extends Activity implements android.view.View.OnClickListener{
 
-	EditText coorName,coorVolum,coorLenght,coortWidth,coorHeight,coorDecs;
-	TextView lineColor,lineStyle,lineWidth;
-	boolean isfull=false;
-	int linecolor=0;
-	private float width=0;	
+	EditText coorName,coorDecs;
+	TextView coorvolum,coorlength,coorwidth,coorheight;
+	RelativeLayout gotoeditcoorlength,gotoeditcoorwidth,gotoeditcoorheight;
 	CoordinateBean coordinate;
+	LineBean xline;
+	LineBean yline;
+	LineBean zline;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_attribute_coordinate);
 		coorName=(EditText) findViewById(R.id.editcoorName);
-		coorVolum=(EditText) findViewById(R.id.editcoorvolum);
-		coorLenght=(EditText) findViewById(R.id.editcoorLengh);
-		coortWidth=(EditText) findViewById(R.id.editcoorwidth);
-		coorHeight=(EditText) findViewById(R.id.editcoorheight);
 		coorDecs=(EditText) findViewById(R.id.editcoorDescripte);
-		lineColor=(TextView) findViewById(R.id.editcoorlinecolor);
-		lineWidth=(TextView) findViewById(R.id.editcoorlinewidth);
-		lineStyle=(TextView) findViewById(R.id.editcoorlineStyle);
+		coorlength=(TextView) findViewById(R.id.coorLengh);
+		coorwidth=(TextView) findViewById(R.id.coorwidth);
+		coorheight=(TextView) findViewById(R.id.coorheight);
+		gotoeditcoorlength=(RelativeLayout) findViewById(R.id.gotoeditcoorlength);
+		gotoeditcoorwidth=(RelativeLayout) findViewById(R.id.gotoeditcoorwidth);
+		gotoeditcoorheight=(RelativeLayout) findViewById(R.id.gotoeditcoorheight);
+		gotoeditcoorlength.setOnClickListener(this);
+		gotoeditcoorwidth.setOnClickListener(this);
+		gotoeditcoorheight.setOnClickListener(this);
 		coordinate=new CoordinateBean();
 		Bundle bundle=this.getIntent().getExtras();
-		coordinate=(CoordinateBean) bundle.getSerializable("Coordinate");
+		coordinate=(CoordinateBean) bundle.getSerializable("Coordinate");	
+		xline=coordinate.getxLine();
+		yline=coordinate.getyLine();
+		zline=coordinate.getzLine();
 		coorName.setText(coordinate.getName());
-		coorVolum.setText(coordinate.getVolum()+"");
-		coorLenght.setText(coordinate.getLenght()+"");
-		coortWidth.setText(coordinate.getWidth()+"");
-		coorHeight.setText(coordinate.getHeight()+"");
-		int c=coordinate.getPaintColor();
-		if (c==Color.RED) {
-			lineColor.setText("红色");
-			linecolor=Color.RED;
-		}else if (c==Color.BLUE) {
-			lineColor.setText("蓝色");
-			linecolor=Color.BLUE;
-		}else if (c==Color.GREEN) {
-			lineColor.setText("绿色");
-			linecolor=Color.GREEN;
-		}else if (c==Color.BLACK) {
-			lineColor.setText("黑色");
-			linecolor=Color.BLACK;
-		}
-		lineWidth.setText(coordinate.getPaintWidth()+"");
-		width=coordinate.getPaintWidth();
-		if (coordinate.isPaintIsFull()) {
-			lineStyle.setText("实线");
-			isfull=true;
-		}else {
-			lineStyle.setText("虚线");
-			isfull=false;
-		}
+		coorDecs.setText(coordinate.getDescripte());
+		coorvolum.setText(coordinate.getVolum()+" m鲁");
+		coorlength.setText(coordinate.getxLine().getLength()+" m");
+		coorwidth.setText(coordinate.getyLine().getLength()+" m");
+		coorheight.setText(coordinate.getzLine().getLength()+" m");
+		
 	}
 	public void AttributeBack(View v){
 		finish();
@@ -74,89 +58,72 @@ public class AttributeCoordinateActivity extends Activity {
 		CoordinateBean backcoor=new CoordinateBean();
 		Bundle bundle = new Bundle();
 		backcoor.setName(coorName.getText().toString());
-		backcoor.setVolum(Double.parseDouble(coorVolum.getText().toString()));
-		backcoor.setLenght(Float.parseFloat(coorLenght.getText().toString()));
-		backcoor.setWidth(Float.parseFloat(coortWidth.getText().toString()));
-		backcoor.setHeight(Float.parseFloat(coorHeight.getText().toString()));
-		backcoor.setPaintColor(linecolor);
-		backcoor.setPaintIsFull(isfull);
-		backcoor.setPaintWidth(width);
+		backcoor.setDescripte(coorDecs.getText().toString());
+		backcoor.setVolum(Double.parseDouble(coorvolum.getText().toString()));
+		backcoor.setxLine(xline);
+		backcoor.setyLine(yline);
+		backcoor.setzLine(zline);
 		bundle.putSerializable("BackCoordinate", backcoor);
 		AttributeCoordinateActivity.this.setResult(RESULT_OK, 
 				this.getIntent().putExtras(bundle));
 		finish();
 	}
-	public void onSetStyle(View v){
-		AlertDialog.Builder builder=new AlertDialog.Builder(AttributeCoordinateActivity.this);
-		builder.setIcon(R.drawable.ic_launcher);
-		//	    指定下拉列表的显示数据
-		final String[] linestyle = {"实线", "虚线"};
-		builder.setTitle("选择实/虚线");
-        //    设置一个下拉的列表选择项
-		builder.setItems(linestyle, new OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				// TODO Auto-generated method stub
-				if (linestyle[i]=="实线") {
-					isfull=true;
-				}else if (linestyle[i]=="虚线") {
-					isfull=false;
-				}
-				lineStyle.setText(linestyle[i]);
-			}
-		});
-		builder.show();
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.gotoeditcoorlength:
+			Intent intentlength = new Intent();
+			Bundle bundlelength = new Bundle();
+			bundlelength.putSerializable("Line", coordinate.getxLine());
+			bundlelength.putInt("TYPE", 1);
+			intentlength.putExtras(bundlelength);
+			intentlength.setClass(AttributeCoordinateActivity.this, AttributeLineActivity.class);
+			startActivityForResult(intentlength, Contants.LENGTHLINEATTRIBUTEBACK);
+			break;
+		case R.id.gotoeditcoorwidth:
+			Intent intentwidth = new Intent();
+			Bundle bundlewidth = new Bundle();
+			bundlewidth.putSerializable("Line", coordinate.getxLine());
+			bundlewidth.putInt("TYPE", 1);
+			intentwidth.putExtras(bundlewidth);
+			intentwidth.setClass(AttributeCoordinateActivity.this, AttributeLineActivity.class);
+			startActivityForResult(intentwidth, Contants.LINEATTRIBUTEBACK);
+			break;
+		case R.id.gotoeditcoorheight:
+			Intent intentheight = new Intent();
+			Bundle bundleheight = new Bundle();
+			bundleheight.putSerializable("Line", coordinate.getxLine());
+			bundleheight.putInt("TYPE", 1);
+			intentheight.putExtras(bundleheight);
+			intentheight.setClass(AttributeCoordinateActivity.this, AttributeLineActivity.class);
+			startActivityForResult(intentheight, Contants.LINEATTRIBUTEBACK);
+			break;
+		}
 	}
-	public void onSetWidth(View v){
-		AlertDialog.Builder builder=new AlertDialog.Builder(AttributeCoordinateActivity.this);
-		builder.setIcon(R.drawable.ic_launcher);
-		//	    指定下拉列表的显示数据
-		final String[] w = {"2", "4", "6","8"};
-		builder.setTitle("选择直线大小");
-        //    设置一个下拉的列表选择项
-		builder.setItems(w, new OnClickListener() {		
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				// TODO Auto-generated method stub
-				String m=w[i];
-				if (m=="2") {
-					width=2;
-				}else if (m=="4") {
-					width=4;
-				}else if (m=="6") {
-					width=6;
-				}else if (m=="8") {
-					width=8;
-				}			
-				lineWidth.setText(m);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode==RESULT_OK) {
+			if (requestCode==Contants.LENGTHLINEATTRIBUTEBACK) {
+				Bundle bundle = data.getExtras();
+			    xline = (LineBean) bundle.getSerializable("BackLine");
+				coorlength.setText(xline.getLength()+" m");
+				coorvolum.setText(xline.getLength()*yline.getLength()*zline.getLength()+" m鲁");
 			}
-		});
-		builder.show();
-	}
-	public void onSetColor(View v){
-		AlertDialog.Builder builder=new AlertDialog.Builder(AttributeCoordinateActivity.this);
-		builder.setIcon(R.drawable.ic_launcher);
-		//	    指定下拉列表的显示数据
-		final String[] scolor = {"红色", "蓝色", "绿色","黑色"};
-		builder.setTitle("选择一种颜色");
-        //    设置一个下拉的列表选择项
-		builder.setItems(scolor, new OnClickListener() {			
-			@Override
-			public void onClick(DialogInterface dialog, int i) {
-				// TODO Auto-generated method stub				
-				if (scolor[i]=="红色") {
-					linecolor=Color.RED;
-				}else if (scolor[i]=="蓝色") {
-					linecolor=Color.BLUE;
-				}else if (scolor[i]=="绿色") {
-					linecolor=Color.GREEN;
-				}else if (scolor[i]=="黑色") {
-					linecolor=Color.BLACK;
-				}
-				lineColor.setText(scolor[i]);
+			if (requestCode==Contants.WIDTHLINEATTRIBUTEBACK) {
+				Bundle bundle = data.getExtras();
+			    yline = (LineBean) bundle.getSerializable("BackLine");
+				coorwidth.setText(yline.getLength()+" m");	
+				coorvolum.setText(xline.getLength()*yline.getLength()*zline.getLength()+" m鲁");
 			}
-		});
-		builder.show();
+			if (requestCode==Contants.HEIGHTLINEATTRIBUTEBACK) {
+				Bundle bundle = data.getExtras();
+			    zline = (LineBean) bundle.getSerializable("BackLine");
+				coorheight.setText(zline.getLength()+" m");	
+				coorvolum.setText(xline.getLength()*yline.getLength()*zline.getLength()+" m鲁");
+			}
+		}
 	}
 }

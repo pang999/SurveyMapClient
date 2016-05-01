@@ -71,7 +71,7 @@ public class PDFCreater {
 	}
 
 	public boolean createPDF(String picPath, List<LineBean> linelist, List<PolygonBean> polylist,
-			List<RectangleBean> rectlist, List<CoordinateBean> coorlist, List<AngleBean> anglelist,
+			/*List<RectangleBean> rectlist, List<CoordinateBean> coorlist, List<AngleBean> anglelist,*/
 			List<TextBean> textlist, List<AudioBean> audiolist) {
 		Document document = new Document();
 		try {
@@ -103,12 +103,12 @@ public class PDFCreater {
 			document.add(createLineTable(linelist));
 			document.add(setTilie("多边形"));
 			document.add(createPolygonTable(polylist));
-			document.add(setTilie("矩形"));
+			/*document.add(setTilie("矩形"));
 			document.add(createRectangleTable(rectlist));
 			document.add(setTilie("坐标"));
 			document.add(createCoordinateTable(coorlist));
 			document.add(setTilie("角度"));
-			document.add(createAngleTable(anglelist));
+			document.add(createAngleTable(anglelist));*/
 			document.add(setTilie("文本注释"));
 			document.add(createTextTable(textlist));
 			document.add(setTilie("语音注释"));
@@ -253,12 +253,12 @@ public class PDFCreater {
 		for (int i = 0; i < list.size(); i++) {
 			table.addCell(setCell(list.get(i).getName()));
 			table.addCell(list.get(i).getVolum() + "m3");
-			table.addCell(list.get(i).getLenght() + "m");
-			table.addCell(list.get(i).getWidth() + "m");
-			table.addCell(list.get(i).getHeight() + "m");
-			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPaintColor())));
-			table.addCell(list.get(i).getPaintWidth() + "");
-			table.addCell(setCell(SurveyUtils.getStyle(list.get(i).isPaintIsFull())));
+//			table.addCell(list.get(i).getLenght() + "m");
+//			table.addCell(list.get(i).getWidth() + "m");
+//			table.addCell(list.get(i).getHeight() + "m");
+//			table.addCell(setCell(SurveyUtils.getColor(list.get(i).getPaintColor())));
+//			table.addCell(list.get(i).getPaintWidth() + "");
+//			table.addCell(setCell(SurveyUtils.getStyle(list.get(i).isPaintIsFull())));
 			table.addCell(setCell(list.get(i).getDescripte()));
 		}
 		return table;

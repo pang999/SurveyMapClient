@@ -152,8 +152,13 @@ public class AudioRecordModel {
 				mRandomAccessFile = new RandomAccessFile(new File(
 						FileUtils.getPcmFilePath(mAudioRecordFileName)), "rw");
 				byte[] b = new byte[inBufSize/4];
-				//开始录制音频
-				audioRecord.startRecording();
+				  //开始录制音频  
+                try{  
+                    // 防止某些手机崩溃，例如联想  
+                    audioRecord.startRecording();  
+                }catch (IllegalStateException e){  
+                    e.printStackTrace();  
+                } 
 				//判断是否正在录制
 				isRecord = true;
 				while(isRecord){
@@ -162,8 +167,16 @@ public class AudioRecordModel {
 					mRandomAccessFile.seek(mRandomAccessFile.length());
 					mRandomAccessFile.write(b, 0, b.length);
 				}
-				//停止录制
-				audioRecord.stop();
+				 //停止录制  
+                try {  
+                    // 防止某些手机崩溃，例如联想  
+                    audioRecord.stop();  
+                    // 彻底释放资源  
+                    audioRecord.release();  
+                    audioRecord = null;  
+                }catch (IllegalStateException e){  
+                    e.printStackTrace();  
+                }
 				mRandomAccessFile.close();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
